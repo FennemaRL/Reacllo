@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import tc from "./trash-can.svg";
 let item1 = [
   { id: "1", title: "title", body: "texte", date: "date" },
   { id: "2", title: "title1", body: "texte", date: "date" },
   { id: "3", title: "title2", body: "texte", date: "date" }
 ];
+for (let i = 4; i < 20; i++) {
+  item1.push({ id: i.toString(), title: `title${i}` });
+}
 const columns1 = [
   { id: "3", items: item1, order: 1 },
   { id: "4", items: [], order: 2 }
@@ -43,7 +47,14 @@ const onDragEnd = (result, columns, setColumns) => {
     setColumns(colcopy);
   }
 };
-
+const removeColumn = (columnId, columns, setColumns) => {
+  let copyColumns = [...columns];
+  copyColumns.splice(
+    columns.findIndex(c => c.id === columnId),
+    1
+  );
+  setColumns([...copyColumns]);
+};
 function App() {
   const [columns, setColumns] = useState(columns1);
   return (
@@ -53,7 +64,8 @@ function App() {
           display: "flex",
           justifyContent: "center",
           minHeight: "100vh",
-          minWidth: "20vw"
+          minWidth: "20vw",
+          overflowX: "auto"
         }}
       >
         <DragDropContext
@@ -61,60 +73,82 @@ function App() {
         >
           {columns.map(column => {
             return (
-              <Droppable key={column.id} droppableId={column.id} place>
-                {(provided, snapshot) => {
-                  return (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      style={{
-                        backgroundColor: snapshot.isDraggingOver
-                          ? "lightblue"
-                          : "lightgrey",
-                        padding: 4,
-                        width: 250,
-                        height: 500,
-                        margin: "8px"
-                      }}
-                    >
-                      {column.items.map((item, indx) => {
-                        return (
-                          <Draggable
-                            key={item.id}
-                            draggableId={item.id}
-                            index={indx}
-                          >
-                            {(provided, snapshot) => {
-                              return (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  style={{
-                                    userSelect: "none",
-                                    padding: 16,
-                                    margin: "0 0 8px 0",
-                                    minHeight: "50px",
-                                    backgroundColor: snapshot.isDragging
-                                      ? "#263B4A"
-                                      : "#456C86",
-                                    color: "white",
-                                    ...provided.draggableProps.style
-                                  }}
-                                >
-                                  {" "}
-                                  {item.title}
-                                </div>
-                              );
-                            }}
-                          </Draggable>
-                        );
-                      })}
-                      {provided.placeholder}
-                    </div>
-                  );
+              <div
+                style={{
+                  backgroundColor: "grey",
+                  margin: "8px",
+                  maxHeight: "50vh",
+                  borderRadius: "8px",
+                  textAlign: "center",
+                  position: "relative"
                 }}
-              </Droppable>
+              >
+                <h1>title</h1>
+                <img
+                  src={tc}
+                  style={{ position: "absolute", top: "8px", right: "8px" }}
+                  onClick={() => removeColumn(column.id, columns, setColumns)}
+                />
+                <Droppable key={column.id} droppableId={column.id} place>
+                  {(provided, snapshot) => {
+                    return (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        style={{
+                          backgroundColor: snapshot.isDraggingOver
+                            ? "lightblue"
+                            : "lightgrey",
+                          padding: 4,
+                          width: 300,
+                          height: "75%",
+                          margin: "8px",
+                          overflowY: "auto",
+
+                          overflowX: "hidden",
+                          borderRadius: "5px"
+                        }}
+                      >
+                        {column.items.map((item, indx) => {
+                          return (
+                            <Draggable
+                              key={item.id}
+                              draggableId={item.id}
+                              index={indx}
+                            >
+                              {(provided, snapshot) => {
+                                return (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                      userSelect: "none",
+                                      padding: 16,
+                                      margin: "0 0 8px 0",
+                                      minHeight: "50px",
+                                      backgroundColor: snapshot.isDragging
+                                        ? "#263B4A"
+                                        : "#456C86",
+                                      color: "white",
+                                      textAlign: "left",
+                                      ...provided.draggableProps.style
+                                    }}
+                                  >
+                                    {" "}
+                                    {item.title}
+                                  </div>
+                                );
+                              }}
+                            </Draggable>
+                          );
+                        })}
+                        {provided.placeholder}
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </div>
             );
           })}
         </DragDropContext>
