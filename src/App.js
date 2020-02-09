@@ -13,21 +13,35 @@ const columns1 = [
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
   let { source, destination } = result;
-  let indexColumn = columns.findIndex(c => c.id === source.droppableId);
-  let column = columns[indexColumn];
-  let copyItems = [...column.items];
-  let rmItem = copyItems.splice(source.index, 1)[0];
-  copyItems.splice(destination.index, 0, rmItem);
-  console.log("copyItems after");
-  console.log(copyItems);
-  let colcopy = [...columns];
-  colcopy.splice(indexColumn, 1, {
-    ...column,
-    items: copyItems
-  });
-  console.log("columnas modificadas");
-  console.log(colcopy);
-  setColumns(colcopy);
+  if (destination.droppableId === source.droppableId) {
+    let indexColumn = columns.findIndex(c => c.id === source.droppableId);
+    let column = columns[indexColumn];
+    let copyItems = [...column.items];
+    let colcopy = [...columns];
+    let rmItem = copyItems.splice(source.index, 1)[0];
+    copyItems.splice(destination.index, 0, rmItem);
+    colcopy.splice(indexColumn, 1, {
+      ...column,
+      items: copyItems
+    });
+    setColumns(colcopy);
+  }
+  if (destination.droppableId !== source.droppableId) {
+    let indexColumnFrom = columns.findIndex(c => c.id === source.droppableId);
+    let indexColumnTo = columns.findIndex(
+      c => c.id === destination.droppableId
+    );
+    let columnFrom = columns[indexColumnFrom];
+    let columnTo = columns[indexColumnTo];
+    let copyItemsFrom = [...columnFrom.items];
+    let copyItemsTo = [...columnTo.items];
+    let colcopy = [...columns];
+    let rmItem = copyItemsFrom.splice(source.index, 1)[0];
+    copyItemsTo.splice(destination.index, 0, rmItem);
+    colcopy.splice(indexColumnFrom, 1, { ...columnFrom, items: copyItemsFrom });
+    colcopy.splice(indexColumnTo, 1, { ...columnTo, items: copyItemsTo });
+    setColumns(colcopy);
+  }
 };
 
 function App() {
@@ -63,40 +77,39 @@ function App() {
                         margin: "8px"
                       }}
                     >
-                      {console.log(column.items) ||
-                        column.items.map((item, indx) => {
-                          return (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id}
-                              index={indx}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      padding: 16,
-                                      margin: "0 0 8px 0",
-                                      minHeight: "50px",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#263B4A"
-                                        : "#456C86",
-                                      color: "white",
-                                      ...provided.draggableProps.style
-                                    }}
-                                  >
-                                    {" "}
-                                    {item.title}
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          );
-                        })}
+                      {column.items.map((item, indx) => {
+                        return (
+                          <Draggable
+                            key={item.id}
+                            draggableId={item.id}
+                            index={indx}
+                          >
+                            {(provided, snapshot) => {
+                              return (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    userSelect: "none",
+                                    padding: 16,
+                                    margin: "0 0 8px 0",
+                                    minHeight: "50px",
+                                    backgroundColor: snapshot.isDragging
+                                      ? "#263B4A"
+                                      : "#456C86",
+                                    color: "white",
+                                    ...provided.draggableProps.style
+                                  }}
+                                >
+                                  {" "}
+                                  {item.title}
+                                </div>
+                              );
+                            }}
+                          </Draggable>
+                        );
+                      })}
                       {provided.placeholder}
                     </div>
                   );
