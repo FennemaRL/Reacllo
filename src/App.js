@@ -9,11 +9,12 @@ let item1 = [
 for (let i = 4; i < 20; i++) {
   item1.push({ id: i.toString(), title: `title${i}` });
 }
+
 const columns1 = [
   { id: "3", items: item1, order: 1 },
   { id: "4", items: [], order: 2 }
 ];
-
+let reftitle = React.createRef();
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
   let { source, destination } = result;
@@ -55,14 +56,27 @@ const removeColumn = (columnId, columns, setColumns) => {
   );
   setColumns([...copyColumns]);
 };
+const createColumn = (
+  titleColumn,
+  columns,
+  setColumns,
+  idActual,
+  setSuccId
+) => {
+  let newColumn = { id: idActual.toString(), title: titleColumn, items: [] };
+  setSuccId(idActual + 1);
+  console.log([...columns, newColumn]);
+  setColumns([...columns, newColumn]);
+};
 function App() {
   const [columns, setColumns] = useState(columns1);
+  const [idNext, setSuccId] = useState(5);
   return (
     <div className="App">
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           minHeight: "100vh",
           minWidth: "20vw",
           overflowX: "auto"
@@ -74,6 +88,7 @@ function App() {
           {columns.map(column => {
             return (
               <div
+                key={column.id}
                 style={{
                   backgroundColor: "grey",
                   margin: "8px",
@@ -152,6 +167,39 @@ function App() {
             );
           })}
         </DragDropContext>
+        <div
+          style={{
+            backgroundColor: "grey",
+            margin: "8px",
+            maxHeight: "0vh",
+            borderRadius: "8px",
+            textAlign: "center",
+            position: "relative"
+          }}
+        >
+          <div>
+            <input ref={reftitle} placeholder="Add new row" />
+            <button
+              onClick={e => {
+                e.preventDefault();
+                reftitle.current.value
+                  ? (() => {
+                      createColumn(
+                        reftitle.current.value,
+                        columns,
+                        setColumns,
+                        idNext,
+                        setSuccId
+                      );
+                      reftitle.current.value = "";
+                    })()
+                  : console.log("no hay texto carnal :)");
+              }}
+            >
+              >
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
