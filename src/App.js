@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "./trash-can.svg";
+import NewTask from "./newTask";
 let item1 = [
   { id: "1", title: "title", body: "texte", date: "date" },
   { id: "2", title: "title1", body: "texte", date: "date" },
   { id: "3", title: "title2", body: "texte", date: "date" }
-];
+]; /*
 for (let i = 4; i < 20; i++) {
   item1.push({ id: i.toString(), title: `title${i}` });
-}
+}*/
 
 const columns1 = [
   { id: "3", items: item1, order: 1 },
@@ -65,12 +66,28 @@ const createColumn = (
 ) => {
   let newColumn = { id: idActual.toString(), title: titleColumn, items: [] };
   setSuccId(idActual + 1);
-  console.log([...columns, newColumn]);
   setColumns([...columns, newColumn]);
+};
+const createTask = (columnId, columns, setColumns) => {
+  let columnsCopy = [...columns];
+  let columnToAddtaskIndex = columnsCopy.findIndex(c => c.id === columnId);
+  let columnToAddCopy = { ...columnsCopy.splice(columnToAddtaskIndex, 1)[0] };
+
+  return task => {
+    if (task) {
+      columnToAddCopy.item = columnToAddCopy.items.push(task);
+      columnsCopy.splice(columnToAddtaskIndex, 0, columnToAddCopy);
+      setColumns(columnsCopy);
+    }
+  };
 };
 function App() {
   const [columns, setColumns] = useState(columns1);
   const [idNext, setSuccId] = useState(5);
+  const [newTask, setnewTask] = useState({
+    display: false,
+    columnId: undefined
+  });
   return (
     <div className="App">
       <div
@@ -78,10 +95,14 @@ function App() {
           display: "flex",
           justifyContent: "flex-start",
           minHeight: "100vh",
-          minWidth: "20vw",
-          overflowX: "auto"
+          minWidth: "20vw"
         }}
       >
+        <NewTask
+          task={newTask}
+          close={() => setnewTask({ display: false, columnId: undefined })}
+          addTask={createTask(newTask.columnId, columns, setColumns)}
+        />{" "}
         <DragDropContext
           onDragEnd={result => onDragEnd(result, columns, setColumns)}
         >
@@ -119,7 +140,6 @@ function App() {
                           height: "75%",
                           margin: "8px",
                           overflowY: "auto",
-
                           overflowX: "hidden",
                           borderRadius: "5px"
                         }}
@@ -163,6 +183,13 @@ function App() {
                     );
                   }}
                 </Droppable>
+                <button
+                  onClick={() =>
+                    setnewTask({ display: true, columnId: column.id })
+                  }
+                >
+                  +
+                </button>
               </div>
             );
           })}
@@ -193,7 +220,7 @@ function App() {
                       );
                       reftitle.current.value = "";
                     })()
-                  : console.log("no hay texto carnal :)");
+                  : (() => {})();
               }}
             >
               >
