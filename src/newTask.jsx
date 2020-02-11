@@ -44,6 +44,7 @@ const newTask = props => {
         <button
           onClick={() => {
             props.addTask({ id: "5", title: "title5", body: "text1" });
+            clearRefInputValue();
             props.close();
           }}
         >

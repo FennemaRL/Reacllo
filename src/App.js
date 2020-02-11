@@ -55,7 +55,7 @@ const removeColumn = (columnId, columns, setColumns) => {
     columns.findIndex(c => c.id === columnId),
     1
   );
-  setColumns([...copyColumns]);
+  setColumns(copyColumns);
 };
 const createColumn = (
   titleColumn,
@@ -80,6 +80,14 @@ const createTask = (columnId, columns, setColumns) => {
       setColumns(columnsCopy);
     }
   };
+};
+const removeTask = (columnId, taskIndex, columns, setColumns) => {
+  let copyColumns = [...columns];
+  let columnIndex = columns.findIndex(c => c.id === columnId);
+  let columnCopy = { ...copyColumns.splice(columnIndex, 1)[0] };
+  columnCopy.items.splice(taskIndex, 1);
+  copyColumns.splice(columnIndex, 0, columnCopy);
+  setColumns(copyColumns);
 };
 function App() {
   const [columns, setColumns] = useState(columns1);
@@ -172,6 +180,17 @@ function App() {
                                   >
                                     {" "}
                                     {item.title}
+                                    <img
+                                      src={tc}
+                                      onClick={() => {
+                                        removeTask(
+                                          column.id,
+                                          indx,
+                                          columns,
+                                          setColumns
+                                        );
+                                      }}
+                                    />
                                   </div>
                                 );
                               }}
