@@ -90,7 +90,6 @@ const newTask = props => {
           />
           <div
             style={{
-              paddingTop: "6px",
               display: "flex",
               justifyContent: "space-between",
               width: "98%"

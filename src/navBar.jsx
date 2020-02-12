@@ -7,12 +7,13 @@ class Nav extends Component {
       <header
         style={{
           width: "100%",
-          minHeight: "75px",
+          minHeight: "60px",
           backgroundColor: "#607D8B",
           color: "white",
           display: "flex",
           alignItems: "center",
-          fontWeight: "600"
+          fontWeight: "600",
+          justifyContent: "space-between"
         }}
       >
         <a
@@ -20,6 +21,34 @@ class Nav extends Component {
         >
           Reacllo
         </a>
+        <div
+          style={{
+            paddingRight: "15px",
+            display: "flex",
+            width: "300px",
+            justifyContent: "space-between"
+          }}
+        >
+          <button
+            style={{
+              width: "80px",
+              height: "30px",
+              borderRadius: "5px",
+              color: "Lightgrey",
+              backgroundColor: "#455A64",
+              border: "none"
+            }}
+          >
+            {" "}
+            MyBoard
+          </button>
+          <nav
+            style={{ alignItems: "center", display: "flex", fontWeight: "300" }}
+          >
+            <img />
+            <p>Pepe rumualdo</p>
+          </nav>
+        </div>
       </header>
     );
   }

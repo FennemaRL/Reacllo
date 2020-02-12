@@ -16,7 +16,11 @@ for (let i = 4; i < 20; i++) {
 
 const columns1 = [
   { id: "3", title: "papa", items: item1, order: 1 },
-  { id: "4", title: "papa", items: [], order: 2 }
+  { id: "4", title: "papa", items: [], order: 2 },
+
+  { id: "7", title: "papa", items: [], order: 2 },
+
+  { id: "6", title: "papa", items: [], order: 2 }
 ];
 let reftitle = React.createRef();
 const onDragEnd = (result, columns, setColumns) => {
@@ -112,12 +116,11 @@ function App() {
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "flex-start",
-          minHeight: "89vh",
-          Width: "100vw",
+          minHeight: "100vh",
+          minWidth: "100%",
           backgroundColor: "#B0BEC5",
           paddingTop: "30px",
           position: "relative",
-
           overflowX: "auto"
         }}
       >
@@ -242,7 +245,8 @@ function App() {
                       width: "50px",
                       height: "50px",
                       fontSize: "2.5em",
-                      marginBottom: "8px"
+                      margin: "8px 0px",
+                      border: "none"
                     }}
                     onClick={() =>
                       setnewTask({ display: true, columnId: column.id })
