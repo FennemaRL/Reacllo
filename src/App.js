@@ -9,10 +9,10 @@ let item1 = [
   { id: "2", title: "title1", body: "texte", date: "date" },
   { id: "3", title: "title2", body: "texte", date: "date" }
 ];
-/*
+
 for (let i = 4; i < 20; i++) {
   item1.push({ id: i.toString(), title: `title${i}` });
-}*/
+}
 
 const columns1 = [
   { id: "3", title: "papa", items: item1, order: 1 },
@@ -101,24 +101,27 @@ function App() {
   });
   return (
     <div className="App">
-      <Nav />
+      <Nav boardTitle="papa" />
+      <NewTask
+        task={newTask}
+        close={() => setnewTask({ display: false, columnId: undefined })}
+        addTask={createTask(newTask.columnId, columns, setColumns)}
+      />
       <div
         style={{
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "flex-start",
-          minHeight: "100vh",
-          maxWidth: "100vw",
-          overflowY: "auto",
+          minHeight: "89vh",
+          Width: "100vw",
           backgroundColor: "#B0BEC5",
-          paddingTop: "30px"
+          paddingTop: "30px",
+          position: "relative",
+
+          overflowX: "auto"
         }}
       >
-        <NewTask
-          task={newTask}
-          close={() => setnewTask({ display: false, columnId: undefined })}
-          addTask={createTask(newTask.columnId, columns, setColumns)}
-        />{" "}
+        {" "}
         <DragDropContext
           onDragEnd={result => onDragEnd(result, columns, setColumns)}
         >
@@ -129,14 +132,19 @@ function App() {
                 style={{
                   backgroundColor: "#ECEFF1",
                   margin: "0px 16px",
-                  minWidth: "35%",
+                  minWidth: "25%",
                   borderRadius: "3px",
                   position: "relative"
                 }}
               >
-                <p style={{ margin: "12px 8px", textTransform: "capitalize" }}>
+                <h3
+                  style={{
+                    margin: "12px 8px",
+                    textTransform: "capitalize"
+                  }}
+                >
                   {column.title}
-                </p>
+                </h3>
                 <img
                   src={tc}
                   style={{ position: "absolute", top: "8px", right: "8px" }}
@@ -154,6 +162,7 @@ function App() {
                             ? "lightblue"
                             : "",
                           margin: "8px 8px 0px 8px",
+                          maxHeight: "45vh",
                           overflowY: "auto",
                           overflowX: "hidden",
                           borderRadius: "5px"
@@ -181,6 +190,7 @@ function App() {
                                         ? "#CFD8DC"
                                         : "#FAFAFA",
                                       color: "black",
+
                                       textAlign: "left",
                                       ...provided.draggableProps.style
                                     }}
@@ -231,7 +241,8 @@ function App() {
                       color: "white",
                       width: "50px",
                       height: "50px",
-                      fontSize: "2.5em"
+                      fontSize: "2.5em",
+                      marginBottom: "8px"
                     }}
                     onClick={() =>
                       setnewTask({ display: true, columnId: column.id })
@@ -246,36 +257,52 @@ function App() {
         </DragDropContext>
         <div
           style={{
-            backgroundColor: "grey",
-            margin: "8px",
-            maxHeight: "0vh",
+            margin: "0px 16px",
             borderRadius: "8px",
             textAlign: "center",
-            position: "relative"
+            position: "relative",
+            width: "45%",
+            height: "45px",
+            display: "flex"
           }}
         >
-          <div>
-            <input ref={reftitle} placeholder="Add new row" />
-            <button
-              onClick={e => {
-                e.preventDefault();
-                reftitle.current.value
-                  ? (() => {
-                      createColumn(
-                        reftitle.current.value,
-                        columns,
-                        setColumns,
-                        idNext,
-                        setSuccId
-                      );
-                      reftitle.current.value = "";
-                    })()
-                  : (() => {})();
-              }}
+          <input
+            ref={reftitle}
+            placeholder="Add new row"
+            style={{
+              border: "none",
+              borderRadius: "3px 0px 0px 3px",
+              paddingLeft: "8px",
+              backgroundColor: "rgb(96, 125, 139)",
+              color: "white"
+            }}
+          />
+          <button
+            style={{
+              minWidth: "40px",
+              border: "none",
+              borderRadius: "0px 3px 3px 0px ",
+              backgroundColor: "rgb(96, 125, 139)",
+              color: "white"
+            }}
+            onClick={e => {
+              e.preventDefault();
+              reftitle.current.value
+                ? (() => {
+                    createColumn(
+                      reftitle.current.value,
+                      columns,
+                      setColumns,
+                      idNext,
+                      setSuccId
+                    );
+                    reftitle.current.value = "";
+                  })()
+                : (() => {})();
+            }}
+          >
             >
-              >
-            </button>
-          </div>
+          </button>
         </div>
       </div>
     </div>

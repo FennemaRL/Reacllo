@@ -11,10 +11,15 @@ class Nav extends Component {
           backgroundColor: "#607D8B",
           color: "white",
           display: "flex",
-          alignItems: "center"
+          alignItems: "center",
+          fontWeight: "600"
         }}
       >
-        <a>TrelloRR</a>
+        <a
+          style={{ fontSize: "1.5em", fontStyle: "italic", marginLeft: "15px" }}
+        >
+          Reacllo
+        </a>
       </header>
     );
   }
