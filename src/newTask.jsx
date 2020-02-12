@@ -40,15 +40,23 @@ const newTask = props => {
       >
         <p>Title: </p> <input ref={refs[0]} />
         <p>Short description:</p> <input ref={refs[1]} />
-        <p>Task</p> <input ref={refs[2]} />
+        <p>tiempo en horas</p>{" "}
+        <input ref={refs[2]} type="number" min="0" max="99" step="1" />
         <button
           onClick={() => {
-            props.addTask({ id: "5", title: "title5", body: "text1" });
-            clearRefInputValue();
-            props.close();
+            if (refs.every(r => r.current.value)) {
+              props.addTask({
+                id: "5",
+                title: refs[0].current.value,
+                body: refs[1].current.value,
+                tiempo: refs[2].current.value
+              });
+              clearRefInputValue();
+              props.close();
+            }
           }}
         >
-          add
+          createTask
         </button>
         <button
           onClick={() => {

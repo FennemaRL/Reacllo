@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "./trash-can.svg";
+import tv from "./view.svg";
 import NewTask from "./newTask";
+import Nav from "./navBar";
 let item1 = [
   { id: "1", title: "title", body: "texte", date: "date" },
   { id: "2", title: "title1", body: "texte", date: "date" },
   { id: "3", title: "title2", body: "texte", date: "date" }
-]; /*
+];
+/*
 for (let i = 4; i < 20; i++) {
   item1.push({ id: i.toString(), title: `title${i}` });
 }*/
 
 const columns1 = [
-  { id: "3", items: item1, order: 1 },
-  { id: "4", items: [], order: 2 }
+  { id: "3", title: "papa", items: item1, order: 1 },
+  { id: "4", title: "papa", items: [], order: 2 }
 ];
 let reftitle = React.createRef();
 const onDragEnd = (result, columns, setColumns) => {
@@ -98,12 +101,17 @@ function App() {
   });
   return (
     <div className="App">
+      <Nav />
       <div
         style={{
           display: "flex",
           justifyContent: "flex-start",
+          alignItems: "flex-start",
           minHeight: "100vh",
-          minWidth: "20vw"
+          maxWidth: "100vw",
+          overflowY: "auto",
+          backgroundColor: "#B0BEC5",
+          paddingTop: "30px"
         }}
       >
         <NewTask
@@ -119,20 +127,22 @@ function App() {
               <div
                 key={column.id}
                 style={{
-                  backgroundColor: "grey",
-                  margin: "8px",
-                  maxHeight: "50vh",
-                  borderRadius: "8px",
-                  textAlign: "center",
+                  backgroundColor: "#ECEFF1",
+                  margin: "0px 16px",
+                  minWidth: "35%",
+                  borderRadius: "3px",
                   position: "relative"
                 }}
               >
-                <h1>title</h1>
+                <p style={{ margin: "12px 8px", textTransform: "capitalize" }}>
+                  {column.title}
+                </p>
                 <img
                   src={tc}
                   style={{ position: "absolute", top: "8px", right: "8px" }}
                   onClick={() => removeColumn(column.id, columns, setColumns)}
                 />
+
                 <Droppable key={column.id} droppableId={column.id} place>
                   {(provided, snapshot) => {
                     return (
@@ -142,11 +152,8 @@ function App() {
                         style={{
                           backgroundColor: snapshot.isDraggingOver
                             ? "lightblue"
-                            : "lightgrey",
-                          padding: 4,
-                          width: 300,
-                          height: "75%",
-                          margin: "8px",
+                            : "",
+                          margin: "8px 8px 0px 8px",
                           overflowY: "auto",
                           overflowX: "hidden",
                           borderRadius: "5px"
@@ -167,30 +174,41 @@ function App() {
                                     {...provided.dragHandleProps}
                                     style={{
                                       userSelect: "none",
-                                      padding: 16,
+                                      padding: "16px",
                                       margin: "0 0 8px 0",
-                                      minHeight: "50px",
+                                      minHeight: "10px",
                                       backgroundColor: snapshot.isDragging
-                                        ? "#263B4A"
-                                        : "#456C86",
-                                      color: "white",
+                                        ? "#CFD8DC"
+                                        : "#FAFAFA",
+                                      color: "black",
                                       textAlign: "left",
                                       ...provided.draggableProps.style
                                     }}
                                   >
                                     {" "}
-                                    {item.title}
-                                    <img
-                                      src={tc}
-                                      onClick={() => {
-                                        removeTask(
-                                          column.id,
-                                          indx,
-                                          columns,
-                                          setColumns
-                                        );
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        textTransform: "capitalize"
                                       }}
-                                    />
+                                    >
+                                      <p onClick={() => console.log("papa")}>
+                                        {item.title}
+                                      </p>
+                                      <div style={{ flex: "1" }} />
+                                      <img
+                                        src={tc}
+                                        style={{ width: "2.8%" }}
+                                        onClick={() => {
+                                          removeTask(
+                                            column.id,
+                                            indx,
+                                            columns,
+                                            setColumns
+                                          );
+                                        }}
+                                      />
+                                    </div>
                                   </div>
                                 );
                               }}
@@ -202,13 +220,26 @@ function App() {
                     );
                   }}
                 </Droppable>
-                <button
-                  onClick={() =>
-                    setnewTask({ display: true, columnId: column.id })
-                  }
+
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
                 >
-                  +
-                </button>
+                  <button
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#607D8B",
+                      color: "white",
+                      width: "50px",
+                      height: "50px",
+                      fontSize: "2.5em"
+                    }}
+                    onClick={() =>
+                      setnewTask({ display: true, columnId: column.id })
+                    }
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             );
           })}
