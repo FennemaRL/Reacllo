@@ -1,38 +1,77 @@
 import React, { Component } from "react";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle
+} from "react-sortable-hoc";
 import arrayMove from "array-move";
 
-const SortableList = SortableContainer(({ items }) => {
+/*
+          });*/
+let styleLi = {
+  textDecoration: "none",
+  backgroundColor: "black",
+  color: "white",
+  flex: " 0 1 18%",
+  margin: "30px",
+  padding: "8px",
+  height: "90px",
+  borderRadius: "5px",
+  backgroundColor: "#B0BEC5"
+};
+const DragHandle = SortableHandle(() => (
+  <span
+    style={{
+      height: "10px",
+      width: "10px",
+      position: "absolute",
+      top: "0px",
+      left: "6px"
+    }}
+  >
+    ::
+  </span>
+));
+const SortableList = SortableContainer(({ items, onClose }) => {
   return (
     <ul style={{ display: "flex", flexWrap: "wrap" }}>
       {items.map((value, index) => (
         <SortableItem
+          onCloseF={onClose}
           key={`item-${value + index}`}
           index={index}
           value={value}
         />
       ))}
+      <li style={styleLi}>add new</li>
     </ul>
   );
 });
 
-const SortableItem = SortableElement(({ value }) => (
-  <li
-    tabIndex={0}
-    style={{
-      textDecoration: "none",
-      backgroundColor: "black",
-      color: "white",
-      flex: " 0 1 18%",
-      margin: "30px",
-      padding: "8px",
-      height: "90px",
-      borderRadius: "5px",
-      textDecoration: "none",
-      backgroundColor: "#B0BEC5"
-    }}
-  >
-    <h3>{value.boardTitle}</h3>
+const SortableItem = SortableElement(({ value, onCloseF }) => (
+  <li tabIndex={value.id} style={{ ...styleLi, position: "relative" }}>
+    <div
+      style={{
+        height: "10px",
+        width: "10px",
+        backgroundColor: "black",
+        position: "absolute",
+        top: "6px",
+        right: "6px"
+      }}
+      onClick={() => {
+        onCloseF(prebBoards => {
+          let boardsCopy = [...prebBoards.boardsObs];
+          boardsCopy.splice(
+            prebBoards.boardsObs.findIndex(c => c.id === value.id),
+            1
+          );
+          return { boardsObs: boardsCopy };
+        });
+      }}
+    />
+    <DragHandle />
+    <h3 style={{ marginTop: "12px" }}>{value.boardTitle}</h3>
     <div style={{ display: "flex" }}>
       <div
         style={{
@@ -68,14 +107,12 @@ const SortableItem = SortableElement(({ value }) => (
 class Boards extends Component {
   state = {
     boardsObs: [
-      { id: "1", boardTitle: "boardTitle" },
-      { id: "2", boardTitle: "boardTitle1" },
-      { id: "3", boardTitle: "boardTitle2" },
-      { id: "4", boardTitle: "boardTitle3" },
-      { id: "5", boardTitle: "boardTitle4" }
+      { id: "1", boardTitle: "Test" },
+      { id: "2", boardTitle: "Test2" },
+      { id: "3", boardTitle: "Test3" }
     ]
   };
-
+  setState = this.setState.bind(this);
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(({ boardsObs }) => ({
       boardsObs: arrayMove(boardsObs, oldIndex, newIndex)
@@ -95,6 +132,8 @@ class Boards extends Component {
         <SortableList
           items={this.state.boardsObs}
           onSortEnd={this.onSortEnd}
+          useDragHandle={true}
+          onClose={this.setState}
           axis="xy"
         />
       </div>
