@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "./trash-can.svg";
-import tv from "./view.svg";
 import NewTask from "./newTask";
-import Nav from "./navBar";
 let item1 = [
   { id: "1", title: "title", body: "texte", date: "date" },
   { id: "2", title: "title1", body: "texte", date: "date" },
@@ -96,7 +94,7 @@ const removeTask = (columnId, taskIndex, columns, setColumns) => {
   copyColumns.splice(columnIndex, 0, columnCopy);
   setColumns(copyColumns);
 };
-function App() {
+function Board() {
   const [columns, setColumns] = useState(columns1);
   const [idNext, setSuccId] = useState(5);
   const [newTask, setnewTask] = useState({
@@ -104,8 +102,7 @@ function App() {
     columnId: undefined
   });
   return (
-    <div className="App">
-      <Nav boardTitle="papa" />
+    <div className="Board">
       <NewTask
         task={newTask}
         close={() => setnewTask({ display: false, columnId: undefined })}
@@ -313,4 +310,4 @@ function App() {
   );
 }
 
-export default App;
+export default Board;
