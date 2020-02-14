@@ -43,7 +43,7 @@ class Nav extends Component {
               }}
             >
               {" "}
-              MyBoard
+              MyBoards
             </button>
           </Link>
           <nav

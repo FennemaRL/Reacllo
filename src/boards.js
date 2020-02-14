@@ -21,7 +21,7 @@ let styleLi = {
 };
 const NewBoard = props => {
   let hefinput = React.createRef();
-  const [display, setDisplay] = useState(true);
+  const [display, setDisplay] = useState(false);
   return (
     <li style={styleLi}>
       <p
