@@ -103,7 +103,7 @@ const newTask = props => {
                 border: "none",
                 fontSize: "110%",
                 color: "white",
-                backgroundColor: "#53B284"
+                backgroundColor: "#1A7737"
               }}
               onClick={() => {
                 if (refs.every(r => r.current.value)) {
@@ -128,7 +128,7 @@ const newTask = props => {
                 border: "none",
                 fontSize: "110%",
                 color: "white",
-                backgroundColor: "#FF4248"
+                backgroundColor: "#CC161C"
               }}
               onClick={() => {
                 clearRefInputValue();

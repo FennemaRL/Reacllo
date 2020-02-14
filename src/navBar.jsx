@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class Nav extends Component {
   state = {};
@@ -16,11 +17,12 @@ class Nav extends Component {
           justifyContent: "space-between"
         }}
       >
-        <a
+        <Link
+          to="/boards/userTest"
           style={{ fontSize: "1.5em", fontStyle: "italic", marginLeft: "15px" }}
         >
           Reacllo
-        </a>
+        </Link>
         <div
           style={{
             paddingRight: "15px",
@@ -29,19 +31,21 @@ class Nav extends Component {
             justifyContent: "space-between"
           }}
         >
-          <button
-            style={{
-              width: "80px",
-              height: "30px",
-              borderRadius: "5px",
-              color: "Lightgrey",
-              backgroundColor: "#455A64",
-              border: "none"
-            }}
-          >
-            {" "}
-            MyBoard
-          </button>
+          <Link to="/boards/userTest">
+            <button
+              style={{
+                width: "80px",
+                height: "30px",
+                borderRadius: "5px",
+                color: "Lightgrey",
+                backgroundColor: "#455A64",
+                border: "none"
+              }}
+            >
+              {" "}
+              MyBoard
+            </button>
+          </Link>
           <nav
             style={{ alignItems: "center", display: "flex", fontWeight: "300" }}
           >

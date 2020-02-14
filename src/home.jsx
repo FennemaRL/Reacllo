@@ -6,14 +6,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect
 } from "react-router-dom";
 const Home = () => {
   return (
     <div>
-      <Nav boardTitle="papa" />
       <Router>
+        <Nav />
         <Switch>
           <Route exact path="/board/userTest" component={BoardTest} />
           <Route exact path="/boards/userTest" component={Boards} />
