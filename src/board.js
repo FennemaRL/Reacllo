@@ -25,7 +25,7 @@ const TitleDragger = SortableHandle(({ title }) => (
     {title}
   </div>
 ));
-const SortableItem = SortableElement(({ value }) => (
+const SortableItem = SortableElement(({ value, onSortEndList }) => (
   <li
     style={{
       backgroundColor: "#ECEFF1",
@@ -38,15 +38,20 @@ const SortableItem = SortableElement(({ value }) => (
     }}
   >
     <TitleDragger title={value.title} />
-    <ColumnList tasks={value.items} />
+    <ColumnList tasks={value.items} onSortEndList={onSortEndList(value.id)} />
   </li>
 ));
-const SortableList = SortableContainer(({ items }) => {
+const SortableList = SortableContainer(({ items, onSortEndList }) => {
   return (
     <div>
       <ul style={{ display: "flex" }}>
         {items.map((value, index) => (
-          <SortableItem key={`item-${value.id}`} index={index} value={value} />
+          <SortableItem
+            key={`item-${value.id}`}
+            index={index}
+            value={value}
+            onSortEndList={onSortEndList}
+          />
         ))}
       </ul>
     </div>
@@ -62,12 +67,24 @@ class Board extends Component {
       { id: "6", title: "papa4", items: [], order: 2 }
     ]
   };
+  onSortEndList = columnId => {
+    let copyColumns = [...this.state.columns];
+    let indexColumn = copyColumns.findIndex(c => c.id == columnId);
+    let copyColumn = copyColumns[indexColumn];
+    return ({ oldIndex, newIndex }) => {
+      console.log(copyColumn.items);
+      console.log(oldIndex, newIndex);
+      copyColumn.items = arrayMove(copyColumn.items, oldIndex, newIndex);
+      console.log("reordenar :)");
+      console.log(copyColumn.items);
+      this.setState({ columns: copyColumns });
+    };
+  };
   onSortEndColumn = ({ oldIndex, newIndex }) => {
     this.setState(({ columns }) => ({
       columns: arrayMove(columns, oldIndex, newIndex)
     }));
   };
-  onSortEndTask;
   render() {
     return (
       <div
@@ -83,6 +100,7 @@ class Board extends Component {
           onSortEnd={this.onSortEndColumn}
           axis="x"
           useDragHandle={true}
+          onSortEndList={this.onSortEndList}
         />
       </div>
     );

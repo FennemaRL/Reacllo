@@ -33,7 +33,7 @@ const SortableList = SortableContainer(({ items }) => {
 const columnList = props => {
   return (
     <div style={{ margin: "16px 8px", height: "90%" }}>
-      <SortableList items={props.tasks} />
+      <SortableList items={props.tasks} onSortEnd={props.onSortEndList} />
     </div>
   );
 };
