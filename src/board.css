@@ -1,0 +1,20 @@
+.trashCan:hover {
+  cursor: pointer;
+}
+button:hover {
+  cursor: pointer;
+}
+input[type="text"]::placeholder {
+  color: white;
+}
+
+button.newColumn {
+  border-radius: 50%;
+  background-color: #607d8b;
+  color: white;
+  width: 50px;
+  height: 50px;
+  font-size: 2.5em;
+  margin: 8px 0px;
+  border: none;
+}
