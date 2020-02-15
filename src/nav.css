@@ -1,0 +1,42 @@
+header {
+  width: 100%;
+  min-height: 60px;
+  background-color: #607d8b;
+  color: white;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  justify-content: space-between;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+header a {
+  font-size: 1.5em;
+  font-style: italic;
+  margin-left: 15px;
+}
+header .userNav {
+  padding-right: 15px;
+  display: flex;
+  width: 300px;
+  justify-content: space-between;
+}
+
+header .userNav button {
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  color: Lightgrey;
+  background-color: #455a64;
+  border: none;
+}
+header .userNav button:hover {
+  cursor: pointer;
+}
+header .userNav nav {
+  align-items: center;
+  display: flex;
+  font-weight: 300;
+}

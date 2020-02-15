@@ -121,6 +121,7 @@ function Board() {
                 <img
                   src={tc}
                   className="trashCan"
+                  title="delete column"
                   onClick={() => removeColumn(column.id, columns, setColumns)}
                 />
 
@@ -161,8 +162,9 @@ function Board() {
                                     <p className="title">{item.title}</p>
                                     <img
                                       src={tc}
-                                      style={{ width: "2.8%" }}
+                                      style={{ width: "3.5%" }}
                                       className="trashCan"
+                                      title="delete task"
                                       onClick={() => {
                                         removeTask(
                                           column.id,
@@ -186,6 +188,7 @@ function Board() {
 
                 <div className="containerButtonNewTask">
                   <button
+                    title="create new task"
                     className="newTask"
                     onClick={() =>
                       setnewTask({ display: true, columnId: column.id })
