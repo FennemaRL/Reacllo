@@ -103,52 +103,23 @@ function Board() {
     columnId: undefined
   });
   return (
-    <div className="Board">
+    <div>
       <NewTask
         task={newTask}
         close={() => setnewTask({ display: false, columnId: undefined })}
         addTask={createTask(newTask.columnId, columns, setColumns)}
       />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          minHeight: "100vh",
-          minWidth: "100%",
-          backgroundColor: "#B0BEC5",
-          paddingTop: "30px",
-          position: "relative",
-          overflowX: "auto"
-        }}
-      >
+      <div className="board">
         {" "}
         <DragDropContext
           onDragEnd={result => onDragEnd(result, columns, setColumns)}
         >
           {columns.map(column => {
             return (
-              <div
-                key={column.id}
-                style={{
-                  backgroundColor: "#ECEFF1",
-                  margin: "0px 16px",
-                  minWidth: "25%",
-                  borderRadius: "3px",
-                  position: "relative"
-                }}
-              >
-                <h3
-                  style={{
-                    margin: "12px 8px",
-                    textTransform: "capitalize"
-                  }}
-                >
-                  {column.title}
-                </h3>
+              <div key={column.id} className="column">
+                <h3 className="title">{column.title}</h3>
                 <img
                   src={tc}
-                  style={{ position: "absolute", top: "8px", right: "8px" }}
                   className="trashCan"
                   onClick={() => removeColumn(column.id, columns, setColumns)}
                 />
@@ -159,15 +130,11 @@ function Board() {
                       <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
+                        className="listContainer"
                         style={{
                           backgroundColor: snapshot.isDraggingOver
                             ? "lightblue"
-                            : "",
-                          margin: "8px 8px 0px 8px",
-                          maxHeight: "45vh",
-                          overflowY: "auto",
-                          overflowX: "hidden",
-                          borderRadius: "5px"
+                            : ""
                         }}
                       >
                         {column.items.map((item, indx) => {
@@ -183,43 +150,28 @@ function Board() {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
+                                    className="itemList"
                                     style={{
-                                      userSelect: "none",
-                                      padding: "16px",
-                                      margin: "0 0 8px 0",
-                                      minHeight: "10px",
                                       backgroundColor: snapshot.isDragging
                                         ? "#CFD8DC"
                                         : "#FAFAFA",
-                                      color: "black",
-
-                                      textAlign: "left",
                                       ...provided.draggableProps.style
                                     }}
                                   >
-                                    {" "}
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        textTransform: "capitalize"
+                                    <p className="title">{item.title}</p>
+                                    <img
+                                      src={tc}
+                                      style={{ width: "2.8%" }}
+                                      className="trashCan"
+                                      onClick={() => {
+                                        removeTask(
+                                          column.id,
+                                          indx,
+                                          columns,
+                                          setColumns
+                                        );
                                       }}
-                                    >
-                                      <p>{item.title}</p>
-                                      <div style={{ flex: "1" }} />
-                                      <img
-                                        src={tc}
-                                        style={{ width: "2.8%" }}
-                                        className="trashCan"
-                                        onClick={() => {
-                                          removeTask(
-                                            column.id,
-                                            indx,
-                                            columns,
-                                            setColumns
-                                          );
-                                        }}
-                                      />
-                                    </div>
+                                    />
                                   </div>
                                 );
                               }}
@@ -232,11 +184,9 @@ function Board() {
                   }}
                 </Droppable>
 
-                <div
-                  style={{ display: "flex", justifyContent: "space-around" }}
-                >
+                <div className="containerButtonNewTask">
                   <button
-                    className="newColumn"
+                    className="newTask"
                     onClick={() =>
                       setnewTask({ display: true, columnId: column.id })
                     }
@@ -248,37 +198,9 @@ function Board() {
             );
           })}
         </DragDropContext>
-        <div
-          style={{
-            margin: "0px 16px",
-            borderRadius: "8px",
-            textAlign: "center",
-            position: "relative",
-            width: "45%",
-            height: "45px",
-            display: "flex"
-          }}
-        >
-          <input
-            ref={reftitle}
-            type="text"
-            placeholder="Add new row"
-            style={{
-              border: "none",
-              borderRadius: "3px 0px 0px 3px",
-              paddingLeft: "8px",
-              backgroundColor: "rgb(96, 125, 139)",
-              color: "white"
-            }}
-          />
+        <div className="newColumn">
+          <input ref={reftitle} type="text" placeholder="Add new row" />
           <button
-            style={{
-              minWidth: "40px",
-              border: "none",
-              borderRadius: "0px 3px 3px 0px ",
-              backgroundColor: "rgb(96, 125, 139)",
-              color: "white"
-            }}
             onClick={e => {
               e.preventDefault();
               reftitle.current.value

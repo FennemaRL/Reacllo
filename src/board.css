@@ -1,14 +1,83 @@
+.board {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  min-width: 100%;
+  background-color: #b0bec5;
+  padding-top: 30px;
+  position: relative;
+  overflow-x: auto;
+}
+.trashCan {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
 .trashCan:hover {
   cursor: pointer;
 }
-button:hover {
-  cursor: pointer;
+.newColumn {
+  margin: 0px 16px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  width: 45%;
+  height: 45px;
+  display: flex;
 }
-input[type="text"]::placeholder {
+.newColumn input[type="text"] {
+  border: none;
+  border-radius: 3px 0px 0px 3px;
+  padding-left: 8px;
+  background-color: rgb(96, 125, 139);
   color: white;
 }
+.newColumn input[type="text"]::placeholder {
+  color: white;
+}
+.newColumn button {
+  min-width: 40px;
+  border: none;
+  border-radius: 0px 3px 3px 0px;
+  background-color: rgb(96, 125, 139);
+  color: white;
+}
+.column {
+  background-color: #eceff1;
+  margin: 0px 16px;
+  min-width: 25%;
+  border-radius: 3px;
+  position: relative;
+}
+.column .title {
+  margin: 12px 8px;
+  text-transform: capitalize;
+}
+.column .listContainer {
+  margin: 8px 8px 0px 8px;
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 5px;
+}
+.column .listContainer .itemList {
+  user-select: none;
+  padding: 16px;
+  margin: 0 0 8px 0;
+  min-height: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: black;
+  text-align: left;
+  position: relative;
+}
 
-button.newColumn {
+.containerButtonNewTask {
+  display: flex;
+  justify-content: space-around;
+}
+button.newTask {
   border-radius: 50%;
   background-color: #607d8b;
   color: white;
@@ -17,4 +86,7 @@ button.newColumn {
   font-size: 2.5em;
   margin: 8px 0px;
   border: none;
+}
+button.newTask:hover {
+  cursor: pointer;
 }
