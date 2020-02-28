@@ -7,10 +7,10 @@ import {
 import { Link } from "react-router-dom";
 import arrayMove from "array-move";
 import tc from "./trash-can.svg";
-
+import "./boards.css";
+import axios from "axios";
 let styleLi = {
   textDecoration: "none",
-  backgroundColor: "black",
   color: "white",
   flex: " 0 1 18%",
   margin: "30px",
@@ -68,7 +68,7 @@ const NewBoard = props => {
                 let title = hefinput.current.value;
                 hefinput.current.value = "";
                 setDisplay(false);
-                props.onCreateBoard({ id: "", boardTitle: title });
+                props.onCreateBoard(title);
               }
             }}
           >
@@ -96,19 +96,14 @@ const NewBoard = props => {
     </li>
   );
 };
-const DragHandle = SortableHandle(() => (
-  <span
-    style={{
-      height: "10px",
-      width: "10px",
-      position: "absolute",
-      top: "0px",
-      left: "6px"
-    }}
-  >
-    ::
-  </span>
-));
+const DragHandle = SortableHandle(() => {
+  let inputRef = React.createRef();
+  return (
+    <span ref={inputRef} title="Drag to order">
+      :::
+    </span>
+  );
+});
 const SortableList = SortableContainer(({ items, onClose, onCreateBoard }) => {
   return (
     <ul style={{ display: "flex", flexWrap: "wrap" }}>
@@ -126,9 +121,11 @@ const SortableList = SortableContainer(({ items, onClose, onCreateBoard }) => {
 });
 
 const SortableItem = SortableElement(({ value, onCloseF }) => (
-  <li tabIndex={value.id} style={{ ...styleLi, position: "relative" }}>
+  <li tabIndex={value} style={{ ...styleLi, position: "relative" }}>
     <img
       src={tc}
+      className="trashCan"
+      title="remove board"
       style={{
         height: "15px",
         width: "15px",
@@ -136,11 +133,12 @@ const SortableItem = SortableElement(({ value, onCloseF }) => (
         top: "6px",
         right: "6px"
       }}
+      alt=""
       onClick={() => {
         onCloseF(prebBoards => {
           let boardsCopy = [...prebBoards.boardsObs];
           boardsCopy.splice(
-            prebBoards.boardsObs.findIndex(c => c.id === value.id),
+            prebBoards.boardsObs.findIndex(c => c === value),
             1
           );
           return { boardsObs: boardsCopy };
@@ -149,7 +147,7 @@ const SortableItem = SortableElement(({ value, onCloseF }) => (
     />
     <DragHandle />
     <Link to="/board/userTest">
-      <h3 style={{ marginTop: "12px" }}>{value.boardTitle}</h3>
+      <h3 style={{ marginTop: "12px" }}>{value}</h3>
       <div style={{ display: "flex" }}>
         <div
           style={{
@@ -185,25 +183,60 @@ const SortableItem = SortableElement(({ value, onCloseF }) => (
 
 class Boards extends Component {
   state = {
-    boardsObs: [
-      { id: "1", boardTitle: "Test" },
-      { id: "2", boardTitle: "Test2" },
-      { id: "3", boardTitle: "Test3" }
-    ]
+    boardsObs: [],
+    user: {
+      userName: localStorage.getItem("UserName") || "Test"
+    }
   };
+
   setState = this.setState.bind(this);
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(({ boardsObs }) => ({
       boardsObs: arrayMove(boardsObs, oldIndex, newIndex)
     }));
   };
-  createBoard = board =>
-    this.setState(prevs => {
-      return {
-        boardsObs: [...prevs.boardsObs, board]
-      };
-    });
+  createBoard = board => {
+    let token = localStorage.getItem("UserToken");
 
+    if (!this.state.boardsObs.includes(board)) {
+      axios({
+        url: `https://kanban-api-node.herokuapp.com/board`,
+        method: "POST",
+        headers: { token: token },
+        data: { boardTitle: board }
+      })
+        .then(res => {
+          console.log("se guardo exitosamente");
+        })
+        .catch(err => {
+          if (err.message === "not authorized jwt expired")
+            console.log("cagaste Papu");
+        });
+
+      this.setState(prevs => {
+        return {
+          boardsObs: [...prevs.boardsObs, board]
+        };
+      });
+    }
+  };
+  componentDidMount() {
+    if (!localStorage.getItem("UserToken")) {
+      axios
+        .post(`https://kanban-api-node.herokuapp.com/user/login`, {
+          userName: process.env.REACT_APP_DEFAULT_USER,
+          password: process.env.REACT_APP_DEFAULT_PASSWORD
+        })
+        .then(res => localStorage.setItem("UserToken", res.data.token))
+        .catch(e => console.log(e));
+    }
+    axios
+      .get(`https://kanban-api-node.herokuapp.com/user/Test`)
+      .then(res => {
+        this.setState({ boardsObs: res.data.boards });
+      })
+      .catch(err => console.warn(err.message));
+  }
   render() {
     return (
       <div

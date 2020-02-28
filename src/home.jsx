@@ -14,9 +14,9 @@ const Home = () => {
       <Router>
         <Nav />
         <Switch>
-          <Route exact path="/board/userTest" component={BoardTest} />
-          <Route exact path="/boards/userTest" component={Boards} />
-          <Redirect to="/boards/userTest" />
+          <Route exact path="/board/" component={BoardTest} />
+          <Route exact path="/boards/" component={Boards} />
+          <Redirect to="/boards/" />
         </Switch>
       </Router>
     </div>
