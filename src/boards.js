@@ -104,23 +104,25 @@ const DragHandle = SortableHandle(() => {
     </span>
   );
 });
-const SortableList = SortableContainer(({ items, onClose, onCreateBoard }) => {
-  return (
-    <ul style={{ display: "flex", flexWrap: "wrap" }}>
-      {items.map((value, index) => (
-        <SortableItem
-          onCloseF={onClose}
-          key={`item-${value + index}`}
-          index={index}
-          value={value}
-        />
-      ))}
-      <NewBoard onCreateBoard={onCreateBoard} />
-    </ul>
-  );
-});
+const SortableList = SortableContainer(
+  ({ items, removeBoard, onCreateBoard }) => {
+    return (
+      <ul style={{ display: "flex", flexWrap: "wrap" }}>
+        {items.map((value, index) => (
+          <SortableItem
+            removeBoard={removeBoard}
+            key={`item-${value + index}`}
+            index={index}
+            value={value}
+          />
+        ))}
+        <NewBoard onCreateBoard={onCreateBoard} />
+      </ul>
+    );
+  }
+);
 
-const SortableItem = SortableElement(({ value, onCloseF }) => (
+const SortableItem = SortableElement(({ value, removeBoard }) => (
   <li tabIndex={value} style={{ ...styleLi, position: "relative" }}>
     <img
       src={tc}
@@ -135,14 +137,7 @@ const SortableItem = SortableElement(({ value, onCloseF }) => (
       }}
       alt=""
       onClick={() => {
-        onCloseF(prebBoards => {
-          let boardsCopy = [...prebBoards.boardsObs];
-          boardsCopy.splice(
-            prebBoards.boardsObs.findIndex(c => c === value),
-            1
-          );
-          return { boardsObs: boardsCopy };
-        });
+        removeBoard(value);
       }}
     />
     <DragHandle />
@@ -188,8 +183,26 @@ class Boards extends Component {
       userName: localStorage.getItem("UserName") || "Test"
     }
   };
-
   setState = this.setState.bind(this);
+  removeBoard = board => {
+    let token = localStorage.getItem("UserToken");
+    axios({
+      url: `https://kanban-api-node.herokuapp.com/board/${board}`,
+      method: "DELETE",
+      headers: { token: token },
+      data: { boardTitle: board }
+    })
+      .then(res => {
+        console.log("se borro exitosamente");
+      })
+      .catch(err => {
+        if (err.message === "not authorized jwt expired")
+          console.log("cagaste Papu");
+      });
+  };
+
+  removeBoard = this.removeBoard.bind(this);
+
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(({ boardsObs }) => ({
       boardsObs: arrayMove(boardsObs, oldIndex, newIndex)
@@ -235,7 +248,7 @@ class Boards extends Component {
       .then(res => {
         this.setState({ boardsObs: res.data.boards });
       })
-      .catch(err => console.warn(err.message));
+      .catch(err => console.log(err.message));
   }
   render() {
     return (
@@ -251,7 +264,7 @@ class Boards extends Component {
           items={this.state.boardsObs}
           onSortEnd={this.onSortEnd}
           useDragHandle={true}
-          onClose={this.setState}
+          removeBoard={this.removeBoard}
           onCreateBoard={this.createBoard}
           axis="xy"
         />
