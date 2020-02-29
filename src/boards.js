@@ -141,7 +141,7 @@ const SortableItem = SortableElement(({ value, removeBoard }) => (
       }}
     />
     <DragHandle />
-    <Link to="/board/userTest">
+    <Link to={`/board/${value}`}>
       <h3 style={{ marginTop: "12px" }}>{value}</h3>
       <div style={{ display: "flex" }}>
         <div
@@ -199,6 +199,14 @@ class Boards extends Component {
         if (err.message === "not authorized jwt expired")
           console.log("cagaste Papu");
       });
+    this.setState(prev => {
+      let copy = [prev];
+      copy.splice(
+        copy.findIndex(b => b === board),
+        1
+      );
+      return { boardsObs: copy };
+    });
   };
 
   removeBoard = this.removeBoard.bind(this);

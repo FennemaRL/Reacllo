@@ -9,24 +9,20 @@ let item1 = [
   { id: "3", title: "title2", body: "texte", date: "date" }
 ];
 
-for (let i = 4; i < 20; i++) {
-  item1.push({ id: i.toString(), title: `title${i}` });
-}
-
 const columns1 = [
-  { id: "3", title: "papa", items: item1, order: 1 },
-  { id: "4", title: "papa", items: [], order: 2 },
+  { title: "papa1", items: item1, order: 1 },
+  { title: "papa2", items: [], order: 2 },
 
-  { id: "7", title: "papa", items: [], order: 2 },
+  { title: "papa3", items: [], order: 2 },
 
-  { id: "6", title: "papa", items: [], order: 2 }
+  { title: "papa4", items: [], order: 2 }
 ];
 let reftitle = React.createRef();
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
   let { source, destination } = result;
   if (destination.droppableId === source.droppableId) {
-    let indexColumn = columns.findIndex(c => c.id === source.droppableId);
+    let indexColumn = columns.findIndex(c => c.title === source.droppableId);
     let column = columns[indexColumn];
     let copyItems = [...column.items];
     let colcopy = [...columns];
@@ -39,9 +35,11 @@ const onDragEnd = (result, columns, setColumns) => {
     setColumns(colcopy);
   }
   if (destination.droppableId !== source.droppableId) {
-    let indexColumnFrom = columns.findIndex(c => c.id === source.droppableId);
+    let indexColumnFrom = columns.findIndex(
+      c => c.title === source.droppableId
+    );
     let indexColumnTo = columns.findIndex(
-      c => c.id === destination.droppableId
+      c => c.title === destination.droppableId
     );
     let columnFrom = columns[indexColumnFrom];
     let columnTo = columns[indexColumnTo];
@@ -58,7 +56,7 @@ const onDragEnd = (result, columns, setColumns) => {
 const removeColumn = (columnId, columns, setColumns) => {
   let copyColumns = [...columns];
   copyColumns.splice(
-    columns.findIndex(c => c.id === columnId),
+    columns.findIndex(c => c.title === columnId),
     1
   );
   setColumns(copyColumns);
@@ -70,13 +68,13 @@ const createColumn = (
   idActual,
   setSuccId
 ) => {
-  let newColumn = { id: idActual.toString(), title: titleColumn, items: [] };
+  let newColumn = { title: titleColumn, items: [] };
   setSuccId(idActual + 1);
   setColumns([...columns, newColumn]);
 };
 const createTask = (columnId, columns, setColumns) => {
   let columnsCopy = [...columns];
-  let columnToAddtaskIndex = columnsCopy.findIndex(c => c.id === columnId);
+  let columnToAddtaskIndex = columnsCopy.findIndex(c => c.title === columnId);
   let columnToAddCopy = { ...columnsCopy.splice(columnToAddtaskIndex, 1)[0] };
 
   return task => {
@@ -89,7 +87,7 @@ const createTask = (columnId, columns, setColumns) => {
 };
 const removeTask = (columnId, taskIndex, columns, setColumns) => {
   let copyColumns = [...columns];
-  let columnIndex = columns.findIndex(c => c.id === columnId);
+  let columnIndex = columns.findIndex(c => c.title === columnId);
   let columnCopy = { ...copyColumns.splice(columnIndex, 1)[0] };
   columnCopy.items.splice(taskIndex, 1);
   copyColumns.splice(columnIndex, 0, columnCopy);
@@ -116,16 +114,18 @@ function Board() {
         >
           {columns.map(column => {
             return (
-              <div key={column.id} className="column">
+              <div key={column.title} className="column">
                 <h3 className="title">{column.title}</h3>
                 <img
                   src={tc}
                   className="trashCan"
                   title="delete column"
-                  onClick={() => removeColumn(column.id, columns, setColumns)}
+                  onClick={() =>
+                    removeColumn(column.title, columns, setColumns)
+                  }
                 />
 
-                <Droppable key={column.id} droppableId={column.id} place>
+                <Droppable key={column.title} droppableId={column.title} place>
                   {(provided, snapshot) => {
                     return (
                       <div
@@ -167,7 +167,7 @@ function Board() {
                                       title="delete task"
                                       onClick={() => {
                                         removeTask(
-                                          column.id,
+                                          column.title,
                                           indx,
                                           columns,
                                           setColumns
@@ -191,7 +191,7 @@ function Board() {
                     title="create new task"
                     className="newTask"
                     onClick={() =>
-                      setnewTask({ display: true, columnId: column.id })
+                      setnewTask({ display: true, columnId: column.title })
                     }
                   >
                     +
