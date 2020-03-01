@@ -212,9 +212,24 @@ class Boards extends Component {
   removeBoard = this.removeBoard.bind(this);
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    this.setState(({ boardsObs }) => ({
-      boardsObs: arrayMove(boardsObs, oldIndex, newIndex)
-    }));
+    this.setState(({ boardsObs }) => {
+      let token = localStorage.getItem("UserToken");
+      let newOrder = arrayMove(boardsObs, oldIndex, newIndex);
+      axios({
+        url: `https://kanban-api-node.herokuapp.com/user/neworder`,
+        method: "Patch",
+        headers: { token: token },
+        data: { boardsOrder: newOrder }
+      })
+        .then(res => {
+          console.log("se reordeno exitosamente");
+        })
+        .catch(err => {
+          if (err.message === "not authorized jwt expired")
+            console.log("cagaste Papu");
+        });
+      return { boardsObs: newOrder };
+    });
   };
   createBoard = board => {
     let token = localStorage.getItem("UserToken");
