@@ -41,13 +41,28 @@ const onDragEnd = (result, columns, setColumns) => {
     setColumns(colcopy);
   }
 };
-const removeColumn = (columnId, columns, setColumns) => {
+const removeColumn = (tableTitle, columns, setTables, boardName) => {
   let copyColumns = [...columns];
   copyColumns.splice(
-    columns.findIndex(c => c.title === columnId),
+    columns.findIndex(c => c.title === tableTitle),
     1
   );
-  setColumns(copyColumns);
+  /*
+  let token = localStorage.getItem("UserToken");
+  axios({
+    url: `https://kanban-api-node.herokuapp.com/board/newTable/`,
+    method: "Delete",
+    headers: { token: token },
+    data: { boardTitle: boardName, tableTitle: tableTitle }
+  })
+    .then(res => {
+      console.log(res); //message confirm
+    })
+    .catch(err => {
+      if (err.message === "not authorized jwt expired")
+        console.log("cagaste Papu");
+    });*/
+  setTables(copyColumns);
 };
 const createColumn = (titleTable, columns, setColumns, boardName) => {
   let token = localStorage.getItem("UserToken");
@@ -64,7 +79,7 @@ const createColumn = (titleTable, columns, setColumns, boardName) => {
       if (err.message === "not authorized jwt expired")
         console.log("cagaste Papu");
     });
-  let newColumn = { title: titleTable, items: [] };
+  let newColumn = { titleTable: titleTable, content: [] };
   setColumns([...columns, newColumn]);
 };
 const createTask = (columnId, columns, setColumns) => {
@@ -86,10 +101,11 @@ const removeTask = (columnId, taskIndex, columns, setColumns) => {
   let columnCopy = { ...copyColumns.splice(columnIndex, 1)[0] };
   columnCopy.items.splice(taskIndex, 1);
   copyColumns.splice(columnIndex, 0, columnCopy);
+
   setColumns(copyColumns);
 };
 function Board(props) {
-  const [columns, setColumns] = useState([]);
+  const [tables, setTables] = useState([]);
   const [newTask, setnewTask] = useState({
     display: false,
     columnId: undefined
@@ -103,41 +119,49 @@ function Board(props) {
       headers: { token: token }
     })
       .then(res => {
-        /*fetch */
-        console.log(res);
+        setTables(res.data.tables);
       })
       .catch(err => {
         if (err.message === "not authorized jwt expired")
           console.log("cagaste Papu");
       });
-  }, [props.match.params.boardTitle]);
+  }, []);
   return (
     <div>
       <NewTask
         task={newTask}
         close={() => setnewTask({ display: false, columnId: undefined })}
-        addTask={createTask(newTask.columnId, columns, setColumns)}
+        addTask={createTask(newTask.columnId, tables, setTables)}
       />
       <div className="board">
         {" "}
         <DragDropContext
-          onDragEnd={result => onDragEnd(result, columns, setColumns)}
+          onDragEnd={result => onDragEnd(result, tables, setTables)}
         >
-          {columns.map(column => {
+          {tables.map(table => {
             return (
-              <div key={column.title} className="column">
-                <h3 className="title">{column.title}</h3>
+              <div key={table.titleTable} className="column">
+                <h3 className="title">{table.titleTable}</h3>
                 <img
                   src={tc}
                   alt=""
                   className="trashCan"
                   title="delete column"
                   onClick={() =>
-                    removeColumn(column.title, columns, setColumns)
+                    removeColumn(
+                      table.titleTable,
+                      tables,
+                      setTables,
+                      props.match.params.boardTitle
+                    )
                   }
                 />
 
-                <Droppable key={column.title} droppableId={column.title} place>
+                <Droppable
+                  key={table.titleTable}
+                  droppableId={table.titleTable}
+                  place
+                >
                   {(provided, snapshot) => {
                     return (
                       <div
@@ -150,7 +174,7 @@ function Board(props) {
                             : ""
                         }}
                       >
-                        {column.items.map((item, indx) => {
+                        {table.content.map((item, indx) => {
                           return (
                             <Draggable
                               key={item.id}
@@ -180,9 +204,9 @@ function Board(props) {
                                       alt=""
                                       onClick={() => {
                                         removeTask(
-                                          column.title,
-                                          columns,
-                                          setColumns
+                                          table.title,
+                                          tables,
+                                          setTables
                                         );
                                       }}
                                     />
@@ -203,7 +227,7 @@ function Board(props) {
                     title="create new task"
                     className="newTask"
                     onClick={() =>
-                      setnewTask({ display: true, columnId: column.title })
+                      setnewTask({ display: true, columnId: table.title })
                     }
                   >
                     +
@@ -222,8 +246,8 @@ function Board(props) {
                 ? (() => {
                     createColumn(
                       reftitle.current.value,
-                      columns,
-                      setColumns,
+                      tables,
+                      setTables,
                       props.match.params.boardTitle
                     );
                     reftitle.current.value = "";
