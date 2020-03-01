@@ -1,22 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "./trash-can.svg";
 import NewTask from "./newTask";
 import "./board.css";
-let item1 = [
-  { id: "1", title: "title", body: "texte", date: "date" },
-  { id: "2", title: "title1", body: "texte", date: "date" },
-  { id: "3", title: "title2", body: "texte", date: "date" }
-];
+import axios from "axios";
 
-const columns1 = [
-  { title: "papa1", items: item1, order: 1 },
-  { title: "papa2", items: [], order: 2 },
-
-  { title: "papa3", items: [], order: 2 },
-
-  { title: "papa4", items: [], order: 2 }
-];
 let reftitle = React.createRef();
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
@@ -61,15 +49,22 @@ const removeColumn = (columnId, columns, setColumns) => {
   );
   setColumns(copyColumns);
 };
-const createColumn = (
-  titleColumn,
-  columns,
-  setColumns,
-  idActual,
-  setSuccId
-) => {
-  let newColumn = { title: titleColumn, items: [] };
-  setSuccId(idActual + 1);
+const createColumn = (titleTable, columns, setColumns, boardName) => {
+  let token = localStorage.getItem("UserToken");
+  axios({
+    url: `https://kanban-api-node.herokuapp.com/board/newTable/`,
+    method: "Post",
+    headers: { token: token },
+    data: { boardTitle: boardName, tableTitle: titleTable }
+  })
+    .then(res => {
+      console.log(res); /*message confirm */
+    })
+    .catch(err => {
+      if (err.message === "not authorized jwt expired")
+        console.log("cagaste Papu");
+    });
+  let newColumn = { title: titleTable, items: [] };
   setColumns([...columns, newColumn]);
 };
 const createTask = (columnId, columns, setColumns) => {
@@ -93,13 +88,29 @@ const removeTask = (columnId, taskIndex, columns, setColumns) => {
   copyColumns.splice(columnIndex, 0, columnCopy);
   setColumns(copyColumns);
 };
-function Board() {
-  const [columns, setColumns] = useState(columns1);
-  const [idNext, setSuccId] = useState(5);
+function Board(props) {
+  const [columns, setColumns] = useState([]);
   const [newTask, setnewTask] = useState({
     display: false,
     columnId: undefined
   });
+  useEffect(() => {
+    let token = localStorage.getItem("UserToken");
+
+    axios({
+      url: `https://kanban-api-node.herokuapp.com/board/${props.match.params.boardTitle}`,
+      method: "Get",
+      headers: { token: token }
+    })
+      .then(res => {
+        /*fetch */
+        console.log(res);
+      })
+      .catch(err => {
+        if (err.message === "not authorized jwt expired")
+          console.log("cagaste Papu");
+      });
+  }, [props.match.params.boardTitle]);
   return (
     <div>
       <NewTask
@@ -118,6 +129,7 @@ function Board() {
                 <h3 className="title">{column.title}</h3>
                 <img
                   src={tc}
+                  alt=""
                   className="trashCan"
                   title="delete column"
                   onClick={() =>
@@ -165,10 +177,10 @@ function Board() {
                                       style={{ width: "3.5%" }}
                                       className="trashCan"
                                       title="delete task"
+                                      alt=""
                                       onClick={() => {
                                         removeTask(
                                           column.title,
-                                          indx,
                                           columns,
                                           setColumns
                                         );
@@ -212,8 +224,7 @@ function Board() {
                       reftitle.current.value,
                       columns,
                       setColumns,
-                      idNext,
-                      setSuccId
+                      props.match.params.boardTitle
                     );
                     reftitle.current.value = "";
                   })()
