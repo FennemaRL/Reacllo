@@ -122,63 +122,75 @@ const SortableList = SortableContainer(
   }
 );
 
-const SortableItem = SortableElement(({ value, removeBoard }) => (
-  <li tabIndex={value} style={{ ...styleLi, position: "relative" }}>
-    <img
-      src={tc}
-      className="trashCan"
-      title="remove board"
-      style={{
-        height: "15px",
-        width: "15px",
-        position: "absolute",
-        top: "6px",
-        right: "6px"
-      }}
-      alt=""
-      onClick={() => {
-        removeBoard(value);
-      }}
-    />
-    <DragHandle />
-    <Link to={`/board/${value}`}>
-      <h3 style={{ marginTop: "12px" }}>{value}</h3>
-      <div style={{ display: "flex" }}>
-        <div
-          style={{
-            height: "35px",
-            width: "15px",
-            margin: "2px",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            borderRadius: "2px"
-          }}
-        />
-        <div
-          style={{
-            height: "25px",
-            width: "15px",
-            margin: "2px",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            borderRadius: "2px"
-          }}
-        />
-        <div
+const SortableItem = SortableElement(({ value, removeBoard }) => {
+  const [trashCanState, setTrashCanState] = useState(false);
+  return (
+    <li
+      tabIndex={value}
+      style={{ ...styleLi, position: "relative" }}
+      onMouseEnter={() => setTrashCanState(true)}
+      onMouseLeave={() => setTrashCanState(false)}
+    >
+      {trashCanState && (
+        <img
+          src={tc}
+          className="trashCan"
+          title="remove board"
           style={{
             height: "15px",
             width: "15px",
-            margin: "2px",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            borderRadius: "2px"
+            position: "absolute",
+            top: "6px",
+            right: "6px"
+          }}
+          alt=""
+          onClick={() => {
+            removeBoard(value);
           }}
         />
-      </div>
-    </Link>
-  </li>
-));
+      )}
+      <DragHandle />
+      <Link to={`/board/${value}`}>
+        <h3 style={{ marginTop: "12px" }}>{value}</h3>
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              height: "35px",
+              width: "15px",
+              margin: "2px",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              borderRadius: "2px"
+            }}
+          />
+          <div
+            style={{
+              height: "25px",
+              width: "15px",
+              margin: "2px",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              borderRadius: "2px"
+            }}
+          />
+          <div
+            style={{
+              height: "15px",
+              width: "15px",
+              margin: "2px",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              borderRadius: "2px"
+            }}
+          />
+        </div>
+      </Link>
+    </li>
+  );
+});
 
 class Boards extends Component {
   state = {
     boardsObs: [],
+    firstFetch: false,
+    errMessage: "",
     user: {
       userName: localStorage.getItem("UserName") || "Test"
     }
@@ -192,15 +204,14 @@ class Boards extends Component {
       headers: { token: token },
       data: { boardTitle: board }
     })
-      .then(res => {
-        console.log("se borro exitosamente");
-      })
+      .then(res => console.log("se borro exitosamente"))
       .catch(err => {
-        if (err.message === "not authorized jwt expired")
-          console.log("cagaste Papu");
+        this.setState(prev => {
+          return { errMessage: err.response.data.message };
+        });
       });
     this.setState(prev => {
-      let copy = [prev];
+      let copy = [...prev.boardsObs];
       copy.splice(
         copy.findIndex(b => b === board),
         1
@@ -264,14 +275,16 @@ class Boards extends Component {
           password: process.env.REACT_APP_DEFAULT_PASSWORD
         })
         .then(res => localStorage.setItem("UserToken", res.data.token))
-        .catch(e => console.log(e));
+        .catch(err => console.log(err.message));
     }
-    axios
-      .get(`https://kanban-api-node.herokuapp.com/user/Test`)
-      .then(res => {
-        this.setState({ boardsObs: res.data.boards });
-      })
-      .catch(err => console.log(err.message));
+    if (!this.state.firstFetch) {
+      axios
+        .get(`https://kanban-api-node.herokuapp.com/user/Test`)
+        .then(res => {
+          this.setState({ boardsObs: res.data.boards, firstFetch: true });
+        })
+        .catch(err => console.log(err.message));
+    }
   }
   render() {
     return (
