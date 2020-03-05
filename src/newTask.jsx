@@ -108,7 +108,7 @@ const newTask = props => {
               onClick={() => {
                 if (refs.every(r => r.current.value)) {
                   props.addTask({
-                    taskTitle: refs[0].current.value,
+                    titleTask: refs[0].current.value,
                     body: refs[1].current.value
                   });
                   clearRefInputValue();

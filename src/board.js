@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "./trash-can.svg";
 import NewTask from "./newTask";
+import UpdateRes from "./updateRes";
 import "./board.css";
 import axios from "axios";
 
@@ -44,7 +45,7 @@ const onDragEnd = (result, tables, setTables) => {
     setTables(tablesCopy);
   }
 };
-const removeTable = (tableTitle, columns, setTables, boardName) => {
+const removeTable = (tableTitle, columns, setTables, boardName, setMessage) => {
   let copyColumns = [...columns];
   copyColumns.splice(
     columns.findIndex(c => c.tableTitle === tableTitle),
@@ -58,16 +59,13 @@ const removeTable = (tableTitle, columns, setTables, boardName) => {
     headers: { token: token },
     data: { boardTitle: boardName, tableTitle: tableTitle }
   })
-    .then(res => {
-      console.log("se borro correctamente la tabla"); //message confirm
-    })
-    .catch(err => {
-      if (err.message === "not authorized jwt expired")
-        console.log("cagaste Papu");
-    });
+    .then(
+      res => setMessage("se borro correctamente la tabla") //message confirm
+    )
+    .catch(err => setMessage(err.message));
   setTables(copyColumns);
 };
-const createTable = (titleTable, tables, setTables, boardName) => {
+const createTable = (titleTable, tables, setTables, boardName, setMessage) => {
   let token = localStorage.getItem("UserToken");
   if (!tables.includes(titleTable)) {
     axios({
@@ -76,18 +74,16 @@ const createTable = (titleTable, tables, setTables, boardName) => {
       headers: { token: token },
       data: { boardTitle: boardName, tableTitle: titleTable }
     })
-      .then(res => {
-        console.log("se agrego correctamente la tabla"); /*message confirm */
-      })
-      .catch(err => {
-        if (err.message === "not authorized jwt expired")
-          console.log("cagaste Papu");
-      });
+      .then(
+        res =>
+          setMessage("se agrego correctamente la tabla") /*message confirm */
+      )
+      .catch(err => setMessage(err.message));
     let newTable = { titleTable: titleTable, content: [] };
     setTables([...tables, newTable]);
   }
 };
-const createTask = (titleTable, tables, setColumns, boardName) => {
+const createTask = (titleTable, tables, setColumns, boardName, setMessage) => {
   let tablesCopy = [...tables];
   let tableToAddtaskIndex = tablesCopy.findIndex(
     c => c.titleTable === titleTable
@@ -105,13 +101,11 @@ const createTask = (titleTable, tables, setColumns, boardName) => {
         headers: { token: token },
         data: { boardTitle: boardName, tableTitle: titleTable, task: task }
       })
-        .then(res => {
-          console.log("se agrego correctamente la tarea"); /*message confirm */
-        })
-        .catch(err => {
-          if (err.message === "not authorized jwt expired")
-            console.log("cagaste Papu");
-        });
+        .then(res =>
+          setMessage("se agrego correctamente la tarea")
+        ) /*message confirm */
+
+        .catch(err => setMessage(err.message));
       setColumns(tablesCopy);
     }
   };
@@ -122,7 +116,8 @@ const removeTask = (
   task,
   tables,
   setTables,
-  boardName
+  boardName,
+  setMessage
 ) => {
   let copyTables = [...tables];
   let table = copyTables.find(t => t.titleTable === titleTable);
@@ -136,16 +131,11 @@ const removeTask = (
     data: {
       boardTitle: boardName,
       tableTitle: titleTable,
-      taskTitle: task.taskTitle
+      titleTask: task.titleTask
     }
   })
-    .then(res => {
-      console.log("se borro correctamente la tarea"); /*message confirm */
-    })
-    .catch(err => {
-      if (err.message === "not authorized jwt expired")
-        console.log("cagaste Papu");
-    });
+    .then(res => setMessage("se borro correctamente la tarea"))
+    .catch(err => setMessage(err.message));
   setTables(copyTables);
 };
 function Board(props) {
@@ -154,6 +144,7 @@ function Board(props) {
     display: false,
     tableID: undefined
   });
+  const [message, setMessage] = useState("");
   useEffect(() => {
     let token = localStorage.getItem("UserToken");
 
@@ -179,9 +170,11 @@ function Board(props) {
           newTask.tableID,
           tables,
           setTables,
-          props.match.params.boardTitle
+          props.match.params.boardTitle,
+          setMessage
         )}
       />
+      <UpdateRes message={message} />
       <div className="board">
         {" "}
         <DragDropContext
@@ -201,7 +194,8 @@ function Board(props) {
                       table.titleTable,
                       tables,
                       setTables,
-                      props.match.params.boardTitle
+                      props.match.params.boardTitle,
+                      setMessage
                     )
                   }
                 />
@@ -226,8 +220,8 @@ function Board(props) {
                         {table.content.map((task, indx) => {
                           return (
                             <Draggable
-                              key={task.taskTitle}
-                              draggableId={task.taskTitle}
+                              key={task.titleTask}
+                              draggableId={task.titleTask}
                               index={indx}
                             >
                               {(provided, snapshot) => {
@@ -244,7 +238,7 @@ function Board(props) {
                                       ...provided.draggableProps.style
                                     }}
                                   >
-                                    <p className="title">{task.taskTitle}</p>
+                                    <p className="title">{task.titleTask}</p>
                                     <img
                                       src={tc}
                                       style={{ width: "3.5%" }}
@@ -258,7 +252,8 @@ function Board(props) {
                                           task,
                                           tables,
                                           setTables,
-                                          props.match.params.boardTitle
+                                          props.match.params.boardTitle,
+                                          setMessage
                                         );
                                       }}
                                     />
@@ -300,7 +295,8 @@ function Board(props) {
                       reftitle.current.value,
                       tables,
                       setTables,
-                      props.match.params.boardTitle
+                      props.match.params.boardTitle,
+                      setMessage
                     );
                     reftitle.current.value = "";
                   })()
