@@ -11,3 +11,7 @@ li span:hover {
 li span.grab {
   cursor: -webkit-grabbing;
 }
+.trashCan .display {
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}

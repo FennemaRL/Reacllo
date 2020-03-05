@@ -108,10 +108,8 @@ const newTask = props => {
               onClick={() => {
                 if (refs.every(r => r.current.value)) {
                   props.addTask({
-                    id: "5",
-                    title: refs[0].current.value,
-                    body: refs[1].current.value,
-                    tiempo: refs[2].current.value
+                    taskTitle: refs[0].current.value,
+                    body: refs[1].current.value
                   });
                   clearRefInputValue();
                   props.close();

@@ -6,109 +6,153 @@ import "./board.css";
 import axios from "axios";
 
 let reftitle = React.createRef();
-const onDragEnd = (result, columns, setColumns) => {
+const onDragEnd = (result, tables, setTables) => {
   if (!result.destination) return;
   let { source, destination } = result;
   if (destination.droppableId === source.droppableId) {
-    let indexColumn = columns.findIndex(c => c.title === source.droppableId);
-    let column = columns[indexColumn];
-    let copyItems = [...column.items];
-    let colcopy = [...columns];
-    let rmItem = copyItems.splice(source.index, 1)[0];
-    copyItems.splice(destination.index, 0, rmItem);
-    colcopy.splice(indexColumn, 1, {
-      ...column,
-      items: copyItems
+    let indexTable = tables.findIndex(c => c.titleTable === source.droppableId);
+    let table = tables[indexTable];
+    let copytask = [...table.content];
+    let tablescopy = [...tables];
+    let rmItem = copytask.splice(source.index, 1)[0];
+    copytask.splice(destination.index, 0, rmItem);
+    tablescopy.splice(indexTable, 1, {
+      ...table,
+      content: copytask
     });
-    setColumns(colcopy);
+    setTables(tablescopy);
   }
   if (destination.droppableId !== source.droppableId) {
-    let indexColumnFrom = columns.findIndex(
-      c => c.title === source.droppableId
+    let indexTableFrom = tables.findIndex(
+      c => c.titleTable === source.droppableId
     );
-    let indexColumnTo = columns.findIndex(
-      c => c.title === destination.droppableId
+    let indexTableTo = tables.findIndex(
+      c => c.titleTable === destination.droppableId
     );
-    let columnFrom = columns[indexColumnFrom];
-    let columnTo = columns[indexColumnTo];
-    let copyItemsFrom = [...columnFrom.items];
-    let copyItemsTo = [...columnTo.items];
-    let colcopy = [...columns];
-    let rmItem = copyItemsFrom.splice(source.index, 1)[0];
-    copyItemsTo.splice(destination.index, 0, rmItem);
-    colcopy.splice(indexColumnFrom, 1, { ...columnFrom, items: copyItemsFrom });
-    colcopy.splice(indexColumnTo, 1, { ...columnTo, items: copyItemsTo });
-    setColumns(colcopy);
+    let tableFrom = tables[indexTableFrom];
+    let tableTo = tables[indexTableTo];
+    let copyTaskFrom = [...tableFrom.content];
+    let copyTaskTo = [...tableTo.content];
+    let tablesCopy = [...tables];
+    let rmItem = copyTaskFrom.splice(source.index, 1)[0];
+    copyTaskTo.splice(destination.index, 0, rmItem);
+    tablesCopy.splice(indexTableFrom, 1, {
+      ...tableFrom,
+      content: copyTaskFrom
+    });
+    tablesCopy.splice(indexTableTo, 1, { ...tableTo, content: copyTaskTo });
+    setTables(tablesCopy);
   }
 };
-const removeColumn = (tableTitle, columns, setTables, boardName) => {
+const removeTable = (tableTitle, columns, setTables, boardName) => {
   let copyColumns = [...columns];
   copyColumns.splice(
-    columns.findIndex(c => c.title === tableTitle),
+    columns.findIndex(c => c.tableTitle === tableTitle),
     1
   );
-  /*
+
   let token = localStorage.getItem("UserToken");
   axios({
-    url: `https://kanban-api-node.herokuapp.com/board/newTable/`,
+    url: `https://kanban-api-node.herokuapp.com/board/table/`,
     method: "Delete",
     headers: { token: token },
     data: { boardTitle: boardName, tableTitle: tableTitle }
   })
     .then(res => {
-      console.log(res); //message confirm
-    })
-    .catch(err => {
-      if (err.message === "not authorized jwt expired")
-        console.log("cagaste Papu");
-    });*/
-  setTables(copyColumns);
-};
-const createColumn = (titleTable, columns, setColumns, boardName) => {
-  let token = localStorage.getItem("UserToken");
-  axios({
-    url: `https://kanban-api-node.herokuapp.com/board/newTable/`,
-    method: "Post",
-    headers: { token: token },
-    data: { boardTitle: boardName, tableTitle: titleTable }
-  })
-    .then(res => {
-      console.log(res); /*message confirm */
+      console.log("se borro correctamente la tabla"); //message confirm
     })
     .catch(err => {
       if (err.message === "not authorized jwt expired")
         console.log("cagaste Papu");
     });
-  let newColumn = { titleTable: titleTable, content: [] };
-  setColumns([...columns, newColumn]);
+  setTables(copyColumns);
 };
-const createTask = (columnId, columns, setColumns) => {
-  let columnsCopy = [...columns];
-  let columnToAddtaskIndex = columnsCopy.findIndex(c => c.title === columnId);
-  let columnToAddCopy = { ...columnsCopy.splice(columnToAddtaskIndex, 1)[0] };
+const createTable = (titleTable, tables, setTables, boardName) => {
+  let token = localStorage.getItem("UserToken");
+  if (!tables.includes(titleTable)) {
+    axios({
+      url: `https://kanban-api-node.herokuapp.com/board/table/`,
+      method: "Post",
+      headers: { token: token },
+      data: { boardTitle: boardName, tableTitle: titleTable }
+    })
+      .then(res => {
+        console.log("se agrego correctamente la tabla"); /*message confirm */
+      })
+      .catch(err => {
+        if (err.message === "not authorized jwt expired")
+          console.log("cagaste Papu");
+      });
+    let newTable = { titleTable: titleTable, content: [] };
+    setTables([...tables, newTable]);
+  }
+};
+const createTask = (titleTable, tables, setColumns, boardName) => {
+  let tablesCopy = [...tables];
+  let tableToAddtaskIndex = tablesCopy.findIndex(
+    c => c.titleTable === titleTable
+  );
+  let columnToAddCopy = { ...tablesCopy.splice(tableToAddtaskIndex, 1)[0] };
 
   return task => {
     if (task) {
-      columnToAddCopy.item = columnToAddCopy.items.push(task);
-      columnsCopy.splice(columnToAddtaskIndex, 0, columnToAddCopy);
-      setColumns(columnsCopy);
+      let token = localStorage.getItem("UserToken");
+      columnToAddCopy.item = columnToAddCopy.content.push(task);
+      tablesCopy.splice(tableToAddtaskIndex, 0, columnToAddCopy);
+      axios({
+        url: `https://kanban-api-node.herokuapp.com/board/table/task/`,
+        method: "Post",
+        headers: { token: token },
+        data: { boardTitle: boardName, tableTitle: titleTable, task: task }
+      })
+        .then(res => {
+          console.log("se agrego correctamente la tarea"); /*message confirm */
+        })
+        .catch(err => {
+          if (err.message === "not authorized jwt expired")
+            console.log("cagaste Papu");
+        });
+      setColumns(tablesCopy);
     }
   };
 };
-const removeTask = (columnId, taskIndex, columns, setColumns) => {
-  let copyColumns = [...columns];
-  let columnIndex = columns.findIndex(c => c.title === columnId);
-  let columnCopy = { ...copyColumns.splice(columnIndex, 1)[0] };
-  columnCopy.items.splice(taskIndex, 1);
-  copyColumns.splice(columnIndex, 0, columnCopy);
+const removeTask = (
+  titleTable,
+  taskIndex,
+  task,
+  tables,
+  setTables,
+  boardName
+) => {
+  let copyTables = [...tables];
+  let table = copyTables.find(t => t.titleTable === titleTable);
+  table.content.splice(taskIndex, 1);
 
-  setColumns(copyColumns);
+  let token = localStorage.getItem("UserToken");
+  axios({
+    url: `https://kanban-api-node.herokuapp.com/board/table/task/`,
+    method: "delete",
+    headers: { token: token },
+    data: {
+      boardTitle: boardName,
+      tableTitle: titleTable,
+      taskTitle: task.taskTitle
+    }
+  })
+    .then(res => {
+      console.log("se borro correctamente la tarea"); /*message confirm */
+    })
+    .catch(err => {
+      if (err.message === "not authorized jwt expired")
+        console.log("cagaste Papu");
+    });
+  setTables(copyTables);
 };
 function Board(props) {
   const [tables, setTables] = useState([]);
   const [newTask, setnewTask] = useState({
     display: false,
-    columnId: undefined
+    tableID: undefined
   });
   useEffect(() => {
     let token = localStorage.getItem("UserToken");
@@ -130,8 +174,13 @@ function Board(props) {
     <div>
       <NewTask
         task={newTask}
-        close={() => setnewTask({ display: false, columnId: undefined })}
-        addTask={createTask(newTask.columnId, tables, setTables)}
+        close={() => setnewTask({ display: false, tableID: undefined })}
+        addTask={createTask(
+          newTask.tableID,
+          tables,
+          setTables,
+          props.match.params.boardTitle
+        )}
       />
       <div className="board">
         {" "}
@@ -148,7 +197,7 @@ function Board(props) {
                   className="trashCan"
                   title="delete column"
                   onClick={() =>
-                    removeColumn(
+                    removeTable(
                       table.titleTable,
                       tables,
                       setTables,
@@ -174,11 +223,11 @@ function Board(props) {
                             : ""
                         }}
                       >
-                        {table.content.map((item, indx) => {
+                        {table.content.map((task, indx) => {
                           return (
                             <Draggable
-                              key={item.id}
-                              draggableId={item.id}
+                              key={task.taskTitle}
+                              draggableId={task.taskTitle}
                               index={indx}
                             >
                               {(provided, snapshot) => {
@@ -195,7 +244,7 @@ function Board(props) {
                                       ...provided.draggableProps.style
                                     }}
                                   >
-                                    <p className="title">{item.title}</p>
+                                    <p className="title">{task.taskTitle}</p>
                                     <img
                                       src={tc}
                                       style={{ width: "3.5%" }}
@@ -204,9 +253,12 @@ function Board(props) {
                                       alt=""
                                       onClick={() => {
                                         removeTask(
-                                          table.title,
+                                          table.titleTable,
+                                          indx,
+                                          task,
                                           tables,
-                                          setTables
+                                          setTables,
+                                          props.match.params.boardTitle
                                         );
                                       }}
                                     />
@@ -227,7 +279,7 @@ function Board(props) {
                     title="create new task"
                     className="newTask"
                     onClick={() =>
-                      setnewTask({ display: true, columnId: table.title })
+                      setnewTask({ display: true, tableID: table.titleTable })
                     }
                   >
                     +
@@ -244,7 +296,7 @@ function Board(props) {
               e.preventDefault();
               reftitle.current.value
                 ? (() => {
-                    createColumn(
+                    createTable(
                       reftitle.current.value,
                       tables,
                       setTables,

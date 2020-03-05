@@ -42,6 +42,7 @@
   border-radius: 0px 3px 3px 0px;
   background-color: rgb(96, 125, 139);
   color: white;
+  cursor: pointer;
 }
 .column {
   background-color: #eceff1;

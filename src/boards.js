@@ -9,6 +9,7 @@ import arrayMove from "array-move";
 import tc from "./trash-can.svg";
 import "./boards.css";
 import axios from "axios";
+import UpdateRes from "./updateRes";
 let styleLi = {
   textDecoration: "none",
   color: "white",
@@ -18,7 +19,7 @@ let styleLi = {
   height: "90px",
   borderRadius: "5px",
 
-  boxShadow: "0px 4px 5px 0px rgba(0,0,0,0.75)",
+  boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.75)",
   backgroundColor: "#B0BEC5"
 };
 const NewBoard = props => {
@@ -57,8 +58,8 @@ const NewBoard = props => {
             style={{
               flex: 0.62,
               margin: "8px 0",
-              height: "24px",
-              borderRadius: "1px",
+              height: "30px",
+              borderRadius: "3px",
               border: "none",
               color: "white",
               backgroundColor: "#1A7737"
@@ -77,9 +78,9 @@ const NewBoard = props => {
           <button
             style={{
               flex: 0.33,
-              height: "24px",
+              height: "30px",
               margin: "8px 0",
-              borderRadius: "1px",
+              borderRadius: "3px",
               border: "none",
               color: "white",
               backgroundColor: "#CC161C"
@@ -187,29 +188,29 @@ const SortableItem = SortableElement(({ value, removeBoard }) => {
 });
 
 class Boards extends Component {
-  state = {
-    boardsObs: [],
-    firstFetch: false,
-    errMessage: "",
-    user: {
-      userName: localStorage.getItem("UserName") || "Test"
-    }
-  };
-  setState = this.setState.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      boardsObs: [],
+      firstFetch: false,
+      errMessage: "",
+      user: {
+        userName: localStorage.getItem("UserName") || "Test"
+      }
+    };
+    this.setState = this.setState.bind(this);
+  }
   removeBoard = board => {
     let token = localStorage.getItem("UserToken");
     axios({
-      url: `https://kanban-api-node.herokuapp.com/board/${board}`,
+      url: `https://kanban-api-node.herokuapp.com/board/`,
       method: "DELETE",
       headers: { token: token },
       data: { boardTitle: board }
     })
-      .then(res => console.log("se borro exitosamente"))
-      .catch(err => {
-        this.setState(prev => {
-          return { errMessage: err.response.data.message };
-        });
-      });
+      .then(res => this.setState({ message: "se borro exitosamente" }))
+      .catch(err => this.setState({ message: err.response.data.message }));
+
     this.setState(prev => {
       let copy = [...prev.boardsObs];
       copy.splice(
@@ -232,40 +233,32 @@ class Boards extends Component {
         headers: { token: token },
         data: { boardsOrder: newOrder }
       })
-        .then(res => {
-          console.log("se reordeno exitosamente");
-        })
-        .catch(err => {
-          if (err.message === "not authorized jwt expired")
-            console.log("cagaste Papu");
-        });
+        .then(res => this.setState({ message: "se reordeno exitosamente" }))
+        .catch(err => this.setState({ message: err.message }));
       return { boardsObs: newOrder };
     });
   };
   createBoard = board => {
     let token = localStorage.getItem("UserToken");
 
-    if (!this.state.boardsObs.includes(board)) {
-      axios({
-        url: `https://kanban-api-node.herokuapp.com/board`,
-        method: "POST",
-        headers: { token: token },
-        data: { boardTitle: board }
-      })
-        .then(res => {
-          console.log("se guardo exitosamente");
-        })
-        .catch(err => {
-          if (err.message === "not authorized jwt expired")
-            console.log("cagaste Papu");
-        });
-
-      this.setState(prevs => {
-        return {
-          boardsObs: [...prevs.boardsObs, board]
-        };
-      });
+    if (this.state.boardsObs.includes(board)) {
+      this.setState({ message: "Existe una board con ese nombre" });
+      return;
     }
+    axios({
+      url: `https://kanban-api-node.herokuapp.com/board`,
+      method: "POST",
+      headers: { token: token },
+      data: { boardTitle: board }
+    })
+      .then(res => this.setState({ message: "se guardo exitosamente" }))
+      .catch(err => this.setState({ message: err.message }));
+
+    this.setState(prevs => {
+      return {
+        boardsObs: [...prevs.boardsObs, board]
+      };
+    });
   };
   componentDidMount() {
     if (!localStorage.getItem("UserToken")) {
@@ -288,23 +281,26 @@ class Boards extends Component {
   }
   render() {
     return (
-      <div
-        style={{
-          minHeight: "89vh",
-          minWidth: "70%",
-          margin: "0 15%",
-          paddingTop: "30px"
-        }}
-      >
-        <SortableList
-          items={this.state.boardsObs}
-          onSortEnd={this.onSortEnd}
-          useDragHandle={true}
-          removeBoard={this.removeBoard}
-          onCreateBoard={this.createBoard}
-          axis="xy"
-        />
-      </div>
+      <>
+        <UpdateRes message={this.state.message} />
+        <div
+          style={{
+            minHeight: "89vh",
+            minWidth: "70%",
+            margin: "0 15%",
+            paddingTop: "30px"
+          }}
+        >
+          <SortableList
+            items={this.state.boardsObs}
+            onSortEnd={this.onSortEnd}
+            useDragHandle={true}
+            removeBoard={this.removeBoard}
+            onCreateBoard={this.createBoard}
+            axis="xy"
+          />
+        </div>
+      </>
     );
   }
 }
