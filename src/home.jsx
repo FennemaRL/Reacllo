@@ -2,6 +2,7 @@ import React from "react";
 import Nav from "./navBar";
 import BoardTest from "./board";
 import Boards from "./boards";
+import RoterState from "./route";
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,6 +14,7 @@ const Home = () => {
     <div>
       <Router>
         <Nav />
+        <RoterState />
         <Switch>
           <Route exact path="/board/:boardTitle" component={BoardTest} />
           <Route exact path="/boards/" component={Boards} />

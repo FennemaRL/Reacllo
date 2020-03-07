@@ -17,11 +17,15 @@ header a {
   font-style: italic;
   margin-left: 15px;
 }
-header .userNav {
+header .userNav nav {
   padding-right: 15px;
   display: flex;
   width: 300px;
-  justify-content: space-between;
+  justify-content: space-around;
+
+  align-items: center;
+  display: flex;
+  font-weight: 300;
 }
 
 header .userNav button {
@@ -35,8 +39,8 @@ header .userNav button {
 header .userNav button:hover {
   cursor: pointer;
 }
-header .userNav nav {
-  align-items: center;
+.buttons {
+  width: 180px;
+  justify-content: space-around;
   display: flex;
-  font-weight: 300;
 }

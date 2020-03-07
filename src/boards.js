@@ -193,7 +193,7 @@ class Boards extends Component {
     this.state = {
       boardsObs: [],
       firstFetch: false,
-      errMessage: "",
+      errMessage: props.message | "",
       user: {
         userName: localStorage.getItem("UserName") || "Test"
       }
@@ -280,7 +280,6 @@ class Boards extends Component {
     }
   }
   render() {
-    console.log(this.props);
     return (
       <>
         <UpdateRes message={this.state.message} />

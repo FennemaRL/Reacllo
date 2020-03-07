@@ -3,17 +3,26 @@ import { Link } from "react-router-dom";
 import "./nav.css";
 class Nav extends Component {
   state = {};
+  logOutUser() {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("UserToken");
+  }
   render() {
+    let isLog = localStorage.getItem("userName");
+    let userName = localStorage.getItem("userName") || "UserTest";
+
     return (
       <header>
-        <Link to="/boards/userTest">Reacllo</Link>
+        <Link to="/boards/">Reacllo</Link>
         <div className="userNav">
-          <Link to="/boards/userTest">
-            <button>MyBoards</button>
-          </Link>
           <nav>
-            <img />
-            <p>Pepe rumualdo</p>
+            <p>{userName}</p>
+            {(isLog && <button onCLick={this.logOutUser}>LogOut</button>) || (
+              <div className="buttons">
+                <button>logIn</button>
+                <button>Register</button>
+              </div>
+            )}
           </nav>
         </div>
       </header>

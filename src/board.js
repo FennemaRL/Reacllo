@@ -7,7 +7,15 @@ import "./board.css";
 import axios from "axios";
 
 let reftitle = React.createRef();
-const onDragEnd = (result, tables, setTables, boardName, setMessage) => {
+
+const onDragEnd = (
+  result,
+  tables,
+  setTables,
+  boardName,
+  setMessage,
+  redirect
+) => {
   /* taskTitle, boardTitle, tableTitleFrom, tableTitleTo, indexTo */
   let tableTitleTo;
   let tableTitleFrom;
@@ -72,9 +80,16 @@ const onDragEnd = (result, tables, setTables, boardName, setMessage) => {
     .then(
       res => setMessage("se reordeno la tarea correctamente") //message confirm
     )
-    .catch(err => setMessage(err.message));
+    .catch(err => redirect(err));
 };
-const removeTable = (tableTitle, columns, setTables, boardName, setMessage) => {
+const removeTable = (
+  tableTitle,
+  columns,
+  setTables,
+  boardName,
+  setMessage,
+  redirect
+) => {
   let copyColumns = [...columns];
   copyColumns.splice(
     columns.findIndex(c => c.tableTitle === tableTitle),
@@ -91,10 +106,17 @@ const removeTable = (tableTitle, columns, setTables, boardName, setMessage) => {
     .then(
       res => setMessage("se borro correctamente la tabla") //message confirm
     )
-    .catch(err => setMessage(err.message));
+    .catch(err => redirect(err));
   setTables(copyColumns);
 };
-const createTable = (titleTable, tables, setTables, boardName, setMessage) => {
+const createTable = (
+  titleTable,
+  tables,
+  setTables,
+  boardName,
+  setMessage,
+  redirect
+) => {
   let token = localStorage.getItem("UserToken");
   if (!tables.includes(titleTable)) {
     axios({
@@ -107,12 +129,21 @@ const createTable = (titleTable, tables, setTables, boardName, setMessage) => {
         res =>
           setMessage("se agrego correctamente la tabla") /*message confirm */
       )
-      .catch(err => setMessage(err.message));
+      .catch(err => {
+        redirect(err);
+      });
     let newTable = { titleTable: titleTable, content: [] };
     setTables([...tables, newTable]);
   }
 };
-const createTask = (titleTable, tables, setColumns, boardName, setMessage) => {
+const createTask = (
+  titleTable,
+  tables,
+  setColumns,
+  boardName,
+  setMessage,
+  redirect
+) => {
   let tablesCopy = [...tables];
   let tableToAddtaskIndex = tablesCopy.findIndex(
     c => c.titleTable === titleTable
@@ -134,7 +165,7 @@ const createTask = (titleTable, tables, setColumns, boardName, setMessage) => {
           setMessage("se agrego correctamente la tarea")
         ) /*message confirm */
 
-        .catch(err => setMessage(err.message));
+        .catch(err => redirect(err));
       setColumns(tablesCopy);
     }
   };
@@ -146,7 +177,8 @@ const removeTask = (
   tables,
   setTables,
   boardName,
-  setMessage
+  setMessage,
+  redirect
 ) => {
   let copyTables = [...tables];
   let table = copyTables.find(t => t.titleTable === titleTable);
@@ -164,7 +196,7 @@ const removeTask = (
     }
   })
     .then(res => setMessage("se borro correctamente la tarea"))
-    .catch(err => setMessage(err.message));
+    .catch(err => redirect(err));
   setTables(copyTables);
 };
 const TableMapper = ({
@@ -172,7 +204,8 @@ const TableMapper = ({
   setTables,
   boardTitle,
   setMessage,
-  setnewTask
+  setnewTask,
+  redirect
 }) => {
   return tables.map(table => {
     return (
@@ -189,7 +222,8 @@ const TableMapper = ({
               tables,
               setTables,
               boardTitle,
-              setMessage
+              setMessage,
+              redirect
             )
           }
         />
@@ -278,6 +312,18 @@ function Board(props) {
     display: false,
     tableID: undefined
   });
+  const redirect = props => err => {
+    if (err.response.status === 401) {
+      localStorage.removeItem("UserToken");
+      let user = localStorage.getItem("userName");
+      localStorage.removeItem("userName");
+      props.history.push("/boards", {
+        message: user
+          ? "El usuario no esta auntenticado intente loguear nuevamente "
+          : "las credenciales caducaron por eso se redirecciono al inicio"
+      }); /*setear mensaje de log out */
+    }
+  };
   const [message, setMessage] = useState("");
   useEffect(() => {
     let token = localStorage.getItem("UserToken");
@@ -290,10 +336,7 @@ function Board(props) {
       .then(res => {
         setTables(res.data.tables);
       })
-      .catch(err => {
-        if (err.message === "not authorized jwt expired")
-          console.log("cagaste Papu");
-      });
+      .catch(err => redirect(props)(err));
   }, []);
   return (
     <div>
@@ -318,7 +361,8 @@ function Board(props) {
               tables,
               setTables,
               props.match.params.boardTitle,
-              setMessage
+              setMessage,
+              redirect(props)
             )
           }
         >
@@ -328,6 +372,7 @@ function Board(props) {
             boardTitle={props.match.params.boardTitle}
             setMessage={setMessage}
             setnewTask={setnewTask}
+            redirect={redirect(props)}
           />
         </DragDropContext>
         <div className="newColumn">
@@ -342,7 +387,8 @@ function Board(props) {
                       tables,
                       setTables,
                       props.match.params.boardTitle,
-                      setMessage
+                      setMessage,
+                      redirect(props)
                     );
                     reftitle.current.value = "";
                   })()
