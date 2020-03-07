@@ -7,20 +7,29 @@ import "./board.css";
 import axios from "axios";
 
 let reftitle = React.createRef();
-const onDragEnd = (result, tables, setTables) => {
+const onDragEnd = (result, tables, setTables, boardName, setMessage) => {
+  /* taskTitle, boardTitle, tableTitleFrom, tableTitleTo, indexTo */
+  let tableTitleTo;
+  let tableTitleFrom;
+
   if (!result.destination) return;
+
   let { source, destination } = result;
+  let indexTo = destination.index;
+  let rmItem;
   if (destination.droppableId === source.droppableId) {
     let indexTable = tables.findIndex(c => c.titleTable === source.droppableId);
     let table = tables[indexTable];
     let copytask = [...table.content];
     let tablescopy = [...tables];
-    let rmItem = copytask.splice(source.index, 1)[0];
+    rmItem = copytask.splice(source.index, 1)[0];
     copytask.splice(destination.index, 0, rmItem);
     tablescopy.splice(indexTable, 1, {
       ...table,
       content: copytask
     });
+    tableTitleTo = destination.droppableId;
+    tableTitleFrom = destination.droppableId;
     setTables(tablescopy);
   }
   if (destination.droppableId !== source.droppableId) {
@@ -35,15 +44,36 @@ const onDragEnd = (result, tables, setTables) => {
     let copyTaskFrom = [...tableFrom.content];
     let copyTaskTo = [...tableTo.content];
     let tablesCopy = [...tables];
-    let rmItem = copyTaskFrom.splice(source.index, 1)[0];
+    rmItem = copyTaskFrom.splice(source.index, 1)[0];
     copyTaskTo.splice(destination.index, 0, rmItem);
     tablesCopy.splice(indexTableFrom, 1, {
       ...tableFrom,
       content: copyTaskFrom
     });
     tablesCopy.splice(indexTableTo, 1, { ...tableTo, content: copyTaskTo });
+
+    tableTitleTo = destination.droppableId;
+    tableTitleFrom = source.droppableId;
     setTables(tablesCopy);
   }
+  console.log(rmItem);
+  let token = localStorage.getItem("UserToken");
+  axios({
+    url: `https://kanban-api-node.herokuapp.com/board/table/task`,
+    method: "Patch",
+    data: {
+      boardTitle: boardName,
+      tableTitleTo: tableTitleTo,
+      tableTitleFrom: tableTitleFrom,
+      taskTitle: rmItem.titleTask,
+      indexTo: indexTo
+    },
+    headers: { token: token }
+  })
+    .then(
+      res => setMessage("se reordeno la tarea correctamente") //message confirm
+    )
+    .catch(err => setMessage(err.message));
 };
 const removeTable = (tableTitle, columns, setTables, boardName, setMessage) => {
   let copyColumns = [...columns];
@@ -138,6 +168,111 @@ const removeTask = (
     .catch(err => setMessage(err.message));
   setTables(copyTables);
 };
+const TableMapper = ({
+  tables,
+  setTables,
+  boardTitle,
+  setMessage,
+  setnewTask
+}) => {
+  return tables.map(table => {
+    return (
+      <div key={table.titleTable} className="column">
+        <h3 className="title">{table.titleTable}</h3>
+        <img
+          src={tc}
+          alt=""
+          className="trashCan"
+          title="delete column"
+          onClick={() =>
+            removeTable(
+              table.titleTable,
+              tables,
+              setTables,
+              boardTitle,
+              setMessage
+            )
+          }
+        />
+
+        <Droppable key={table.titleTable} droppableId={table.titleTable} place>
+          {(provided, snapshot) => {
+            return (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="listContainer"
+                style={{
+                  backgroundColor: snapshot.isDraggingOver ? "lightblue" : ""
+                }}
+              >
+                {table.content.map((task, indx) => {
+                  return (
+                    <Draggable
+                      key={task.titleTask}
+                      draggableId={task.titleTask}
+                      index={indx}
+                    >
+                      {(provided, snapshot) => {
+                        return (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="itemList"
+                            style={{
+                              backgroundColor: snapshot.isDragging
+                                ? "#CFD8DC"
+                                : "#FAFAFA",
+                              ...provided.draggableProps.style
+                            }}
+                          >
+                            <p className="title">{task.titleTask}</p>
+                            <img
+                              src={tc}
+                              style={{ width: "3.5%" }}
+                              className="trashCan"
+                              title="delete task"
+                              alt=""
+                              onClick={() => {
+                                removeTask(
+                                  table.titleTable,
+                                  indx,
+                                  task,
+                                  tables,
+                                  setTables,
+                                  boardTitle,
+                                  setMessage
+                                );
+                              }}
+                            />
+                          </div>
+                        );
+                      }}
+                    </Draggable>
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
+
+        <div className="containerButtonNewTask">
+          <button
+            title="create new task"
+            className="newTask"
+            onClick={() =>
+              setnewTask({ display: true, tableID: table.titleTable })
+            }
+          >
+            +
+          </button>
+        </div>
+      </div>
+    );
+  });
+};
 function Board(props) {
   const [tables, setTables] = useState([]);
   const [newTask, setnewTask] = useState({
@@ -178,111 +313,23 @@ function Board(props) {
       <div className="board">
         {" "}
         <DragDropContext
-          onDragEnd={result => onDragEnd(result, tables, setTables)}
+          onDragEnd={result =>
+            onDragEnd(
+              result,
+              tables,
+              setTables,
+              props.match.params.boardTitle,
+              setMessage
+            )
+          }
         >
-          {tables.map(table => {
-            return (
-              <div key={table.titleTable} className="column">
-                <h3 className="title">{table.titleTable}</h3>
-                <img
-                  src={tc}
-                  alt=""
-                  className="trashCan"
-                  title="delete column"
-                  onClick={() =>
-                    removeTable(
-                      table.titleTable,
-                      tables,
-                      setTables,
-                      props.match.params.boardTitle,
-                      setMessage
-                    )
-                  }
-                />
-
-                <Droppable
-                  key={table.titleTable}
-                  droppableId={table.titleTable}
-                  place
-                >
-                  {(provided, snapshot) => {
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className="listContainer"
-                        style={{
-                          backgroundColor: snapshot.isDraggingOver
-                            ? "lightblue"
-                            : ""
-                        }}
-                      >
-                        {table.content.map((task, indx) => {
-                          return (
-                            <Draggable
-                              key={task.titleTask}
-                              draggableId={task.titleTask}
-                              index={indx}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className="itemList"
-                                    style={{
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#CFD8DC"
-                                        : "#FAFAFA",
-                                      ...provided.draggableProps.style
-                                    }}
-                                  >
-                                    <p className="title">{task.titleTask}</p>
-                                    <img
-                                      src={tc}
-                                      style={{ width: "3.5%" }}
-                                      className="trashCan"
-                                      title="delete task"
-                                      alt=""
-                                      onClick={() => {
-                                        removeTask(
-                                          table.titleTable,
-                                          indx,
-                                          task,
-                                          tables,
-                                          setTables,
-                                          props.match.params.boardTitle,
-                                          setMessage
-                                        );
-                                      }}
-                                    />
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    );
-                  }}
-                </Droppable>
-
-                <div className="containerButtonNewTask">
-                  <button
-                    title="create new task"
-                    className="newTask"
-                    onClick={() =>
-                      setnewTask({ display: true, tableID: table.titleTable })
-                    }
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+          <TableMapper
+            tables={tables}
+            setTables={setTables}
+            boardTitle={props.match.params.boardTitle}
+            setMessage={setMessage}
+            setnewTask={setnewTask}
+          />
         </DragDropContext>
         <div className="newColumn">
           <input ref={reftitle} type="text" placeholder="Add new row" />
