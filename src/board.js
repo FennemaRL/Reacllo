@@ -56,7 +56,6 @@ const onDragEnd = (result, tables, setTables, boardName, setMessage) => {
     tableTitleFrom = source.droppableId;
     setTables(tablesCopy);
   }
-  console.log(rmItem);
   let token = localStorage.getItem("UserToken");
   axios({
     url: `https://kanban-api-node.herokuapp.com/board/table/task`,

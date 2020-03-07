@@ -280,6 +280,7 @@ class Boards extends Component {
     }
   }
   render() {
+    console.log(this.props);
     return (
       <>
         <UpdateRes message={this.state.message} />
