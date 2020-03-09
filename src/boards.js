@@ -33,7 +33,7 @@ const NewBoard = props => {
           setDisplay(true);
         }}
       >
-        add new board
+        add new board ...
       </p>
       <div style={{ display: !display ? "none" : "" }}>
         <p>Title : </p>
@@ -192,14 +192,24 @@ class Boards extends Component {
     super(props);
     this.state = {
       boardsObs: [],
-      firstFetch: false,
-      errMessage: props.message | "",
-      user: {
-        userName: localStorage.getItem("UserName") || "Test"
-      }
+      firstFetch: true,
+      message: props.location.message
     };
     this.setState = this.setState.bind(this);
   }
+
+  errHandler = err => {
+    localStorage.removeItem("UserToken");
+    localStorage.removeItem("userName");
+    if (err.response.status === 401) {
+      this.setState({
+        message:
+          "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, logueese nuevamente",
+        firstFetch: true
+      });
+    }
+  };
+
   removeBoard = board => {
     let token = localStorage.getItem("UserToken");
     axios({
@@ -209,7 +219,7 @@ class Boards extends Component {
       data: { boardTitle: board }
     })
       .then(res => this.setState({ message: "se borro exitosamente" }))
-      .catch(err => this.setState({ message: err.response.data.message }));
+      .catch(err => this.errHandler(err));
 
     this.setState(prev => {
       let copy = [...prev.boardsObs];
@@ -217,7 +227,7 @@ class Boards extends Component {
         copy.findIndex(b => b === board),
         1
       );
-      return { boardsObs: copy };
+      return { boardsObs: copy, message: "actualizando ..." };
     });
   };
 
@@ -234,8 +244,8 @@ class Boards extends Component {
         data: { boardsOrder: newOrder }
       })
         .then(res => this.setState({ message: "se reordeno exitosamente" }))
-        .catch(err => this.setState({ message: err.message }));
-      return { boardsObs: newOrder };
+        .catch(err => this.errHandler(err));
+      return { boardsObs: newOrder, message: "actualizando ..." };
     });
   };
   createBoard = board => {
@@ -252,15 +262,16 @@ class Boards extends Component {
       data: { boardTitle: board }
     })
       .then(res => this.setState({ message: "se guardo exitosamente" }))
-      .catch(err => this.setState({ message: err.message }));
-
+      .catch(err => this.errHandler(err));
+    this.setState({});
     this.setState(prevs => {
       return {
-        boardsObs: [...prevs.boardsObs, board]
+        boardsObs: [...prevs.boardsObs, board],
+        message: "actualizando ..."
       };
     });
   };
-  componentDidMount() {
+  _getToken() {
     if (!localStorage.getItem("UserToken")) {
       axios
         .post(`https://kanban-api-node.herokuapp.com/user/login`, {
@@ -270,14 +281,24 @@ class Boards extends Component {
         .then(res => localStorage.setItem("UserToken", res.data.token))
         .catch(err => console.log(err.message));
     }
-    if (!this.state.firstFetch) {
+  }
+  _getBoards() {
+    if (this.state.firstFetch) {
       axios
         .get(`https://kanban-api-node.herokuapp.com/user/Test`)
         .then(res => {
-          this.setState({ boardsObs: res.data.boards, firstFetch: true });
+          this.setState({ boardsObs: res.data.boards, firstFetch: false });
         })
         .catch(err => console.log(err.message));
     }
+  }
+  componentDidMount() {
+    this._getToken();
+    this._getBoards();
+  }
+  componentDidUpdate() {
+    this._getToken();
+    this._getBoards();
   }
   render() {
     return (
@@ -285,7 +306,7 @@ class Boards extends Component {
         <UpdateRes message={this.state.message} />
         <div
           style={{
-            minHeight: "89vh",
+            minHeight: "79vh",
             minWidth: "70%",
             margin: "0 15%",
             paddingTop: "30px"

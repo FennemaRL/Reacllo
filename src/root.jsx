@@ -2,22 +2,26 @@ import React from "react";
 import Nav from "./navBar";
 import BoardTest from "./board";
 import Boards from "./boards";
-import RoterState from "./route";
+import ShowRoute from "./route";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
+  withRouter
 } from "react-router-dom";
-const Home = () => {
+const Root = () => {
+  const ShowRoutep = withRouter(props => <ShowRoute {...props} />);
   return (
     <div>
       <Router>
         <Nav />
-        <RoterState />
+        <ShowRoutep />
         <Switch>
           <Route exact path="/board/:boardTitle" component={BoardTest} />
           <Route exact path="/boards/" component={Boards} />
+          {/*<Route exact path="/register/" component={Register} />
+          <Route extact path="/logIn/" component={Login} />*/}
           <Redirect to="/boards/" />
         </Switch>
       </Router>
@@ -25,4 +29,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Root;

@@ -81,6 +81,7 @@ const onDragEnd = (
       res => setMessage("se reordeno la tarea correctamente") //message confirm
     )
     .catch(err => redirect(err));
+  setMessage("actualizando ...");
 };
 const removeTable = (
   tableTitle,
@@ -108,6 +109,8 @@ const removeTable = (
     )
     .catch(err => redirect(err));
   setTables(copyColumns);
+
+  setMessage("actualizando ...");
 };
 const createTable = (
   titleTable,
@@ -134,6 +137,8 @@ const createTable = (
       });
     let newTable = { titleTable: titleTable, content: [] };
     setTables([...tables, newTable]);
+
+    setMessage("actualizando ...");
   }
 };
 const createTask = (
@@ -167,6 +172,7 @@ const createTask = (
 
         .catch(err => redirect(err));
       setColumns(tablesCopy);
+      setMessage("actualizando ...");
     }
   };
 };
@@ -315,12 +321,11 @@ function Board(props) {
   const redirect = props => err => {
     if (err.response.status === 401) {
       localStorage.removeItem("UserToken");
-      let user = localStorage.getItem("userName");
       localStorage.removeItem("userName");
-      props.history.push("/boards", {
-        message: user
-          ? "El usuario no esta auntenticado intente loguear nuevamente "
-          : "las credenciales caducaron por eso se redirecciono al inicio"
+      props.history.push({
+        pathname: "/boards",
+        message:
+          "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente "
       }); /*setear mensaje de log out */
     }
   };

@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+const UpdateRes = ({ message }) => {
+  const [messages, setMessage] = useState("");
+  useEffect(() => {
+    setMessage(message);
+  }, [message]);
 
-const UpdateRes = props => {
   return (
-    <div>
-      {props.message && (
+    <>
+      {messages && (
         <div
           style={{
             backgroundColor: "#9A94BC",
@@ -14,10 +18,10 @@ const UpdateRes = props => {
             height: "40px"
           }}
         >
-          <p>{props.message}</p>
+          <p>{messages}</p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 export default UpdateRes;
