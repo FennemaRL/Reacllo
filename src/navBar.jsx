@@ -17,8 +17,12 @@ const Nav = () => {
           <p>{userName}</p>
           {(isLog && <button onCLick={logOutUser}>LogOut</button>) || (
             <div className="buttons">
-              <button>logIn</button>
-              <button>Register</button>
+              <Link to="/login/">
+                <button>logIn</button>
+              </Link>
+              <Link to="/register/">
+                <button>Register</button>
+              </Link>
             </div>
           )}
         </nav>

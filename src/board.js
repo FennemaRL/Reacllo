@@ -328,6 +328,15 @@ function Board(props) {
           "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente "
       }); /*setear mensaje de log out */
     }
+    if (
+      err.response.status === 400 &&
+      err.response.data.message === "Board not found"
+    ) {
+      props.history.push({
+        pathname: "/boards",
+        message: "No existe una pizarra con ese titulo "
+      });
+    }
   };
   const [message, setMessage] = useState("");
   useEffect(() => {
