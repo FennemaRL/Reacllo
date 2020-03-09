@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 const LoginReg = props => {
@@ -51,7 +51,7 @@ const LoginReg = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!err.userName || !err.password) {
+    if (!err.userName && !err.password) {
       axios({
         url: `https://kanban-api-node.herokuapp.com/user/register/`,
         data: { ...user, Username: user.userName },

@@ -13,10 +13,11 @@ import {
 } from "react-router-dom";
 const Root = () => {
   const ShowRoutep = withRouter(props => <ShowRoute {...props} />);
+  const NavWithp = withRouter(props => <Nav {...props} />);
   return (
     <div>
       <Router>
-        <Nav />
+        <NavWithp />
         <ShowRoutep />
         <Switch>
           <Route exact path="/board/:boardTitle" component={BoardTest} />

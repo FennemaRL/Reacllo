@@ -283,9 +283,10 @@ class Boards extends Component {
     }
   }
   _getBoards() {
+    let user = localStorage.getItem("userName") || "Test";
     if (this.state.firstFetch) {
       axios
-        .get(`https://kanban-api-node.herokuapp.com/user/Test`)
+        .get(`https://kanban-api-node.herokuapp.com/user/${user}`)
         .then(res => {
           this.setState({ boardsObs: res.data.boards, firstFetch: false });
         })
