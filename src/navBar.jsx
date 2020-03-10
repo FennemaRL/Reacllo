@@ -13,7 +13,7 @@ const Nav = props => {
   let userName = localStorage.getItem("userName") || "UserTest";
   return (
     <header>
-      <Link to="/boards/">Reacllo</Link>
+      <Link to="/">Reacllo</Link>
       <div className="userNav">
         <nav>
           <p>{userName}</p>

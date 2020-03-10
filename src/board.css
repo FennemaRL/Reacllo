@@ -17,7 +17,7 @@
 .trashCan:hover {
   cursor: pointer;
 }
-.newColumn {
+.newTable {
   margin: 0px 16px;
   border-radius: 8px;
   text-align: center;
@@ -25,18 +25,19 @@
   width: 45%;
   height: 45px;
   display: flex;
+  text-transform: capitalize;
 }
-.newColumn input[type="text"] {
+.newTable input[type="text"] {
   border: none;
   border-radius: 3px 0px 0px 3px;
   padding-left: 8px;
   background-color: rgb(96, 125, 139);
   color: white;
 }
-.newColumn input[type="text"]::placeholder {
+.newTable input[type="text"]::placeholder {
   color: white;
 }
-.newColumn button {
+.newTable button {
   min-width: 40px;
   border: none;
   border-radius: 0px 3px 3px 0px;

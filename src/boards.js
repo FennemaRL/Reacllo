@@ -33,10 +33,10 @@ const NewBoard = props => {
           setDisplay(true);
         }}
       >
-        add new board ...
+        crear una nueva pizarra
       </p>
       <div style={{ display: !display ? "none" : "" }}>
-        <p>Title : </p>
+        <p>Titulo : </p>
         <input
           ref={hefinput}
           style={{
@@ -73,7 +73,7 @@ const NewBoard = props => {
               }
             }}
           >
-            Add
+            Agregar
           </button>
           <button
             style={{
@@ -90,7 +90,7 @@ const NewBoard = props => {
               setDisplay(false);
             }}
           >
-            Cancel
+            Cancelar
           </button>
         </div>
       </div>

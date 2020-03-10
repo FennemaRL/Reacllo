@@ -389,8 +389,12 @@ function Board(props) {
             redirect={redirect(props)}
           />
         </DragDropContext>
-        <div className="newColumn">
-          <input ref={reftitle} type="text" placeholder="Add new row" />
+        <div className="newTable">
+          <input
+            ref={reftitle}
+            type="text"
+            placeholder="Crear una nueva Tabla"
+          />
           <button
             onClick={e => {
               e.preventDefault();
@@ -409,7 +413,8 @@ function Board(props) {
                 : (() => {})();
             }}
           >
-            >
+            {" "}
+            +
           </button>
         </div>
       </div>

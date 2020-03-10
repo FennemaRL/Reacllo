@@ -2,7 +2,7 @@ import React from "react";
 import Nav from "./navBar";
 import BoardTest from "./board";
 import Boards from "./boards";
-import ShowRoute from "./route";
+import ShowRoute from "./showRute";
 import LoginReg from "./loginReg";
 import {
   BrowserRouter as Router,

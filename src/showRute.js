@@ -15,7 +15,7 @@ const ShowRoute = props => {
         paddingLeft: "15px"
       }}
     >
-      <Link to="/boards/">
+      <Link to="/">
         <p>Mis pizarras&nbsp;&nbsp;/&nbsp;&nbsp;</p>
       </Link>
       {routes.map(route => (
