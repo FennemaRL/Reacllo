@@ -11,7 +11,6 @@ const logOutUser = history => {
 const Nav = props => {
   let isLog = localStorage.getItem("userName");
   let userName = localStorage.getItem("userName") || "UserTest";
-  console.log(props);
   return (
     <header>
       <Link to="/boards/">Reacllo</Link>
