@@ -7,7 +7,7 @@ const LoginReg = props => {
   return (
     <div
       style={{
-        minHeight: "79vh",
+        minHeight: "88vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

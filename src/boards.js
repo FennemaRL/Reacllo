@@ -7,6 +7,7 @@ import {
 import { Link } from "react-router-dom";
 import arrayMove from "array-move";
 import tc from "./trash-can.svg";
+import hand from "./grab.png";
 import "./boards.css";
 import axios from "axios";
 import UpdateRes from "./updateRes";
@@ -98,10 +99,13 @@ const NewBoard = props => {
   );
 };
 const DragHandle = SortableHandle(() => {
-  let inputRef = React.createRef();
   return (
-    <span ref={inputRef} title="Drag to order">
-      :::
+    <span title="Drag to order">
+      <img
+        src={hand}
+        style={{ width: "120%", marginTop: "6px" }}
+        alt="arrastrame "
+      />
     </span>
   );
 });
