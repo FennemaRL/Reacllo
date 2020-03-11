@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import "./formLr.css";
 const Reg = props => {
   const [user, setUser] = useState({ userName: "", password: "" });
   const [err, setErr] = useState({ userName: "", password: "" });
@@ -13,6 +13,8 @@ const Reg = props => {
       [name]: value
     });
     setErr({ ...err, ..._validateFields(name, value) });
+
+    setMessage("");
   };
   const _validateFields = (name, value) => {
     let err = {};
@@ -52,64 +54,95 @@ const Reg = props => {
       .catch(err => {});
   };
   const _checkUserFieldsEmpty = () => {
-    if (!user.userName)
+    if (!user.userName) {
       setErr({ ...err, userName: "El campo se encuentra vacio" });
-
-    if (!user.password)
+    }
+    if (!user.password) {
       setErr({ ...err, password: "El campo se encuentra vacio" });
+    }
   };
   const handleSubmit = e => {
     e.preventDefault();
     _checkUserFieldsEmpty();
-    if (!err.userName && !err.password) {
-      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
-      axios({
-        url: `${uri}/user/register/`,
-        data: { ...user, Username: user.userName },
-        method: "post"
-      })
-        .then(res => succesReqHandler(res))
-        .catch(err => errorHandler(err));
+    if (err.userName || err.password) {
+      setMessage("No se puede registrar este usuario");
+      return;
     }
+    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
+    axios({
+      url: `${uri}/user/register/`,
+      data: { ...user, Username: user.userName },
+      method: "post"
+    })
+      .then(res => succesReqHandler(res))
+      .catch(err => errorHandler(err));
+  };
 
-    //condicion y llamada a axios
+  //condicion y llamada a axios
+  const _isErrMessage = () => {
+    return ![
+      "No se puede registrar este usuario",
+      "Ese nombre de usuario ya se encuentra en uso"
+    ].includes(message);
   };
   return (
     <div
       style={{
-        backgroundColor: "#F4D58D",
-        height: "40vh",
-        minWidth: "20%"
+        borderTop: `3px solid ${_isErrMessage() ? "#00ADBB" : "#e81123"}`
       }}
+      className="containerf"
     >
       <form noValidate onSubmit={handleSubmit}>
-        <p>Registrate</p>
-        <div>
+        <h3>Registrate</h3>
+        <div className="field">
           <label>Nombre de Usuario</label>
           <div>
             <input
+              style={{
+                borderBottom: `2px solid ${
+                  !err.userName ? "rgba(28,110,164,0.13)" : "#e81123"
+                }`
+              }}
               name="userName"
               type="text"
+              placeholder="Ingrese su nombre de usuario"
               value={user.userName}
               onChange={handleChange}
             />
-            {err.userName && <p>{err.userName}</p>}
+            {err.userName && <p className="error">{err.userName}</p>}
           </div>
         </div>
-        <div>
+        <div className="field">
           <label>Constraseña</label>
           <div>
             <input
+              style={{
+                borderBottom: `2px solid ${
+                  !err.password ? "rgba(28,110,164,0.13)" : "#e81123"
+                }`
+              }}
               name="password"
               type="password"
+              placeholder="Ingrese su contraseña"
               value={user.password}
               onChange={handleChange}
             />
-            {err.password && <p>{err.password}</p>}
+            {err.password && <p className="error">{err.password}</p>}
           </div>
         </div>
-        <button type="Submit">Enviar</button>
-        {message && <p>{message}</p>}
+        <button className="send" type="Submit">
+          Enviar
+        </button>
+        {message && (
+          <p
+            className="resMessage"
+            style={{
+              color: _isErrMessage() ? "#00ADBB" : "#e81123"
+            }}
+          >
+            {message}
+          </p>
+        )}
       </form>
     </div>
   );

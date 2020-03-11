@@ -10,7 +10,8 @@ const LoginReg = props => {
         minHeight: "79vh",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor: "#D9D9D9"
       }}
     >
       {(loginWindow && <Register {...props} />) || <Login {...props} />}

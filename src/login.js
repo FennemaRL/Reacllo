@@ -33,53 +33,74 @@ const Reg = props => {
       method: "post"
     })
       .then(res => {
-        console.log(localStorage.getItem("UserToken") + "pre");
+        localStorage.removeItem("userName");
         localStorage.setItem("userName", user.userName);
         localStorage.removeItem("UserToken");
-        console.log(localStorage.getItem("UserToken") + "middle");
         localStorage.setItem("UserToken", res.data.token);
-
-        console.log(localStorage.getItem("UserToken") + "post");
         props.history.push("/boards");
       })
       .catch(err => errorHandler(err));
 
     //condicion y llamada a axios
   };
+  const _isErrMessage = () => {
+    return ![
+      "Usuario o Contraseña vacias",
+      "El usuario o la contraseña es incorrecta"
+    ].includes(message);
+  };
   return (
     <div
       style={{
-        backgroundColor: "#F4D58D",
-        height: "40vh",
-        minWidth: "20%"
+        borderTop: `3px solid ${_isErrMessage() ? "#00ADBB" : "#e81123"}`
       }}
+      className="containerf"
     >
       <form noValidate onSubmit={handleSubmit}>
-        <p>Ingresar</p>
-        <div>
+        <h3>Ingresar</h3>
+        <div className="field">
           <label>Nombre de Usuario</label>
           <div>
             <input
+              style={{
+                borderBottom: "2px solid rgba(28,110,164,0.13)"
+              }}
               name="userName"
               type="text"
               value={user.userName}
+              placeholder="Ingrese su nombre de usuario"
               onChange={handleChange}
             />
           </div>
         </div>
-        <div>
+        <div className="field">
           <label>Constraseña</label>
           <div>
             <input
+              style={{
+                borderBottom: "2px solid rgba(28,110,164,0.13)"
+              }}
               name="password"
               type="password"
               value={user.password}
+              placeholder="Ingrese su contraseña"
               onChange={handleChange}
             />
           </div>
         </div>
-        <button type="Submit">Iniciar sesión</button>
-        {message && <p>{message}</p>}
+        <button type="Submit" className="send">
+          Iniciar Sesión
+        </button>
+        {message && (
+          <p
+            className="resMessage"
+            style={{
+              color: _isErrMessage() ? "#00ADBB" : "#e81123"
+            }}
+          >
+            {message}
+          </p>
+        )}
       </form>
     </div>
   );
