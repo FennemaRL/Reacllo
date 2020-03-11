@@ -37,8 +37,10 @@ const Reg = props => {
   };
   const succesReqHandler = res => {
     setMessage("se registro exitosamente, ingresando...");
+
+    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `https://kanban-api-node.herokuapp.com/user/login/`,
+      url: `${uri}/user/login/`,
       data: { ...user, Username: user.userName },
       method: "post"
     })
@@ -60,8 +62,9 @@ const Reg = props => {
     e.preventDefault();
     _checkUserFieldsEmpty();
     if (!err.userName && !err.password) {
+      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios({
-        url: `https://kanban-api-node.herokuapp.com/user/register/`,
+        url: `${uri}/user/register/`,
         data: { ...user, Username: user.userName },
         method: "post"
       })

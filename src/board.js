@@ -98,8 +98,9 @@ const removeTable = (
   );
 
   let token = localStorage.getItem("UserToken");
+  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
-    url: `https://kanban-api-node.herokuapp.com/board/table/`,
+    url: `${uri}/board/table/`,
     method: "Delete",
     headers: { token: token },
     data: { boardTitle: boardName, tableTitle: tableTitle }
@@ -121,25 +122,26 @@ const createTable = (
   redirect
 ) => {
   let token = localStorage.getItem("UserToken");
-  if (!tables.includes(titleTable)) {
-    axios({
-      url: `https://kanban-api-node.herokuapp.com/board/table/`,
-      method: "Post",
-      headers: { token: token },
-      data: { boardTitle: boardName, tableTitle: titleTable }
-    })
-      .then(
-        res =>
-          setMessage("se agrego correctamente la tabla") /*message confirm */
-      )
-      .catch(err => {
-        redirect(err);
-      });
-    let newTable = { titleTable: titleTable, content: [] };
-    setTables([...tables, newTable]);
-
-    setMessage("actualizando ...");
+  if (tables.filter(t => t.titleTable === titleTable).length > 0) {
+    setMessage("ya existe una tabla con ese nombre");
+    return;
   }
+  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
+  axios({
+    url: `${uri}/board/table/`,
+    method: "Post",
+    headers: { token: token },
+    data: { boardTitle: boardName, tableTitle: titleTable }
+  })
+    .then(
+      res => setMessage("se agrego correctamente la tabla") /*message confirm */
+    )
+    .catch(err => {
+      redirect(err);
+    });
+  let newTable = { titleTable: titleTable, content: [] };
+  setTables([...tables, newTable]);
+  setMessage("actualizando ...");
 };
 const createTask = (
   titleTable,
@@ -150,18 +152,22 @@ const createTask = (
   redirect
 ) => {
   let tablesCopy = [...tables];
-  let tableToAddtaskIndex = tablesCopy.findIndex(
-    c => c.titleTable === titleTable
-  );
-  let columnToAddCopy = { ...tablesCopy.splice(tableToAddtaskIndex, 1)[0] };
+  let tableToAddtask = tablesCopy.find(c => c.titleTable === titleTable);
 
   return task => {
     if (task) {
+      if (
+        tableToAddtask.content.filter(ta => ta.titleTask === task.titleTask)
+          .length > 0
+      ) {
+        setMessage("ya existe una tarea con ese nombre");
+        return;
+      }
       let token = localStorage.getItem("UserToken");
-      columnToAddCopy.item = columnToAddCopy.content.push(task);
-      tablesCopy.splice(tableToAddtaskIndex, 0, columnToAddCopy);
+      tableToAddtask.content.push(task);
+      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios({
-        url: `https://kanban-api-node.herokuapp.com/board/table/task/`,
+        url: `${uri}/board/table/task/`,
         method: "Post",
         headers: { token: token },
         data: { boardTitle: boardName, tableTitle: titleTable, task: task }
@@ -191,8 +197,9 @@ const removeTask = (
   table.content.splice(taskIndex, 1);
 
   let token = localStorage.getItem("UserToken");
+  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
-    url: `https://kanban-api-node.herokuapp.com/board/table/task/`,
+    url: `${uri}/board/table/task/`,
     method: "delete",
     headers: { token: token },
     data: {
@@ -341,9 +348,9 @@ function Board(props) {
   const [message, setMessage] = useState("");
   useEffect(() => {
     let token = localStorage.getItem("UserToken");
-
+    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `https://kanban-api-node.herokuapp.com/board/${props.match.params.boardTitle}`,
+      url: `${uri}/board/${props.match.params.boardTitle}`,
       method: "Get",
       headers: { token: token }
     })

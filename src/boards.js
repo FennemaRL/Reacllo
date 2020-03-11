@@ -212,8 +212,9 @@ class Boards extends Component {
 
   removeBoard = board => {
     let token = localStorage.getItem("UserToken");
+    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `https://kanban-api-node.herokuapp.com/board/`,
+      url: `${uri}/board/`,
       method: "DELETE",
       headers: { token: token },
       data: { boardTitle: board }
@@ -237,8 +238,9 @@ class Boards extends Component {
     this.setState(({ boardsObs }) => {
       let token = localStorage.getItem("UserToken");
       let newOrder = arrayMove(boardsObs, oldIndex, newIndex);
+      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios({
-        url: `https://kanban-api-node.herokuapp.com/user/neworder`,
+        url: `${uri}/user/neworder`,
         method: "Patch",
         headers: { token: token },
         data: { boardsOrder: newOrder }
@@ -255,15 +257,15 @@ class Boards extends Component {
       this.setState({ message: "Existe una board con ese nombre" });
       return;
     }
+    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `https://kanban-api-node.herokuapp.com/board`,
+      url: `${uri}/board`,
       method: "POST",
       headers: { token: token },
       data: { boardTitle: board }
     })
       .then(res => this.setState({ message: "se guardo exitosamente" }))
       .catch(err => this.errHandler(err));
-    this.setState({});
     this.setState(prevs => {
       return {
         boardsObs: [...prevs.boardsObs, board],
@@ -273,8 +275,9 @@ class Boards extends Component {
   };
   _getToken() {
     if (!localStorage.getItem("UserToken")) {
+      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios
-        .post(`https://kanban-api-node.herokuapp.com/user/login`, {
+        .post(`${uri}/user/login`, {
           userName: process.env.REACT_APP_DEFAULT_USER,
           password: process.env.REACT_APP_DEFAULT_PASSWORD
         })
@@ -285,8 +288,9 @@ class Boards extends Component {
   _getBoards() {
     let user = localStorage.getItem("userName") || "Test";
     if (this.state.firstFetch) {
+      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios
-        .get(`https://kanban-api-node.herokuapp.com/user/${user}`)
+        .get(`${uri}/user/${user}`)
         .then(res => {
           this.setState({ boardsObs: res.data.boards, firstFetch: false });
         })

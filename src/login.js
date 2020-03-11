@@ -25,14 +25,21 @@ const Reg = props => {
       return;
     }
     setMessage("Ingresando...");
+
+    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `https://kanban-api-node.herokuapp.com/user/login/`,
+      url: `${uri}/user/login/`,
       data: { ...user, Username: user.userName },
       method: "post"
     })
       .then(res => {
+        console.log(localStorage.getItem("UserToken") + "pre");
         localStorage.setItem("userName", user.userName);
+        localStorage.removeItem("UserToken");
+        console.log(localStorage.getItem("UserToken") + "middle");
         localStorage.setItem("UserToken", res.data.token);
+
+        console.log(localStorage.getItem("UserToken") + "post");
         props.history.push("/boards");
       })
       .catch(err => errorHandler(err));
