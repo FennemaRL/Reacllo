@@ -2,7 +2,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  min-height: 100vh;
+  min-height: 84.2vh;
   min-width: 100%;
   background-color: #b0bec5;
   padding-top: 30px;
@@ -96,7 +96,10 @@ button.newTask {
   font-size: 2.5em;
   margin: 8px 0px;
   border: none;
+
+  transition-duration: 0.4s;
 }
-button.newTask:hover {
+button:hover {
   cursor: pointer;
+  background-color: #445863;
 }

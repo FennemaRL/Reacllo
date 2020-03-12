@@ -1,9 +1,9 @@
 import React from "react";
-import Nav from "./navBar";
-import BoardTest from "./board";
-import Boards from "./boards";
-import ShowRoute from "./showRute";
-import LoginReg from "./loginReg";
+import Nav from "./nav/navBar";
+import BoardTest from "./board/board";
+import Boards from "./boards/boards";
+import ShowRoute from "./nav/showRute";
+import LoginReg from "./loginReg/loginReg";
 import {
   BrowserRouter as Router,
   Switch,

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import tc from "./trash-can.svg";
+import tc from "../img/trash-can.svg";
 import NewTask from "./newTask";
-import UpdateRes from "./updateRes";
+import UpdateRes from "../nav/updateRes";
 import "./board.css";
 import axios from "axios";
 
@@ -228,7 +228,7 @@ const TableMapper = ({
           src={tc}
           alt=""
           className="trashCan"
-          title="delete column"
+          title="borrar tabla"
           onClick={() =>
             removeTable(
               table.titleTable,
@@ -278,7 +278,7 @@ const TableMapper = ({
                               src={tc}
                               style={{ width: "3.5%" }}
                               className="trashCan"
-                              title="delete task"
+                              title="borrar tarea"
                               alt=""
                               onClick={() => {
                                 removeTask(
@@ -306,7 +306,7 @@ const TableMapper = ({
 
         <div className="containerButtonNewTask">
           <button
-            title="create new task"
+            title="crear una nueva tarea"
             className="newTask"
             onClick={() =>
               setnewTask({ display: true, tableID: table.titleTable })
@@ -397,12 +397,15 @@ function Board(props) {
           />
         </DragDropContext>
         <div className="newTable">
+          {" "}
+          {/*pasaje a componente*/}
           <input
             ref={reftitle}
             type="text"
             placeholder="Crear una nueva Tabla"
           />
           <button
+            title="crear una nueva tabla"
             onClick={e => {
               e.preventDefault();
               reftitle.current.value

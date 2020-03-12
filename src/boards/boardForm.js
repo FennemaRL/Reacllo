@@ -16,10 +16,8 @@ const Bf = ({ setDisplay, rf, onCreateBoard }) => {
   const handleCreate = e => {
     e.preventDefault();
     if (!!e.target.titleNewBoard.value) {
-      console.log(e.target.titleNewBoard.value);
       let title = e.target.titleNewBoard.value;
       onCreateBoard(title);
-      e.target.titleNewBoard.value = "";
       setDisplay(false);
     }
   };

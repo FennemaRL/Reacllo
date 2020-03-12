@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 const SortableItem = SortableElement(({ value }) => (
@@ -11,7 +11,7 @@ const SortableItem = SortableElement(({ value }) => (
       position: "relative"
     }}
   >
-    tarta{value}
+    {value}
   </li>
 ));
 const SortableList = SortableContainer(({ items }) => {
@@ -30,7 +30,7 @@ const SortableList = SortableContainer(({ items }) => {
   );
 });
 
-const columnList = props => {
+const TableList = props => {
   return (
     <div style={{ margin: "16px 8px", height: "90%" }}>
       <SortableList
@@ -44,4 +44,4 @@ const columnList = props => {
   );
 };
 
-export default columnList;
+export default TableList;

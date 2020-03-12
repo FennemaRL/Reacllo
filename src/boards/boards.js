@@ -6,11 +6,11 @@ import {
 } from "react-sortable-hoc";
 import { Link } from "react-router-dom";
 import arrayMove from "array-move";
-import tc from "./trash-can.svg";
-import hand from "./grab.png";
+import tc from "../img/trash-can.svg";
+import hand from "../img/grab.png";
 import "./boards.css";
 import axios from "axios";
-import UpdateRes from "./updateRes";
+import UpdateRes from "../nav/updateRes";
 import BoardForm from "./boardForm";
 let styleLi = {
   textDecoration: "none",
