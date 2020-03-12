@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-const Bf = ({ setDisplay, rf, onCreateBoard }) => {
+const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, false);
     return () => {
@@ -15,11 +15,14 @@ const Bf = ({ setDisplay, rf, onCreateBoard }) => {
   };
   const handleCreate = e => {
     e.preventDefault();
-    if (!!e.target.titleNewBoard.value) {
-      let title = e.target.titleNewBoard.value;
-      onCreateBoard(title);
-      setDisplay(false);
+    if (!e.target.titleNewBoard.value) {
+      setMessage("La pizarra tiene que tener un titulo");
+      return;
     }
+
+    let title = e.target.titleNewBoard.value;
+    onCreateBoard(title);
+    setDisplay(false);
   };
   return (
     <div ref={rf} className="newBoard" style={{ padding: "8px" }}>

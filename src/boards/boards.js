@@ -31,7 +31,7 @@ const DragHandle = SortableHandle(() => {
   );
 });
 const SortableList = SortableContainer(
-  ({ items, removeBoard, onCreateBoard }) => {
+  ({ items, removeBoard, onCreateBoard, setMessage }) => {
     return (
       <ul style={{ display: "flex", flexWrap: "wrap" }}>
         {items.map((value, index) => (
@@ -43,7 +43,7 @@ const SortableList = SortableContainer(
           />
         ))}
         <li style={styleLi}>
-          <BoardForm onCreateBoard={onCreateBoard} />
+          <BoardForm onCreateBoard={onCreateBoard} setMessage={setMessage} />
         </li>
       </ul>
     );
@@ -223,6 +223,7 @@ class Boards extends Component {
             useDragHandle={true}
             removeBoard={this.removeBoard}
             onCreateBoard={this.createBoard}
+            setMessage={messager => this.setState({ message: messager })}
             axis="xy"
           />
         </div>
