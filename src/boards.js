@@ -11,94 +11,17 @@ import hand from "./grab.png";
 import "./boards.css";
 import axios from "axios";
 import UpdateRes from "./updateRes";
+import BoardForm from "./boardForm";
 let styleLi = {
   textDecoration: "none",
   color: "white",
   flex: " 0 1 18%",
   margin: "30px",
-  padding: "8px",
   height: "90px",
   borderRadius: "2px",
 
   boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.75)",
   backgroundColor: "#B0BEC5"
-};
-const NewBoard = props => {
-  let hefinput = React.createRef();
-  const [display, setDisplay] = useState(false);
-  return (
-    <li style={styleLi}>
-      {/*button */}
-      <p
-        style={{ marginTop: "12px", display: display ? "none" : "" }}
-        onClick={() => {
-          setDisplay(true);
-        }}
-      >
-        crear una nueva pizarra
-      </p>
-      <div style={{ display: !display ? "none" : "" }}>
-        {/*form*/}
-        <p>Titulo : </p>
-        <input
-          ref={hefinput}
-          style={{
-            height: "15px",
-            width: "90%",
-            marginTop: "5px",
-            borderRadius: "5px",
-            padding: "5px"
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "98%"
-          }}
-        >
-          <button
-            style={{
-              flex: 0.62,
-              margin: "8px 0",
-              height: "30px",
-              borderRadius: "3px",
-              border: "none",
-              color: "white",
-              backgroundColor: "#1A7737"
-            }}
-            onClick={() => {
-              if (hefinput.current.value) {
-                let title = hefinput.current.value;
-                hefinput.current.value = "";
-                setDisplay(false);
-                props.onCreateBoard(title);
-              }
-            }}
-          >
-            Agregar
-          </button>
-          <button
-            style={{
-              flex: 0.33,
-              height: "30px",
-              margin: "8px 0",
-              borderRadius: "3px",
-              border: "none",
-              color: "white",
-              backgroundColor: "#CC161C"
-            }}
-            onClick={() => {
-              hefinput.current.value = "";
-              setDisplay(false);
-            }}
-          >
-            Cancelar
-          </button>
-        </div>
-      </div>
-    </li>
-  );
 };
 const DragHandle = SortableHandle(() => {
   return (
@@ -119,7 +42,9 @@ const SortableList = SortableContainer(
             value={value}
           />
         ))}
-        <NewBoard onCreateBoard={onCreateBoard} />
+        <li style={styleLi}>
+          <BoardForm onCreateBoard={onCreateBoard} />
+        </li>
       </ul>
     );
   }
@@ -134,57 +59,28 @@ const SortableItem = SortableElement(({ value, removeBoard }) => {
       onMouseEnter={() => setTrashCanState(true)}
       onMouseLeave={() => setTrashCanState(false)}
     >
-      {trashCanState && (
-        <img
-          src={tc}
-          className="trashCan"
-          title="remove board"
-          style={{
-            height: "15px",
-            width: "15px",
-            position: "absolute",
-            top: "6px",
-            right: "6px"
-          }}
-          alt=""
-          onClick={() => {
-            removeBoard(value);
-          }}
-        />
-      )}
-      <DragHandle />
-      <Link to={`/board/${value}`}>
-        <h3 style={{ marginTop: "12px" }}>{value}</h3>
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              height: "35px",
-              width: "15px",
-              margin: "2px",
-              backgroundColor: "rgba(0,0,0,0.5)",
-              borderRadius: "2px"
+      <div style={{ width: "100%", height: "100%", padding: "8px" }}>
+        {trashCanState && (
+          <img
+            src={tc}
+            className="trashCan boardt"
+            title="remove board"
+            alt=""
+            onClick={() => {
+              removeBoard(value);
             }}
           />
-          <div
-            style={{
-              height: "25px",
-              width: "15px",
-              margin: "2px",
-              backgroundColor: "rgba(0,0,0,0.5)",
-              borderRadius: "2px"
-            }}
-          />
-          <div
-            style={{
-              height: "15px",
-              width: "15px",
-              margin: "2px",
-              backgroundColor: "rgba(0,0,0,0.5)",
-              borderRadius: "2px"
-            }}
-          />
-        </div>
-      </Link>
+        )}
+        <DragHandle />
+        <Link to={`/board/${value}`}>
+          <h4 style={{ marginTop: "12px" }}>{value}</h4>
+          <div style={{ display: "flex" }}>
+            <div className="row" />
+            <div className="row" />
+            <div className="row" />
+          </div>
+        </Link>
+      </div>
     </li>
   );
 });
@@ -275,6 +171,7 @@ class Boards extends Component {
       };
     });
   };
+
   _getToken() {
     if (!localStorage.getItem("UserToken")) {
       let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;

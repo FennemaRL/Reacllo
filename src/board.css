@@ -17,6 +17,13 @@
 .trashCan:hover {
   cursor: pointer;
 }
+.trashCan.boardt {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
 .newTable {
   margin: 0px 16px;
   border-radius: 8px;
