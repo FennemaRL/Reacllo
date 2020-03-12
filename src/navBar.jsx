@@ -18,14 +18,14 @@ const Nav = props => {
         <nav>
           <p>{userName}</p>
           {(isLog && (
-            <button onClick={() => logOutUser(props.history)}>LogOut</button>
+            <button onClick={() => logOutUser(props.history)}>Log out</button>
           )) || (
             <div className="buttons">
               <Link to="/login/">
-                <button>logIn</button>
+                <button>Ingresa</button>
               </Link>
               <Link to="/register/">
-                <button>Register</button>
+                <button>Registrate</button>
               </Link>
             </div>
           )}

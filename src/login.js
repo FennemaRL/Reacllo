@@ -88,9 +88,7 @@ const Reg = props => {
             />
           </div>
         </div>
-        <button type="Submit" className="send">
-          Iniciar Sesión
-        </button>
+        <button type="Submit">Iniciar Sesión</button>
         {message && (
           <p
             className="resMessage"

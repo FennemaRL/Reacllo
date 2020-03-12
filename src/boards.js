@@ -18,7 +18,7 @@ let styleLi = {
   margin: "30px",
   padding: "8px",
   height: "90px",
-  borderRadius: "5px",
+  borderRadius: "2px",
 
   boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.75)",
   backgroundColor: "#B0BEC5"
@@ -28,6 +28,7 @@ const NewBoard = props => {
   const [display, setDisplay] = useState(false);
   return (
     <li style={styleLi}>
+      {/*button */}
       <p
         style={{ marginTop: "12px", display: display ? "none" : "" }}
         onClick={() => {
@@ -37,6 +38,7 @@ const NewBoard = props => {
         crear una nueva pizarra
       </p>
       <div style={{ display: !display ? "none" : "" }}>
+        {/*form*/}
         <p>Titulo : </p>
         <input
           ref={hefinput}
@@ -100,12 +102,8 @@ const NewBoard = props => {
 };
 const DragHandle = SortableHandle(() => {
   return (
-    <span title="Drag to order">
-      <img
-        src={hand}
-        style={{ width: "120%", marginTop: "6px" }}
-        alt="arrastrame "
-      />
+    <span title="arrastrame para reordenar">
+      <img src={hand} alt="arrastrame" />
     </span>
   );
 });
@@ -322,6 +320,7 @@ class Boards extends Component {
           }}
         >
           <SortableList
+            helperClass="sortableCursor"
             items={this.state.boardsObs}
             onSortEnd={this.onSortEnd}
             useDragHandle={true}

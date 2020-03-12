@@ -31,14 +31,20 @@ header .userNav nav {
 header .userNav button {
   width: 80px;
   height: 30px;
-  border-radius: 5px;
-  color: Lightgrey;
-  background-color: #455a64;
-  border: none;
+  border-radius: 2px;
+
+  background-color: #607d8b;
+  color: white;
+  border: 1px solid #708d81;
+
+  cursor: pointer;
+  transition-duration: 0.4s;
 }
 header .userNav button:hover {
-  cursor: pointer;
+  background-color: #f9f8f8;
+  color: #607d8b;
 }
+
 .buttons {
   width: 180px;
   justify-content: space-around;
