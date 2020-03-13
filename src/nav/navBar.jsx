@@ -13,7 +13,7 @@ const Nav = props => {
   let userName = localStorage.getItem("userName") || "UserTest";
   return (
     <header>
-      <Link to="/">Reacllo</Link>
+      <Link to="/reacllo/">Reacllo</Link>
       <div className="userNav">
         <nav>
           <p>{userName}</p>
@@ -21,10 +21,10 @@ const Nav = props => {
             <button onClick={() => logOutUser(props.history)}>Log out</button>
           )) || (
             <div className="buttons">
-              <Link to="/login/">
+              <Link to="/reacllo/login/">
                 <button>Ingresa</button>
               </Link>
-              <Link to="/register/">
+              <Link to="/reacllo/register/">
                 <button>Registrate</button>
               </Link>
             </div>

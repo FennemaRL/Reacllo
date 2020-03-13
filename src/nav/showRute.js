@@ -4,6 +4,8 @@ const ShowRoute = props => {
   let routes = props.location.pathname.split("/");
   routes.splice(0, 1);
   routes.splice(0, 1);
+
+  routes.splice(0, 1);
   return (
     <div
       style={{
@@ -15,7 +17,7 @@ const ShowRoute = props => {
         paddingLeft: "15px"
       }}
     >
-      <Link to="/">
+      <Link to="/reacllo/">
         <p>Mis pizarras&nbsp;&nbsp;/&nbsp;&nbsp;</p>
       </Link>
       {routes.map(route => (
