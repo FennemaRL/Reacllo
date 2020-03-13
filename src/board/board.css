@@ -9,7 +9,7 @@
   background-color: #b0bec5;
   padding-top: 30px;
   position: relative;
-  overflow-x: scroll;
+  overflow-x: hidden;
 }
 
 .trashCan {
@@ -77,7 +77,7 @@
 .table .listContainer {
   margin: 8px 8px 0px 8px;
   max-height: 45vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   border-radius: 5px;
 }
