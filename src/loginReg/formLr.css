@@ -1,10 +1,19 @@
+/*estilos se comparten entre regiter, login y new task*/
+
 .containerf {
   height: 380px;
   width: 320px;
   background-color: white;
 }
-
+.containerf.newTask {
+  width: 340px;
+  height: 410px;
+  background: white;
+  display: flex;
+  position: relative;
+}
 .containerf form {
+  width: 95%;
   padding: 10px;
 }
 form h3 {
@@ -19,17 +28,25 @@ form .field label {
   font-weight: bold;
   margin: 20px 0;
 }
-form .field input[type="text"] {
-  width: 100%;
+form .field input {
+  width: 97%;
   border-style: none;
   height: 25px;
-  padding: 5px 0;
+  padding: 5px;
+  margin: 5px 0;
+  background-color: rgb(243, 242, 242);
+  border-bottom: 2px solid rgba(28, 110, 164, 0.13);
+  border-radius: 3px;
 }
-form .field input[type="password"] {
-  width: 100%;
+form .field textarea {
+  width: 97%;
   border-style: none;
-  height: 25px;
-  padding: 5px 0;
+  padding: 5px;
+  margin: 5px 0;
+  resize: none;
+  background-color: rgb(243, 242, 242);
+  border-bottom: 2px solid rgba(28, 110, 164, 0.13);
+  border-radius: 3px;
 }
 form .field .error {
   font-size: 0.7em;

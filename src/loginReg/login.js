@@ -62,9 +62,6 @@ const Reg = props => {
           <label>Nombre de Usuario</label>
           <div>
             <input
-              style={{
-                borderBottom: "2px solid rgba(28,110,164,0.13)"
-              }}
               name="userName"
               type="text"
               value={user.userName}
@@ -77,9 +74,6 @@ const Reg = props => {
           <label>Constraseña</label>
           <div>
             <input
-              style={{
-                borderBottom: "2px solid rgba(28,110,164,0.13)"
-              }}
               name="password"
               type="password"
               value={user.password}
@@ -88,7 +82,9 @@ const Reg = props => {
             />
           </div>
         </div>
-        <button type="Submit">Iniciar Sesión</button>
+        <button className="send" type="Submit">
+          Iniciar Sesión
+        </button>
         {message && (
           <p
             className="resMessage"
