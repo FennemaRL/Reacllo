@@ -12,7 +12,7 @@ const CreateTaskW = props => {
     return () => {
       document.removeEventListener("click", handleClickOutside, false);
     };
-  }, []);
+  });
 
   const handleClickOutside = e => {
     if (ntRef.current && !ntRef.current.contains(e.target)) {

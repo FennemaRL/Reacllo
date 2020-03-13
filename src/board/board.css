@@ -1,9 +1,10 @@
 /*contiene blackbackground de newTask*/
+
 .board {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  min-height: 84.2vh;
+  height: 84.5%;
   min-width: 100%;
   background-color: #b0bec5;
   padding-top: 30px;

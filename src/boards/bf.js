@@ -5,7 +5,7 @@ const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
     return () => {
       document.removeEventListener("click", handleClickOutside, false);
     };
-  }, []);
+  });
 
   const handleClickOutside = event => {
     if (rf.current && !rf.current.contains(event.target)) {

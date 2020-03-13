@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "../img/trash-can.svg";
 import NewTask from "./newTask";
@@ -346,21 +346,25 @@ function Board(props) {
     }
   };
   const [message, setMessage] = useState("");
+  const latestProps = useRef(props);
+  useEffect(() => {
+    latestProps.current = props;
+  });
   useEffect(() => {
     let token = localStorage.getItem("UserToken");
     let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `${uri}/board/${props.match.params.boardTitle}`,
+      url: `${uri}/board/${latestProps.current.match.params.boardTitle}`,
       method: "Get",
       headers: { token: token }
     })
       .then(res => {
         setTables(res.data.tables);
       })
-      .catch(err => redirect(props)(err));
+      .catch(err => redirect(latestProps.current)(err));
   }, []);
   return (
-    <div>
+    <>
       <NewTask
         task={newTask}
         close={() => setnewTask({ display: false, tableID: undefined })}
@@ -428,7 +432,7 @@ function Board(props) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 export default Board;
