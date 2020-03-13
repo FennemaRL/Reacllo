@@ -85,18 +85,15 @@ const onDragEnd = (
 };
 const removeTable = (
   tableTitle,
-  columns,
+  tables,
   setTables,
   boardName,
   setMessage,
   redirect
 ) => {
-  let copyColumns = [...columns];
-  copyColumns.splice(
-    columns.findIndex(c => c.tableTitle === tableTitle),
-    1
+  let copyTables = JSON.parse(
+    JSON.stringify(tables.filter(t => t.titleTable !== tableTitle))
   );
-
   let token = localStorage.getItem("UserToken");
   let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
@@ -109,7 +106,7 @@ const removeTable = (
       res => setMessage("se borro correctamente la tabla") //message confirm
     )
     .catch(err => redirect(err));
-  setTables(copyColumns);
+  setTables(copyTables);
 
   setMessage("actualizando ...");
 };
@@ -146,7 +143,7 @@ const createTable = (
 const createTask = (
   titleTable,
   tables,
-  setColumns,
+  setTables,
   boardName,
   setMessage,
   redirect
@@ -176,7 +173,7 @@ const createTask = (
         .then(res => setMessage("se agrego correctamente la tarea"))
         .catch(err => redirect(err));
       close();
-      setColumns(tablesCopy);
+      setTables(tablesCopy);
 
       setMessage("actualizando ...");
     }
@@ -227,7 +224,7 @@ const TableMapper = ({
         <img
           src={tc}
           alt=""
-          className="trashCan"
+          className="trashCan tablehide"
           title="borrar tabla"
           onClick={() =>
             removeTable(
@@ -277,7 +274,7 @@ const TableMapper = ({
                             <img
                               src={tc}
                               style={{ width: "3.5%" }}
-                              className="trashCan"
+                              className="trashCan taskhide"
                               title="borrar tarea"
                               alt=""
                               onClick={() => {

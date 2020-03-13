@@ -46,7 +46,7 @@ const SortableItem = SortableElement(({ value, removeBoard }) => {
       <div className="board">
         <img
           src={tc}
-          className="trashCan boardt"
+          className="trashCan boardhide boardt"
           title="remove board"
           alt=""
           onClick={() => {

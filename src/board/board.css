@@ -9,16 +9,31 @@
   background-color: #b0bec5;
   padding-top: 30px;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
-.trashCan {
-  display: none;
+div .trashCan {
   position: absolute;
   top: 8px;
   right: 8px;
 }
-.table:hover .trashCan {
+.trashCan.boardhide {
+  display: none;
+}
+.table:hover .trashCan.boardhide {
+  display: block;
+}
+.trashCan.tablehide {
+  display: none;
+}
+.table:hover .trashCan.tablehide {
+  display: block;
+}
+
+.trashCan.taskhide {
+  display: none;
+}
+.itemList:hover .trashCan.taskhide {
   display: block;
 }
 .board:hover .trashCan {
@@ -144,9 +159,15 @@ button:hover {
 }
 @media only screen and (max-width: 48em) {
   .boardW {
-    height: 78.5%;
+    height: 81.5%;
   }
-  .trashCan {
+  .trashCan.tablehide {
+    display: block;
+  }
+  .trashCan.taskhide {
+    display: block;
+  }
+  .trashCan.boardhide {
     display: block;
   }
 }
