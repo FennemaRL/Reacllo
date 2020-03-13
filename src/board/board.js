@@ -154,13 +154,14 @@ const createTask = (
   let tablesCopy = [...tables];
   let tableToAddtask = tablesCopy.find(c => c.titleTable === titleTable);
 
-  return task => {
+  return (task, errMessageFunc, close) => {
     if (task) {
       if (
         tableToAddtask.content.filter(ta => ta.titleTask === task.titleTask)
           .length > 0
       ) {
-        setMessage("ya existe una tarea con ese nombre");
+        //setMessage("ya existe una tarea con ese nombre");
+        errMessageFunc("ya existe una tarea con ese nombre");
         return;
       }
       let token = localStorage.getItem("UserToken");
@@ -172,12 +173,11 @@ const createTask = (
         headers: { token: token },
         data: { boardTitle: boardName, tableTitle: titleTable, task: task }
       })
-        .then(res =>
-          setMessage("se agrego correctamente la tarea")
-        ) /*message confirm */
-
+        .then(res => setMessage("se agrego correctamente la tarea"))
         .catch(err => redirect(err));
+      close();
       setColumns(tablesCopy);
+
       setMessage("actualizando ...");
     }
   };

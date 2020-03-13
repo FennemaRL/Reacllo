@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 const NewTask = props => {
   return props.task.display && <CreateTaskW {...props} />;
@@ -6,7 +6,7 @@ const NewTask = props => {
 
 const CreateTaskW = props => {
   let ntRef = useRef(null);
-
+  const [errMessage, setErrMessage] = useState("");
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, false);
     return () => {
@@ -25,16 +25,25 @@ const CreateTaskW = props => {
     let title = form.title.value;
     let description = form.description.value;
     if (!title || !description) {
-      console.log("necesita titulo y descripcion");
+      setErrMessage("necesita titulo y descripcion");
       return;
     }
-    props.addTask({ titleTask: title, description: description });
-    props.close();
+    props.addTask(
+      { titleTask: title, description: description },
+      setErrMessage,
+      props.close
+    );
   };
   return (
     /*falta reacer la parte del error en nueva tarea 8) */
     <div className="blackbackground">
-      <div ref={ntRef} className="containerf newTask">
+      <div
+        ref={ntRef}
+        className="containerf newTask"
+        style={{
+          borderTop: `3px solid ${!errMessage ? "#00ADBB" : "#e81123"}`
+        }}
+      >
         <form onSubmit={handleCreateForm}>
           <button
             className="close"
@@ -64,6 +73,17 @@ const CreateTaskW = props => {
           <button className="send" type="submit">
             Crear Nueva Tarea
           </button>
+
+          {errMessage && (
+            <p
+              className="resMessage"
+              style={{
+                color: "#e81123"
+              }}
+            >
+              {errMessage}
+            </p>
+          )}
         </form>
       </div>
     </div>
