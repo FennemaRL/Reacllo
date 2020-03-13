@@ -1,6 +1,6 @@
 /*contiene blackbackground de newTask*/
 
-.board {
+.boardW {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -9,12 +9,20 @@
   background-color: #b0bec5;
   padding-top: 30px;
   position: relative;
-  overflow-x: auto;
+  overflow-x: scroll;
 }
+
 .trashCan {
+  display: none;
   position: absolute;
   top: 8px;
   right: 8px;
+}
+.table:hover .trashCan {
+  display: block;
+}
+.board:hover .trashCan {
+  display: block;
 }
 .trashCan:hover {
   cursor: pointer;
@@ -54,26 +62,26 @@
   color: white;
   cursor: pointer;
 }
-.column {
+.table {
   background-color: #eceff1;
   margin: 0px 16px;
-  min-width: 25%;
+  min-width: 280px;
   border-radius: 3px;
   position: relative;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.45);
 }
-.column .title {
+.table .title {
   margin: 12px 8px;
   text-transform: capitalize;
 }
-.column .listContainer {
+.table .listContainer {
   margin: 8px 8px 0px 8px;
   max-height: 45vh;
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: 5px;
 }
-.column .listContainer .itemList {
+.table .listContainer .itemList {
   user-select: none;
   padding: 16px;
   margin: 0 0 8px 0;
@@ -133,4 +141,12 @@ button:hover {
   background-color: rgba(240, 196, 196, 0.863);
 
   color: black;
+}
+@media only screen and (max-width: 48em) {
+  .boardW {
+    height: 78.5%;
+  }
+  .trashCan {
+    display: block;
+  }
 }

@@ -50,3 +50,9 @@ header .userNav button:hover {
   justify-content: space-around;
   display: flex;
 }
+
+@media only screen and (max-width: 48em) {
+  header .userNav nav {
+    display: none;
+  }
+}

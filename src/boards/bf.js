@@ -24,8 +24,8 @@ const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
     setDisplay(false);
   };
   return (
-    <div ref={rf} className="newBoard" style={{ padding: "8px" }}>
-      <form onSubmit={handleCreate}>
+    <div ref={rf} className="board ">
+      <form onSubmit={handleCreate} className="formNewBoard">
         <input
           type="text"
           placeholder="Escriba un titulo"

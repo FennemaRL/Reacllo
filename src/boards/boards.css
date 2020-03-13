@@ -13,12 +13,26 @@ span img {
   pointer-events: all !important;
   cursor: grabbing !important;
 }
-.trashCan .display {
-  opacity: 1;
-  transition: opacity 1s ease-out;
+ul {
+  display: flex;
+  flex-wrap: wrap;
 }
 li {
   overflow: hidden;
+}
+.board {
+  color: white;
+  margin: 15px;
+  width: 120px;
+  min-height: 80px;
+  border-radius: 2px;
+
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  background-color: #b0bec5;
+
+  padding: 16px;
+
+  position: relative;
 }
 .row {
   height: 35px;
@@ -34,38 +48,35 @@ li {
   height: 15px;
 }
 
-.newBoard {
-  width: 100%;
-  height: 100%;
-}
 .containerButton {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 90%;
+  height: 80%;
+  padding: 0px;
+  box-sizing: 0px 1px 3px 0px rgba(0, 0, 0, 0.75);
 }
 button.buttonCBoard {
   border: none;
   color: white;
-  font-size: 500;
-  box-sizing: 0px 1px 3px 0px rgba(0, 0, 0, 0.75);
-  background-color: #b0bec5;
-  cursor: pointer;
-
   width: 100%;
   height: 100%;
+  background-color: #b0bec5;
+  cursor: pointer;
   transition-duration: 0.4s;
 }
 button.buttonCBoard:hover {
   background-color: #7b888f;
 }
 input[type="text"].titleNewBoard {
-  width: 90%;
+  width: 80%;
   border-style: none;
   border-bottom: 2px solid rgba(28, 110, 164, 0.13);
   height: 25px;
   margin-top: 8px;
 }
-
 button.buttonCreateBoard {
   margin-top: 10px;
   background-color: #5aac44;
@@ -79,8 +90,40 @@ button.buttonCreateBoard {
 }
 button.buttonCreateBoard:hover {
   background-color: #5aac44;
-
   min-width: 55px;
   width: 35%;
   height: 30px;
+}
+.boardsContainer {
+  min-height: 79vh;
+  min-width: 70%;
+  margin: 0 15%;
+  padding-top: 30px;
+}
+
+@media only screen and (max-width: 48em) {
+  .board {
+    margin: 10px;
+    width: 110px;
+    padding: 8px;
+  }
+  #root {
+    height: 65vh;
+  }
+  .boardsContainer {
+    min-height: 65vh;
+    min-width: 100%;
+    padding-top: 30px;
+    margin: 0;
+  }
+  input[type="text"].titleNewBoard {
+    width: 95%;
+    height: 30px;
+  }
+  ul {
+    justify-content: center;
+  }
+  .containerButton {
+    height: 45%;
+  }
 }

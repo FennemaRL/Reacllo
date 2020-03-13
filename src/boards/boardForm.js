@@ -3,7 +3,8 @@ import Bf from "./bf";
 
 const CreateButton = ({ setDisplay }) => {
   return (
-    <div className="newBoard containerButton" onClick={() => setDisplay(true)}>
+    /*ultimo a arreglar */
+    <div className="board containerButton" onClick={() => setDisplay(true)}>
       <button className="buttonCBoard">Crea una nueva pizarra</button>
     </div>
   );

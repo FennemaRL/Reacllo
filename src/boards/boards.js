@@ -12,17 +12,7 @@ import "./boards.css";
 import axios from "axios";
 import UpdateRes from "../nav/updateRes";
 import BoardForm from "./boardForm";
-let styleLi = {
-  textDecoration: "none",
-  color: "white",
-  flex: " 0 1 18%",
-  margin: "30px",
-  height: "90px",
-  borderRadius: "2px",
 
-  boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.75)",
-  backgroundColor: "#B0BEC5"
-};
 const DragHandle = SortableHandle(() => {
   return (
     <span title="arrastrame para reordenar">
@@ -33,7 +23,7 @@ const DragHandle = SortableHandle(() => {
 const SortableList = SortableContainer(
   ({ items, removeBoard, onCreateBoard, setMessage }) => {
     return (
-      <ul style={{ display: "flex", flexWrap: "wrap" }}>
+      <ul>
         {items.map((value, index) => (
           <SortableItem
             removeBoard={removeBoard}
@@ -42,7 +32,7 @@ const SortableList = SortableContainer(
             value={value}
           />
         ))}
-        <li style={styleLi}>
+        <li>
           <BoardForm onCreateBoard={onCreateBoard} setMessage={setMessage} />
         </li>
       </ul>
@@ -51,26 +41,18 @@ const SortableList = SortableContainer(
 );
 
 const SortableItem = SortableElement(({ value, removeBoard }) => {
-  const [trashCanState, setTrashCanState] = useState(false);
   return (
-    <li
-      tabIndex={value}
-      style={{ ...styleLi, position: "relative" }}
-      onMouseEnter={() => setTrashCanState(true)}
-      onMouseLeave={() => setTrashCanState(false)}
-    >
-      <div style={{ width: "100%", height: "100%", padding: "8px" }}>
-        {trashCanState && (
-          <img
-            src={tc}
-            className="trashCan boardt"
-            title="remove board"
-            alt=""
-            onClick={() => {
-              removeBoard(value);
-            }}
-          />
-        )}
+    <li tabIndex={value} /*position relative */>
+      <div className="board">
+        <img
+          src={tc}
+          className="trashCan boardt"
+          title="remove board"
+          alt=""
+          onClick={() => {
+            removeBoard(value);
+          }}
+        />
         <DragHandle />
         <Link to={`/reacllo/board/${value}`}>
           <h4 style={{ marginTop: "12px" }}>{value}</h4>
@@ -208,14 +190,7 @@ class Boards extends Component {
     return (
       <>
         <UpdateRes message={this.state.message} />
-        <div
-          style={{
-            minHeight: "79vh",
-            minWidth: "70%",
-            margin: "0 15%",
-            paddingTop: "30px"
-          }}
-        >
+        <div className="boardsContainer">
           <SortableList
             helperClass="sortableCursor"
             items={this.state.boardsObs}

@@ -222,7 +222,7 @@ const TableMapper = ({
 }) => {
   return tables.map(table => {
     return (
-      <div key={table.titleTable} className="column">
+      <div key={table.titleTable} className="table">
         <h3 className="title">{table.titleTable}</h3>
         <img
           src={tc}
@@ -377,7 +377,7 @@ function Board(props) {
         )}
       />
       <UpdateRes message={message} />
-      <div className="board">
+      <div className="boardW">
         {" "}
         <DragDropContext
           onDragEnd={result =>
