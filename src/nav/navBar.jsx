@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./nav.css";
+import userin from "../img/user.svg";
+import reg from "../img/register2.svg";
+import logout from "../img/logout2.svg";
 
 const logOutUser = history => {
   localStorage.removeItem("userName");
@@ -15,7 +18,6 @@ const Nav = props => {
     <header
       className={displayNav ? (isLog ? "displayNavB1" : "displayNavB2") : ""}
     >
-      {/*agregar con onclick faltan transiciones */}
       <div style={{ flex: "1" }}>
         <Link to="/reacllo/">Reacllo</Link>
       </div>
@@ -26,7 +28,6 @@ const Nav = props => {
         </span>
       </div>
       <nav className="mobileDisplay">
-        {/*agregar con onclick faltan transiciones */}
         {(isLog && (
           <div className="buttons">
             <Link to="/reacllo/">
@@ -36,7 +37,12 @@ const Nav = props => {
                   logOutUser(props.history);
                 }}
               >
-                Log out
+                <img
+                  src={logout}
+                  style={{ width: "15%", filter: "invert(100%)" }}
+                  alt="cerrar sesión"
+                />
+                &nbsp; Cerrar&nbsp; sesión
               </button>
             </Link>
           </div>
@@ -44,12 +50,22 @@ const Nav = props => {
           <div className="buttons">
             <Link to="/reacllo/login/">
               <button onClick={() => setDisplayNav(!displayNav)}>
-                Ingresa
+                <img
+                  src={userin}
+                  style={{ width: "15%", filter: "invert(100%)" }}
+                  alt="Ingresa"
+                />
+                &nbsp; Ingresa
               </button>
             </Link>
             <Link to="/reacllo/register/">
               <button onClick={() => setDisplayNav(!displayNav)}>
-                Registrate
+                <img
+                  src={reg}
+                  style={{ width: "15%", filter: "invert(100%)" }}
+                  alt="Registrate"
+                />
+                &nbsp;Registrate
               </button>
             </Link>
           </div>
