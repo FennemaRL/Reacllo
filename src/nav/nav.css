@@ -1,12 +1,15 @@
 header {
   width: 100%;
-  min-height: 60px;
+  height: 60px;
   background-color: #607d8b;
   color: white;
   display: flex;
   align-items: center;
   font-weight: 600;
   justify-content: space-between;
+  overflow: hidden;
+
+  transition: height 0.7s linear;
 }
 a {
   text-decoration: none;
@@ -17,18 +20,30 @@ header a {
   font-style: italic;
   margin-left: 15px;
 }
-header .userNav nav {
+.userNav a {
+  font-size: 1.2em;
+
+  margin: 0px 10px;
+}
+.hide {
+  display: none;
+}
+.userNav {
+  font-weight: 400;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+nav {
   padding-right: 15px;
   display: flex;
-  width: 300px;
   justify-content: space-around;
 
   align-items: center;
-  display: flex;
   font-weight: 300;
 }
 
-header .userNav button {
+nav button {
   width: 80px;
   height: 30px;
   border-radius: 2px;
@@ -40,7 +55,7 @@ header .userNav button {
   cursor: pointer;
   transition-duration: 0.4s;
 }
-header .userNav button:hover {
+nav button:hover {
   background-color: #f9f8f8;
   color: #607d8b;
 }
@@ -52,7 +67,46 @@ header .userNav button:hover {
 }
 
 @media only screen and (max-width: 48em) {
-  header .userNav nav {
+  header {
+    flex-wrap: wrap;
+    padding-top: 17px;
+    height: 43px;
+  }
+  header > * {
+    flex: 1 1 50%;
+  }
+  .userNav {
+    justify-content: space-around;
+  }
+  header.displayNavB2 {
+    height: 137px;
+  }
+  header.displayNavB1 {
+    height: 92px;
+  }
+  .hide {
+    display: block;
+  }
+  nav {
+    padding: 0;
+    margin-top: 20px;
     display: none;
+  }
+  nav.mobileDisplay {
+    display: flex;
+  }
+  nav .buttons {
+    flex-wrap: wrap;
+    width: 200px;
+  }
+  nav .buttons > * {
+    flex: 1 1 50%;
+  }
+
+  nav .buttons button {
+    margin: 7px 0;
+    border: none;
+    font-size: 0.8em;
+    width: 100%;
   }
 }

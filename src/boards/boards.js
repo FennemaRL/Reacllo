@@ -15,7 +15,7 @@ import BoardForm from "./boardForm";
 
 const DragHandle = SortableHandle(() => {
   return (
-    <span title="arrastrame para reordenar">
+    <span className="position" title="arrastrame para reordenar">
       <img src={hand} alt="arrastrame" />
     </span>
   );
@@ -155,6 +155,7 @@ class Boards extends Component {
   };
 
   _getToken() {
+    /*pasar a jwt permanente */
     if (!localStorage.getItem("UserToken")) {
       let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios
