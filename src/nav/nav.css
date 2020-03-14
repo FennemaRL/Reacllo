@@ -27,7 +27,13 @@ header a {
 }
 .hide {
   display: none;
+
+  transform: rotate(90deg);
+  font-size: 1em;
+
+  transition: font-size 0.7s ease, -webkit-transform 0.7s ease;
 }
+
 .userNav {
   font-weight: 400;
   display: flex;
@@ -86,6 +92,9 @@ nav button:hover {
   }
   .hide {
     display: block;
+  }
+  .hide.twist {
+    font-size: 1.5em;
   }
   nav {
     padding: 0;

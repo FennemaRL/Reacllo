@@ -23,7 +23,10 @@ const Nav = props => {
       </div>
       <div className="userNav">
         <Link to="/reacllo/">{userName} </Link>
-        <span className="hide" onClick={() => setDisplayNav(!displayNav)}>
+        <span
+          className={displayNav ? "hide" : "hide twist"}
+          onClick={() => setDisplayNav(!displayNav)}
+        >
           |||
         </span>
       </div>
