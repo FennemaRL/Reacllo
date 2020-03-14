@@ -1,0 +1,15 @@
+.updateRes {
+  background-color: #9a94bc;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+  height: 40px;
+  position: relative;
+}
+.closeUpdateRes {
+  cursor: pointer;
+  position: absolute;
+  top: 2px;
+  right: 10px;
+}
