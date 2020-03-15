@@ -7,14 +7,16 @@ const UpdateRes = ({ message }) => {
   }, [message]);
 
   return (
-    messages && (
-      <div className="updateRes">
-        <p>{messages}</p>
-        <p onClick={() => setMessage("")} className="closeUpdateRes">
-          x
-        </p>
-      </div>
-    )
+    <>
+      {messages && (
+        <div className="updateRes">
+          <p>{messages}</p>
+          <p onClick={() => setMessage("")} className="closeUpdateRes">
+            x
+          </p>
+        </div>
+      )}
+    </>
   );
 };
 export default UpdateRes;
