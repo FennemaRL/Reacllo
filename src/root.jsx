@@ -19,11 +19,11 @@ const Root = () => {
       <NavWithp />
       <ShowRoutep />
       <Switch>
-        <Route exact path="/reacllo/board/:boardTitle" component={BoardTest} />
-        <Route exact path="/reacllo/boards/" component={Boards} />
-        <Route exact path="/reacllo/register/" component={LoginReg} />
-        <Route extact path="/reacllo/login/" component={LoginReg} />
-        <Redirect to="/reacllo/boards/" />
+        <Route exact path="/Reacllo/board/:boardTitle" component={BoardTest} />
+        <Route exact path="/Reacllo/boards/" component={Boards} />
+        <Route exact path="/Reacllo/register/" component={LoginReg} />
+        <Route extact path="/Reacllo/login/" component={LoginReg} />
+        <Redirect to="/Reacllo/boards/" />
       </Switch>
     </Router>
   );

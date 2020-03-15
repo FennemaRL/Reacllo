@@ -19,10 +19,10 @@ const Nav = props => {
       className={displayNav ? (isLog ? "displayNavB1" : "displayNavB2") : ""}
     >
       <div style={{ flex: "1" }}>
-        <Link to="/reacllo/">Reacllo</Link>
+        <Link to="/Reacllo/">Reacllo</Link>
       </div>
       <div className="userNav">
-        <Link to="/reacllo/">{userName} </Link>
+        <Link to="/Reacllo/">{userName} </Link>
         <span
           className={displayNav ? "hide" : "hide twist"}
           onClick={() => setDisplayNav(!displayNav)}
@@ -33,7 +33,7 @@ const Nav = props => {
       <nav className="mobileDisplay">
         {(isLog && (
           <div className="buttons">
-            <Link to="/reacllo/">
+            <Link to="/Reacllo/">
               <button
                 onClick={() => {
                   setDisplayNav(!displayNav);
@@ -51,7 +51,7 @@ const Nav = props => {
           </div>
         )) || (
           <div className="buttons">
-            <Link to="/reacllo/login/">
+            <Link to="/Reacllo/login/">
               <button onClick={() => setDisplayNav(!displayNav)}>
                 <img
                   src={userin}
@@ -61,7 +61,7 @@ const Nav = props => {
                 &nbsp; Ingresa
               </button>
             </Link>
-            <Link to="/reacllo/register/">
+            <Link to="/Reacllo/register/">
               <button onClick={() => setDisplayNav(!displayNav)}>
                 <img
                   src={reg}
