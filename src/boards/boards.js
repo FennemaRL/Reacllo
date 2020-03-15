@@ -91,7 +91,8 @@ class Boards extends Component {
   };
 
   removeBoard = board => {
-    let token = localStorage.getItem("UserToken");
+    let token =
+      localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
     let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
       url: `${uri}/board/`,
@@ -116,7 +117,9 @@ class Boards extends Component {
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(({ boardsObs }) => {
-      let token = localStorage.getItem("UserToken");
+      let token =
+        localStorage.getItem("UserToken") ||
+        process.env.REACT_APP_DEFAULT_TOKEN;
       let newOrder = arrayMove(boardsObs, oldIndex, newIndex);
       let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios({
@@ -131,7 +134,8 @@ class Boards extends Component {
     });
   };
   createBoard = board => {
-    let token = localStorage.getItem("UserToken");
+    let token =
+      localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
 
     if (this.state.boardsObs.includes(board)) {
       this.setState({ message: "Existe una board con ese nombre" });
@@ -154,21 +158,9 @@ class Boards extends Component {
     });
   };
 
-  _getToken() {
-    /*pasar a jwt permanente */
-    if (!localStorage.getItem("UserToken")) {
-      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
-      axios
-        .post(`${uri}/user/login`, {
-          userName: process.env.REACT_APP_DEFAULT_USER,
-          password: process.env.REACT_APP_DEFAULT_PASSWORD
-        })
-        .then(res => localStorage.setItem("UserToken", res.data.token))
-        .catch(err => console.log(err.message));
-    }
-  }
   _getBoards() {
-    let user = localStorage.getItem("userName") || "Test";
+    let user =
+      localStorage.getItem("userName") || process.env.REACT_APP_DEFAULT_USER;
     if (this.state.firstFetch) {
       let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios
@@ -180,11 +172,9 @@ class Boards extends Component {
     }
   }
   componentDidMount() {
-    this._getToken();
     this._getBoards();
   }
   componentDidUpdate() {
-    this._getToken();
     this._getBoards();
   }
   render() {

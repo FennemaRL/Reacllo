@@ -64,7 +64,9 @@ const onDragEnd = (
     tableTitleFrom = source.droppableId;
     setTables(tablesCopy);
   }
-  let token = localStorage.getItem("UserToken");
+
+  let token =
+    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
   axios({
     url: `https://kanban-api-node.herokuapp.com/board/table/task`,
     method: "Patch",
@@ -94,7 +96,9 @@ const removeTable = (
   let copyTables = JSON.parse(
     JSON.stringify(tables.filter(t => t.titleTable !== tableTitle))
   );
-  let token = localStorage.getItem("UserToken");
+
+  let token =
+    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
   let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
     url: `${uri}/board/table/`,
@@ -118,7 +122,8 @@ const createTable = (
   setMessage,
   redirect
 ) => {
-  let token = localStorage.getItem("UserToken");
+  let token =
+    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
   if (tables.filter(t => t.titleTable === titleTable).length > 0) {
     setMessage("ya existe una tabla con ese nombre");
     return;
@@ -161,7 +166,10 @@ const createTask = (
         errMessageFunc("ya existe una tarea con ese nombre");
         return;
       }
-      let token = localStorage.getItem("UserToken");
+
+      let token =
+        localStorage.getItem("UserToken") ||
+        process.env.REACT_APP_DEFAULT_TOKEN;
       tableToAddtask.content.push(task);
       let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios({
@@ -193,7 +201,8 @@ const removeTask = (
   let table = copyTables.find(t => t.titleTable === titleTable);
   table.content.splice(taskIndex, 1);
 
-  let token = localStorage.getItem("UserToken");
+  let token =
+    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
   let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
     url: `${uri}/board/table/task/`,
@@ -348,7 +357,8 @@ function Board(props) {
     latestProps.current = props;
   });
   useEffect(() => {
-    let token = localStorage.getItem("UserToken");
+    let token =
+      localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
     let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
       url: `${uri}/board/${latestProps.current.match.params.boardTitle}`,
