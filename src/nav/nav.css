@@ -44,13 +44,11 @@ nav {
   padding-right: 15px;
   display: flex;
   justify-content: space-around;
-
   align-items: center;
   font-weight: 300;
 }
-
 nav button {
-  width: 80px;
+  width: 100px;
   height: 30px;
   border-radius: 2px;
 
@@ -67,7 +65,7 @@ nav button:hover {
 }
 
 .buttons {
-  width: 180px;
+  width: 240px;
   justify-content: space-around;
   display: flex;
 }

@@ -54,7 +54,7 @@ const SortableItem = SortableElement(({ value, removeBoard }) => {
           }}
         />
         <DragHandle />
-        <Link to={`/reacllo/board/${value}`}>
+        <Link to={`/Reacllo/board/${value}`}>
           <h4 style={{ marginTop: "12px" }}>{value}</h4>
           <div style={{ display: "flex" }}>
             <div className="row" />
