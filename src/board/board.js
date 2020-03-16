@@ -282,7 +282,6 @@ const TableMapper = ({
                             <p className="title">{task.titleTask}</p>
                             <img
                               src={tc}
-                              style={{ width: "3.5%" }}
                               className="trashCan taskhide"
                               title="borrar tarea"
                               alt=""

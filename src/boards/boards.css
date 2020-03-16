@@ -95,10 +95,10 @@ button.buttonCreateBoard:hover {
   height: 30px;
 }
 .boardsContainer {
-  min-height: 79vh;
+  min-height: 85vh;
   min-width: 70%;
   margin: 0 15%;
-  padding-top: 30px;
+  padding-top: 2vh;
 }
 
 @media only screen and (max-width: 48em) {
@@ -107,13 +107,10 @@ button.buttonCreateBoard:hover {
     width: 110px;
     padding: 8px;
   }
-  #root {
-    height: 65vh;
-  }
   .boardsContainer {
-    min-height: 65vh;
+    min-height: 85.5vh;
     min-width: 100%;
-    padding-top: 30px;
+    padding-top: 2vh;
     margin: 0;
   }
   input[type="text"].titleNewBoard {

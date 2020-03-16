@@ -40,11 +40,7 @@ const Nav = props => {
                   logOutUser(props.history);
                 }}
               >
-                <img
-                  src={logout}
-                  style={{ width: "15%", filter: "invert(100%)" }}
-                  alt="cerrar sesión"
-                />
+                <img src={logout} className="imgButton" alt="cerrar sesión" />
                 &nbsp; Cerrar&nbsp; sesión
               </button>
             </Link>
@@ -53,21 +49,13 @@ const Nav = props => {
           <div className="buttons">
             <Link to="/Reacllo/login/">
               <button onClick={() => setDisplayNav(!displayNav)}>
-                <img
-                  src={userin}
-                  style={{ width: "15%", filter: "invert(100%)" }}
-                  alt="Ingresa"
-                />
+                <img src={userin} className="imgButton" alt="Ingresa" />
                 &nbsp; Ingresa
               </button>
             </Link>
             <Link to="/Reacllo/register/">
               <button onClick={() => setDisplayNav(!displayNav)}>
-                <img
-                  src={reg}
-                  style={{ width: "15%", filter: "invert(100%)" }}
-                  alt="Registrate"
-                />
+                <img src={reg} className="imgButton" alt="Registrate" />
                 &nbsp;Registrate
               </button>
             </Link>

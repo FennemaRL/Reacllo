@@ -4,10 +4,10 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  height: 84.5%;
+  min-height: 85vh;
   min-width: 100%;
   background-color: #b0bec5;
-  padding-top: 30px;
+  padding-top: 2vh;
   position: relative;
   overflow-x: auto;
 }
@@ -31,6 +31,7 @@ div .trashCan {
 }
 
 .trashCan.taskhide {
+  width: 3.5%;
   display: none;
 }
 .itemList:hover .trashCan.taskhide {
@@ -159,7 +160,8 @@ button:hover {
 }
 @media only screen and (max-width: 48em) {
   .boardW {
-    height: 83.4%;
+    padding-top: 0.5vh;
+    min-height: 87vh;
   }
   .trashCan.tablehide {
     display: block;

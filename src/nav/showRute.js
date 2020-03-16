@@ -7,16 +7,7 @@ const ShowRoute = props => {
 
   routes.splice(0, 1);
   return (
-    <div
-      style={{
-        backgroundColor: "#b0bec5",
-        height: "45px",
-        textTransform: "capitalize",
-        display: "flex",
-        alignItems: "center",
-        paddingLeft: "15px"
-      }}
-    >
+    <div className="showRoute">
       <Link to="/Reacllo/">
         <p>Mis pizarras&nbsp;&nbsp;/&nbsp;&nbsp;</p>
       </Link>
