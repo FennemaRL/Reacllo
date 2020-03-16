@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "52c770bfc8ff34ebf6d826d7f6336cac",
+    "revision": "c78ecd9529f83a21f9ab9194d423d9e0",
     "url": "/Reacllo/index.html"
   },
   {
-    "revision": "720b199cf2b597bc20fd",
-    "url": "/Reacllo/static/css/main.d54ccf6d.chunk.css"
+    "revision": "c0f5ce4212d1b48e110e",
+    "url": "/Reacllo/static/css/main.de79f90b.chunk.css"
   },
   {
     "revision": "57f0c60393a42df84ca2",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Reacllo/static/js/2.39da44fa.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "720b199cf2b597bc20fd",
-    "url": "/Reacllo/static/js/main.bcf943aa.chunk.js"
+    "revision": "c0f5ce4212d1b48e110e",
+    "url": "/Reacllo/static/js/main.89d50aca.chunk.js"
   },
   {
     "revision": "16aae571306845570817",
