@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "../img/trash-can.svg";
-import NewTask from "./newTask";
+import edit from "../img/edit.svg";
+import TaskWiewer from "./taskUtil";
 import UpdateRes from "../nav/updateRes";
 import "./board.css";
 import axios from "axios";
@@ -223,7 +224,7 @@ const TableMapper = ({
   setTables,
   boardTitle,
   setMessage,
-  setnewTask,
+  setTaskViewerinfo,
   redirect
 }) => {
   return tables.map(table => {
@@ -247,7 +248,7 @@ const TableMapper = ({
           }
         />
 
-        <Droppable key={table.titleTable} droppableId={table.titleTable} place>
+        <Droppable key={table.titleTable} droppableId={table.titleTable}>
           {(provided, snapshot) => {
             return (
               <div
@@ -280,6 +281,7 @@ const TableMapper = ({
                             }}
                           >
                             <p className="title">{task.titleTask}</p>
+                            <p className="description">{task.description}</p>
                             <img
                               src={tc}
                               className="trashCan taskhide"
@@ -296,6 +298,19 @@ const TableMapper = ({
                                   setMessage
                                 );
                               }}
+                            />
+                            <img
+                              src={edit}
+                              title="editar tarea"
+                              className="edit"
+                              alt=""
+                              onClick={() =>
+                                setTaskViewerinfo({
+                                  display: true,
+                                  tableID: table.titleTable,
+                                  task: task
+                                })
+                              }
                             />
                           </div>
                         );
@@ -314,7 +329,10 @@ const TableMapper = ({
             title="crear una nueva tarea"
             className="newTask"
             onClick={() =>
-              setnewTask({ display: true, tableID: table.titleTable })
+              setTaskViewerinfo({
+                display: true,
+                tableID: table.titleTable /*edit aca new task */
+              })
             }
           >
             +
@@ -326,9 +344,11 @@ const TableMapper = ({
 };
 function Board(props) {
   const [tables, setTables] = useState([]);
-  const [newTask, setnewTask] = useState({
-    display: false,
-    tableID: undefined
+  const [taskWiewerInfo, setTaskViewerinfo] = useState({
+    display: false /*cambiar a tipo de view (newTask, editTask, none) */,
+
+    tableID: undefined /*se tiene que quedar para crear la nueva tarea */,
+    task: null /*en el caso de editarla */
   });
   const redirect = props => err => {
     if (err.response.status === 401) {
@@ -371,16 +391,19 @@ function Board(props) {
   }, []);
   return (
     <>
-      <NewTask
-        task={newTask}
-        close={() => setnewTask({ display: false, tableID: undefined })}
+      <TaskWiewer
+        taskWiewerInfo={taskWiewerInfo}
+        close={() =>
+          setTaskViewerinfo({ display: false, tableID: undefined, task: null })
+        }
         addTask={createTask(
-          newTask.tableID,
+          taskWiewerInfo.tableID,
           tables,
           setTables,
           props.match.params.boardTitle,
           setMessage
         )}
+        editTask={() => console.log(1)}
       />
       <UpdateRes message={message} />
       <div className="boardW">
@@ -402,7 +425,7 @@ function Board(props) {
             setTables={setTables}
             boardTitle={props.match.params.boardTitle}
             setMessage={setMessage}
-            setnewTask={setnewTask}
+            setTaskViewerinfo={setTaskViewerinfo}
             redirect={redirect(props)}
           />
         </DragDropContext>
@@ -418,19 +441,17 @@ function Board(props) {
             title="crear una nueva tabla"
             onClick={e => {
               e.preventDefault();
-              reftitle.current.value
-                ? (() => {
-                    createTable(
-                      reftitle.current.value,
-                      tables,
-                      setTables,
-                      props.match.params.boardTitle,
-                      setMessage,
-                      redirect(props)
-                    );
-                    reftitle.current.value = "";
-                  })()
-                : (() => {})();
+              if (reftitle.current.value) {
+                createTable(
+                  reftitle.current.value,
+                  tables,
+                  setTables,
+                  props.match.params.boardTitle,
+                  setMessage,
+                  redirect(props)
+                );
+                reftitle.current.value = "";
+              }
             }}
           >
             {" "}
