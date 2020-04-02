@@ -152,22 +152,20 @@ const createTask = (
   setTables,
   boardName,
   setMessage,
-  redirect
+  redirect,
+  titlesinUse,
+  setTitlesTask
 ) => {
   let tablesCopy = [...tables];
   let tableToAddtask = tablesCopy.find(c => c.titleTable === titleTable);
 
   return (task, errMessageFunc, close) => {
     if (task) {
-      if (
-        tableToAddtask.content.filter(ta => ta.titleTask === task.titleTask)
-          .length > 0
-      ) {
-        //setMessage("ya existe una tarea con ese nombre");
+      let title2Verify = task.titleTask.toLowerCase();
+      if (titlesinUse.has(title2Verify)) {
         errMessageFunc("ya existe una tarea con ese nombre");
         return;
       }
-
       let token =
         localStorage.getItem("UserToken") ||
         process.env.REACT_APP_DEFAULT_TOKEN;
@@ -179,16 +177,19 @@ const createTask = (
         headers: { token: token },
         data: { boardTitle: boardName, tableTitle: titleTable, task: task }
       })
-        .then(res => setMessage("se agrego correctamente la tarea"))
+        .then(res => {
+          setMessage("se agrego correctamente la tarea");
+          setTitlesTask(titlesinUse => titlesinUse.add(title2Verify));
+        })
         .catch(err => redirect(err));
       close();
       setTables(tablesCopy);
-
       setMessage("actualizando ...");
     }
   };
 };
 const removeTask = (
+  /*2 modify */
   titleTable,
   taskIndex,
   task,
@@ -196,7 +197,9 @@ const removeTask = (
   setTables,
   boardName,
   setMessage,
-  redirect
+  redirect,
+  titlesInUse,
+  setTitlesTask
 ) => {
   let copyTables = [...tables];
   let table = copyTables.find(t => t.titleTable === titleTable);
@@ -219,13 +222,42 @@ const removeTask = (
     .catch(err => redirect(err));
   setTables(copyTables);
 };
+const editTask = (
+  /*a modify */
+  titleTable,
+  tables,
+  setTables,
+  boardName,
+  setMessage,
+  titleinUse,
+  setTitlesTask
+) => {
+  let tablesCopy = [...tables];
+  let tableToModifytask = tablesCopy.find(c => c.titleTable === titleTable);
+
+  return (oldTask, newTask, errMessageFunc, close) => {
+    console.log(oldTask, newTask); /*pasar a tittleTask */
+    let taskToModifyIndex = tableToModifytask.content.findIndex(
+      t => t.taskTitle === oldTask.taskTitle
+    );
+    let findedWST = tableToModifytask.content.find(
+      t => t.taskTitle === newTask.taskTitle
+    ); /*mirar el caso en el que exista una con el mismo titulo */
+    if (!findedWST || findedWST.taskTitle === oldTask.taskTitle) {
+      tableToModifytask.content.splice(taskToModifyIndex, 1, newTask);
+      setTables(tablesCopy); /* miss api call*/
+      close();
+    } else setMessage("Ya existe una tarea con ese nombre");
+  };
+};
 const TableMapper = ({
   tables,
   setTables,
   boardTitle,
   setMessage,
   setTaskViewerinfo,
-  redirect
+  redirect,
+  setTaskTitles
 }) => {
   return tables.map(table => {
     return (
@@ -295,7 +327,8 @@ const TableMapper = ({
                                   tables,
                                   setTables,
                                   boardTitle,
-                                  setMessage
+                                  setMessage,
+                                  setTaskTitles
                                 );
                               }}
                             />
@@ -344,6 +377,7 @@ const TableMapper = ({
 };
 function Board(props) {
   const [tables, setTables] = useState([]);
+  const [taskTitlesinUse, setTaskTitles] = useState(new Set());
   const [taskWiewerInfo, setTaskViewerinfo] = useState({
     display: false /*cambiar a tipo de view (newTask, editTask, none) */,
 
@@ -386,6 +420,13 @@ function Board(props) {
     })
       .then(res => {
         setTables(res.data.tables);
+        let set2save = new Set();
+        res.data.tables.forEach(table =>
+          table.content.forEach(task =>
+            set2save.add(task.titleTask.toLowerCase())
+          )
+        );
+        setTaskTitles(set2save);
       })
       .catch(err => redirect(latestProps.current)(err));
   }, []);
@@ -401,9 +442,20 @@ function Board(props) {
           tables,
           setTables,
           props.match.params.boardTitle,
-          setMessage
+          setMessage,
+          redirect,
+          taskTitlesinUse,
+          setTaskTitles
         )}
-        editTask={() => console.log(1)}
+        editTask={editTask(
+          taskWiewerInfo.tableID,
+          tables,
+          setTables,
+          props.match.params.boardTitle,
+          setMessage,
+          taskTitlesinUse,
+          setTaskTitles
+        )}
       />
       <UpdateRes message={message} />
       <div className="boardW">
@@ -426,6 +478,7 @@ function Board(props) {
             boardTitle={props.match.params.boardTitle}
             setMessage={setMessage}
             setTaskViewerinfo={setTaskViewerinfo}
+            setTaskTitles={setTaskTitles}
             redirect={redirect(props)}
           />
         </DragDropContext>

@@ -4,6 +4,7 @@ const TaskWiewer = props => {
   let ntRef = useRef(null);
   const handleClickOutside = e => {
     if (ntRef.current && !ntRef.current.contains(e.target)) {
+      setErrMessage("");
       props.close();
     }
   };
@@ -55,17 +56,22 @@ const EditTaskW = ({
       setErrMessage("necesita titulo y descripcion");
       return;
     } else {
-      if (title === task.title && description === task.description) {
+      if (title === task.titleTask && description === task.description) {
         close();
       } else {
-        editTask({ title: title, description: description });
+        editTask(
+          task,
+          { titleTask: title, description: description },
+          setErrMessage,
+          close
+        );
       }
     }
   };
   return (
     <EmptyFormTaskW
       titleForm="Editar Tarea"
-      buttonText="Editar Tarea"
+      buttonText="Editar"
       close={close}
       ntRef={ntRef}
       handleForm={handleEditForm}
@@ -107,7 +113,7 @@ const CreateTaskW = ({
   return (
     <EmptyFormTaskW
       titleForm="Nueva Tarea"
-      buttonText="Crear Nueva Tarea"
+      buttonText="Crear"
       close={close}
       ntRef={ntRef}
       handleForm={handleCreateForm}
