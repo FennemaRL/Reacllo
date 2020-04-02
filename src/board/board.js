@@ -198,7 +198,6 @@ const removeTask = (
   boardName,
   setMessage,
   redirect,
-  titlesInUse,
   setTitlesTask
 ) => {
   let copyTables = [...tables];
@@ -218,7 +217,10 @@ const removeTask = (
       titleTask: task.titleTask
     }
   })
-    .then(res => setMessage("se borro correctamente la tarea"))
+    .then(res => {
+      setMessage("se borro correctamente la tarea");
+      setTitlesTask(titles => titles.delete(task.titleTask.toLowerCase()));
+    })
     .catch(err => redirect(err));
   setTables(copyTables);
 };
