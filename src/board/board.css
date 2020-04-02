@@ -1,5 +1,5 @@
 /*contiene blackbackground de newTask*/
-
+/*arreglar background de nueva tarea / editar tarea*/
 .boardW {
   display: flex;
   justify-content: flex-start;
@@ -142,7 +142,7 @@ button:hover {
   background-color: #445863;
 }
 .blackbackground {
-  position: absolute;
+  position: fixed;
   z-index: 2;
   top: 0;
   background: rgba(0, 0, 0, 0.5);
