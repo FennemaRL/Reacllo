@@ -231,25 +231,28 @@ const editTask = (
   setTables,
   boardName,
   setMessage,
-  titleinUse,
+  redirect,
+  titlesinUse,
   setTitlesTask
 ) => {
   let tablesCopy = [...tables];
   let tableToModifytask = tablesCopy.find(c => c.titleTable === titleTable);
 
   return (oldTask, newTask, errMessageFunc, close) => {
-    console.log(oldTask, newTask); /*pasar a tittleTask */
     let taskToModifyIndex = tableToModifytask.content.findIndex(
-      t => t.taskTitle === oldTask.taskTitle
+      t => t.titleTask === oldTask.titleTask
     );
-    let findedWST = tableToModifytask.content.find(
-      t => t.taskTitle === newTask.taskTitle
-    ); /*mirar el caso en el que exista una con el mismo titulo */
-    if (!findedWST || findedWST.taskTitle === oldTask.taskTitle) {
+    let titleTask2Remove = oldTask.titleTask.toLowerCase();
+    let titleTask2Add = newTask.titleTask.toLowerCase();
+    if (titleTask2Add === titleTask2Remove || !titlesinUse.has(titleTask2Add)) {
       tableToModifytask.content.splice(taskToModifyIndex, 1, newTask);
       setTables(tablesCopy); /* miss api call*/
+      setTitlesTask(titles => {
+        titles.delete(titleTask2Remove);
+        return titles.add(titleTask2Add);
+      });
       close();
-    } else setMessage("Ya existe una tarea con ese nombre");
+    } else errMessageFunc("Ya existe una tarea con ese nombre");
   };
 };
 const TableMapper = ({
@@ -455,6 +458,7 @@ function Board(props) {
           setTables,
           props.match.params.boardTitle,
           setMessage,
+          redirect,
           taskTitlesinUse,
           setTaskTitles
         )}
