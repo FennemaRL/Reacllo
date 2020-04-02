@@ -69,7 +69,7 @@ const onDragEnd = (
   let token =
     localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
   axios({
-    url: `https://kanban-api-node.herokuapp.com/board/table/task`,
+    url: `https://kanban-api-node.herokuapp.com/board/table/`,
     method: "Patch",
     data: {
       boardTitle: boardName,
@@ -251,7 +251,28 @@ const editTask = (
         titles.delete(titleTask2Remove);
         return titles.add(titleTask2Add);
       });
+      let token =
+        localStorage.getItem("UserToken") ||
+        process.env.REACT_APP_DEFAULT_TOKEN;
+      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
+      axios({
+        url: `${uri}/board/table/task/`,
+        method: "Patch",
+        headers: { token: token },
+        data: {
+          boardTitle: boardName,
+          tableTitle: titleTable,
+          taskTitleToRemove: oldTask.titleTask,
+          newTask: newTask
+        }
+      })
+        .then(res => {
+          setMessage("se modifico correctamente la tarea");
+        })
+        .catch(err => redirect(err));
       close();
+      setTables(tablesCopy);
+      setMessage("actualizando ...");
     } else errMessageFunc("Ya existe una tarea con ese nombre");
   };
 };
