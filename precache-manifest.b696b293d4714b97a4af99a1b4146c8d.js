@@ -1,27 +1,31 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c78ecd9529f83a21f9ab9194d423d9e0",
+    "revision": "df7ac26b0d4d8985934f1040633c665b",
     "url": "/Reacllo/index.html"
   },
   {
-    "revision": "c0f5ce4212d1b48e110e",
-    "url": "/Reacllo/static/css/main.de79f90b.chunk.css"
+    "revision": "fc93530258e386847bc0",
+    "url": "/Reacllo/static/css/main.c8cf8420.chunk.css"
   },
   {
-    "revision": "57f0c60393a42df84ca2",
-    "url": "/Reacllo/static/js/2.39da44fa.chunk.js"
+    "revision": "1cdf3b66797cb95601a0",
+    "url": "/Reacllo/static/js/2.4255d1d6.chunk.js"
   },
   {
     "revision": "928d7b5eb39d16fe9a880722c974b51e",
-    "url": "/Reacllo/static/js/2.39da44fa.chunk.js.LICENSE.txt"
+    "url": "/Reacllo/static/js/2.4255d1d6.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c0f5ce4212d1b48e110e",
-    "url": "/Reacllo/static/js/main.89d50aca.chunk.js"
+    "revision": "fc93530258e386847bc0",
+    "url": "/Reacllo/static/js/main.c4fe3189.chunk.js"
   },
   {
     "revision": "16aae571306845570817",
     "url": "/Reacllo/static/js/runtime-main.b94a1da0.js"
+  },
+  {
+    "revision": "aa72a69bfdd7308a604c3d2ac55d7d09",
+    "url": "/Reacllo/static/media/edit.aa72a69b.svg"
   },
   {
     "revision": "a3189f25fa2b519975c4e3cc66588373",
