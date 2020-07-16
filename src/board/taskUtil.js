@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const TaskWiewer = props => {
+const TaskWiewer = (props) => {
   let ntRef = useRef(null);
-  const handleClickOutside = e => {
+  const handleClickOutside = (e) => {
     if (ntRef.current && !ntRef.current.contains(e.target)) {
       setErrMessage("");
       props.close();
@@ -39,7 +39,7 @@ const EditTaskW = ({
   editTask,
   task,
   ntRef,
-  handleClickOutside
+  handleClickOutside,
 }) => {
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, false);
@@ -47,7 +47,7 @@ const EditTaskW = ({
       document.removeEventListener("click", handleClickOutside, false);
     };
   });
-  const handleEditForm = e => {
+  const handleEditForm = (e) => {
     e.preventDefault();
     let form = e.target;
     let title = form.title.value;
@@ -56,12 +56,12 @@ const EditTaskW = ({
       setErrMessage("necesita titulo y descripcion");
       return;
     } else {
-      if (title === task.titleTask && description === task.description) {
+      if (title === task.taskTitle && description === task.description) {
         close();
       } else {
         editTask(
           task,
-          { titleTask: title, description: description },
+          { taskTitle: title, description: description },
           setErrMessage,
           close
         );
@@ -76,7 +76,7 @@ const EditTaskW = ({
       ntRef={ntRef}
       handleForm={handleEditForm}
       errMessage={errMessage}
-      title={task.titleTask}
+      title={task.taskTitle}
       description={task.description}
     />
   );
@@ -87,7 +87,7 @@ const CreateTaskW = ({
   setErrMessage,
   addTask,
   ntRef,
-  handleClickOutside
+  handleClickOutside,
 }) => {
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, false);
@@ -95,7 +95,7 @@ const CreateTaskW = ({
       document.removeEventListener("click", handleClickOutside, false);
     };
   });
-  const handleCreateForm = e => {
+  const handleCreateForm = (e) => {
     e.preventDefault();
     let form = e.target;
     let title = form.title.value;
@@ -105,7 +105,7 @@ const CreateTaskW = ({
       return;
     }
     addTask(
-      { titleTask: title, description: description },
+      { taskTitle: title, description: description },
       setErrMessage,
       close
     );
@@ -129,7 +129,7 @@ const EmptyFormTaskW = ({
   title,
   description,
   handleForm,
-  errMessage
+  errMessage,
 }) => {
   return (
     <div className="blackbackground">
@@ -137,13 +137,13 @@ const EmptyFormTaskW = ({
         ref={ntRef}
         className="containerf newTask"
         style={{
-          borderTop: `3px solid ${!errMessage ? "#00ADBB" : "#e81123"}`
+          borderTop: `3px solid ${!errMessage ? "#00ADBB" : "#e81123"}`,
         }}
       >
         <form onSubmit={handleForm}>
           <button
             className="close"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               close();
             }}
@@ -182,7 +182,7 @@ const EmptyFormTaskW = ({
             <p
               className="resMessage"
               style={{
-                color: "#e81123"
+                color: "#e81123",
               }}
             >
               {errMessage}

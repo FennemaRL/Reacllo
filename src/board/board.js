@@ -17,7 +17,6 @@ const onDragEnd = (
   setMessage,
   redirect
 ) => {
-  /* taskTitle, boardTitle, tableTitleFrom, tableTitleTo, indexTo */
   let tableTitleTo;
   let tableTitleFrom;
 
@@ -27,7 +26,9 @@ const onDragEnd = (
   let indexTo = destination.index;
   let rmItem;
   if (destination.droppableId === source.droppableId) {
-    let indexTable = tables.findIndex(c => c.titleTable === source.droppableId);
+    let indexTable = tables.findIndex(
+      (c) => c.titleTable === source.droppableId
+    );
     let table = tables[indexTable];
     let copytask = [...table.content];
     let tablescopy = [...tables];
@@ -35,7 +36,7 @@ const onDragEnd = (
     copytask.splice(destination.index, 0, rmItem);
     tablescopy.splice(indexTable, 1, {
       ...table,
-      content: copytask
+      content: copytask,
     });
     tableTitleTo = destination.droppableId;
     tableTitleFrom = destination.droppableId;
@@ -43,10 +44,10 @@ const onDragEnd = (
   }
   if (destination.droppableId !== source.droppableId) {
     let indexTableFrom = tables.findIndex(
-      c => c.titleTable === source.droppableId
+      (c) => c.titleTable === source.droppableId
     );
     let indexTableTo = tables.findIndex(
-      c => c.titleTable === destination.droppableId
+      (c) => c.titleTable === destination.droppableId
     );
     let tableFrom = tables[indexTableFrom];
     let tableTo = tables[indexTableTo];
@@ -57,7 +58,7 @@ const onDragEnd = (
     copyTaskTo.splice(destination.index, 0, rmItem);
     tablesCopy.splice(indexTableFrom, 1, {
       ...tableFrom,
-      content: copyTaskFrom
+      content: copyTaskFrom,
     });
     tablesCopy.splice(indexTableTo, 1, { ...tableTo, content: copyTaskTo });
 
@@ -65,25 +66,26 @@ const onDragEnd = (
     tableTitleFrom = source.droppableId;
     setTables(tablesCopy);
   }
+  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
 
   let token =
     localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
   axios({
-    url: `https://kanban-api-node.herokuapp.com/board/table/`,
+    url: `${uri}/board/table/`,
     method: "Patch",
     data: {
       boardTitle: boardName,
       tableTitleTo: tableTitleTo,
       tableTitleFrom: tableTitleFrom,
-      taskTitle: rmItem.titleTask,
-      indexTo: indexTo
+      taskTitle: rmItem.taskTitle,
+      indexTo: indexTo,
     },
-    headers: { token: token }
+    headers: { token: token },
   })
     .then(
-      res => setMessage("se reordeno la tarea correctamente") //message confirm
+      (res) => setMessage("se reordeno la tarea correctamente") //message confirm
     )
-    .catch(err => redirect(err));
+    .catch((err) => redirect(err));
   setMessage("actualizando ...");
 };
 const removeTable = (
@@ -95,7 +97,7 @@ const removeTable = (
   redirect
 ) => {
   let copyTables = JSON.parse(
-    JSON.stringify(tables.filter(t => t.titleTable !== tableTitle))
+    JSON.stringify(tables.filter((t) => t.titleTable !== tableTitle))
   );
 
   let token =
@@ -105,12 +107,12 @@ const removeTable = (
     url: `${uri}/board/table/`,
     method: "Delete",
     headers: { token: token },
-    data: { boardTitle: boardName, tableTitle: tableTitle }
+    data: { boardTitle: boardName, tableTitle: tableTitle },
   })
     .then(
-      res => setMessage("se borro correctamente la tabla") //message confirm
+      (res) => setMessage("se borro correctamente la tabla") //message confirm
     )
-    .catch(err => redirect(err));
+    .catch((err) => redirect(err));
   setTables(copyTables);
 
   setMessage("actualizando ...");
@@ -125,7 +127,7 @@ const createTable = (
 ) => {
   let token =
     localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
-  if (tables.filter(t => t.titleTable === titleTable).length > 0) {
+  if (tables.filter((t) => t.titleTable === titleTable).length > 0) {
     setMessage("ya existe una tabla con ese nombre");
     return;
   }
@@ -134,12 +136,13 @@ const createTable = (
     url: `${uri}/board/table/`,
     method: "Post",
     headers: { token: token },
-    data: { boardTitle: boardName, tableTitle: titleTable }
+    data: { boardTitle: boardName, tableTitle: titleTable },
   })
     .then(
-      res => setMessage("se agrego correctamente la tabla") /*message confirm */
+      (res) =>
+        setMessage("se agrego correctamente la tabla") /*message confirm */
     )
-    .catch(err => {
+    .catch((err) => {
       redirect(err);
     });
   let newTable = { titleTable: titleTable, content: [] };
@@ -157,11 +160,11 @@ const createTask = (
   setTitlesTask
 ) => {
   let tablesCopy = [...tables];
-  let tableToAddtask = tablesCopy.find(c => c.titleTable === titleTable);
+  let tableToAddtask = tablesCopy.find((c) => c.titleTable === titleTable);
 
   return (task, errMessageFunc, close) => {
     if (task) {
-      let title2Verify = task.titleTask.toLowerCase();
+      let title2Verify = task.taskTitle.toLowerCase();
       if (titlesinUse.has(title2Verify)) {
         errMessageFunc("ya existe una tarea con ese nombre");
         return;
@@ -175,13 +178,13 @@ const createTask = (
         url: `${uri}/board/table/task/`,
         method: "Post",
         headers: { token: token },
-        data: { boardTitle: boardName, tableTitle: titleTable, task: task }
+        data: { boardTitle: boardName, tableTitle: titleTable, task: task },
       })
-        .then(res => {
+        .then((res) => {
           setMessage("se agrego correctamente la tarea");
-          setTitlesTask(titlesinUse => titlesinUse.add(title2Verify));
+          setTitlesTask((titlesinUse) => titlesinUse.add(title2Verify));
         })
-        .catch(err => redirect(err));
+        .catch((err) => redirect(err));
       close();
       setTables(tablesCopy);
       setMessage("actualizando ...");
@@ -201,7 +204,7 @@ const removeTask = (
   setTitlesTask
 ) => {
   let copyTables = [...tables];
-  let table = copyTables.find(t => t.titleTable === titleTable);
+  let table = copyTables.find((t) => t.titleTable === titleTable);
   table.content.splice(taskIndex, 1);
 
   let token =
@@ -214,14 +217,14 @@ const removeTask = (
     data: {
       boardTitle: boardName,
       tableTitle: titleTable,
-      titleTask: task.titleTask
-    }
+      taskTitle: task.taskTitle,
+    },
   })
-    .then(res => {
+    .then((res) => {
       setMessage("se borro correctamente la tarea");
-      setTitlesTask(titles => titles.delete(task.titleTask.toLowerCase()));
+      setTitlesTask((titles) => titles.delete(task.taskTitle.toLowerCase()));
     })
-    .catch(err => redirect(err));
+    .catch((err) => redirect(err));
   setTables(copyTables);
 };
 const editTask = (
@@ -236,18 +239,18 @@ const editTask = (
   setTitlesTask
 ) => {
   let tablesCopy = [...tables];
-  let tableToModifytask = tablesCopy.find(c => c.titleTable === titleTable);
+  let tableToModifytask = tablesCopy.find((c) => c.titleTable === titleTable);
 
   return (oldTask, newTask, errMessageFunc, close) => {
     let taskToModifyIndex = tableToModifytask.content.findIndex(
-      t => t.titleTask === oldTask.titleTask
+      (t) => t.taskTitle === oldTask.taskTitle
     );
-    let titleTask2Remove = oldTask.titleTask.toLowerCase();
-    let titleTask2Add = newTask.titleTask.toLowerCase();
+    let titleTask2Remove = oldTask.taskTitle.toLowerCase();
+    let titleTask2Add = newTask.taskTitle.toLowerCase();
     if (titleTask2Add === titleTask2Remove || !titlesinUse.has(titleTask2Add)) {
       tableToModifytask.content.splice(taskToModifyIndex, 1, newTask);
       setTables(tablesCopy); /* miss api call*/
-      setTitlesTask(titles => {
+      setTitlesTask((titles) => {
         titles.delete(titleTask2Remove);
         return titles.add(titleTask2Add);
       });
@@ -262,14 +265,14 @@ const editTask = (
         data: {
           boardTitle: boardName,
           tableTitle: titleTable,
-          taskTitleToRemove: oldTask.titleTask,
-          newTask: newTask
-        }
+          taskTitleToRemove: oldTask.taskTitle,
+          newTask: newTask,
+        },
       })
-        .then(res => {
+        .then((res) => {
           setMessage("se modifico correctamente la tarea");
         })
-        .catch(err => redirect(err));
+        .catch((err) => redirect(err));
       close();
       setTables(tablesCopy);
       setMessage("actualizando ...");
@@ -283,9 +286,9 @@ const TableMapper = ({
   setMessage,
   setTaskViewerinfo,
   redirect,
-  setTaskTitles
+  setTaskTitles,
 }) => {
-  return tables.map(table => {
+  return tables.map((table) => {
     return (
       <div key={table.titleTable} className="table">
         <h3 className="title">{table.titleTable}</h3>
@@ -314,14 +317,14 @@ const TableMapper = ({
                 ref={provided.innerRef}
                 className="listContainer"
                 style={{
-                  backgroundColor: snapshot.isDraggingOver ? "lightblue" : ""
+                  backgroundColor: snapshot.isDraggingOver ? "lightblue" : "",
                 }}
               >
                 {table.content.map((task, indx) => {
                   return (
                     <Draggable
-                      key={task.titleTask}
-                      draggableId={task.titleTask}
+                      key={task.taskTitle}
+                      draggableId={task.taskTitle}
                       index={indx}
                     >
                       {(provided, snapshot) => {
@@ -335,10 +338,10 @@ const TableMapper = ({
                               backgroundColor: snapshot.isDragging
                                 ? "#CFD8DC"
                                 : "#FAFAFA",
-                              ...provided.draggableProps.style
+                              ...provided.draggableProps.style,
                             }}
                           >
-                            <p className="title">{task.titleTask}</p>
+                            <p className="title">{task.taskTitle}</p>
                             <p className="description">{task.description}</p>
                             <img
                               src={tc}
@@ -367,7 +370,7 @@ const TableMapper = ({
                                 setTaskViewerinfo({
                                   display: true,
                                   tableID: table.titleTable,
-                                  task: task
+                                  task: task,
                                 })
                               }
                             />
@@ -390,7 +393,7 @@ const TableMapper = ({
             onClick={() =>
               setTaskViewerinfo({
                 display: true,
-                tableID: table.titleTable /*edit aca new task */
+                tableID: table.titleTable /*edit aca new task */,
               })
             }
           >
@@ -408,16 +411,16 @@ function Board(props) {
     display: false /*cambiar a tipo de view (newTask, editTask, none) */,
 
     tableID: undefined /*se tiene que quedar para crear la nueva tarea */,
-    task: null /*en el caso de editarla */
+    task: null /*en el caso de editarla */,
   });
-  const redirect = props => err => {
+  const redirect = (props) => (err) => {
     if (err.response.status === 401) {
       localStorage.removeItem("UserToken");
       localStorage.removeItem("userName");
       props.history.push({
         pathname: "/boards",
         message:
-          "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente "
+          "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente ",
       }); /*setear mensaje de log out */
     }
     if (
@@ -426,7 +429,12 @@ function Board(props) {
     ) {
       props.history.push({
         pathname: "/boards",
-        message: "No existe una pizarra con ese titulo "
+        message: "No existe una pizarra con ese titulo ",
+      });
+    } else {
+      props.history.push({
+        pathname: "/boards",
+        message: err.response.data.message,
       });
     }
   };
@@ -442,19 +450,19 @@ function Board(props) {
     axios({
       url: `${uri}/board/${latestProps.current.match.params.boardTitle}`,
       method: "Get",
-      headers: { token: token }
+      headers: { token: token },
     })
-      .then(res => {
+      .then((res) => {
         setTables(res.data.tables);
         let set2save = new Set();
-        res.data.tables.forEach(table =>
-          table.content.forEach(task =>
-            set2save.add(task.titleTask.toLowerCase())
+        res.data.tables.forEach((table) =>
+          table.content.forEach((task) =>
+            set2save.add(task.taskTitle.toLowerCase())
           )
         );
         setTaskTitles(set2save);
       })
-      .catch(err => redirect(latestProps.current)(err));
+      .catch((err) => redirect(latestProps.current)(err));
   }, []);
   return (
     <>
@@ -488,7 +496,7 @@ function Board(props) {
       <div className="boardW">
         {" "}
         <DragDropContext
-          onDragEnd={result =>
+          onDragEnd={(result) =>
             onDragEnd(
               result,
               tables,
@@ -519,7 +527,7 @@ function Board(props) {
           />
           <button
             title="crear una nueva tabla"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               if (reftitle.current.value) {
                 createTable(
