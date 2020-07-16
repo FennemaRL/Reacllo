@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/Reacllo/static/css/main.c8cf8420.chunk.css",
-    "main.js": "/Reacllo/static/js/main.c4fe3189.chunk.js",
-    "main.js.map": "/Reacllo/static/js/main.c4fe3189.chunk.js.map",
+    "main.js": "/Reacllo/static/js/main.195d4df5.chunk.js",
+    "main.js.map": "/Reacllo/static/js/main.195d4df5.chunk.js.map",
     "runtime-main.js": "/Reacllo/static/js/runtime-main.b94a1da0.js",
     "runtime-main.js.map": "/Reacllo/static/js/runtime-main.b94a1da0.js.map",
     "static/js/2.4255d1d6.chunk.js": "/Reacllo/static/js/2.4255d1d6.chunk.js",
     "static/js/2.4255d1d6.chunk.js.map": "/Reacllo/static/js/2.4255d1d6.chunk.js.map",
     "index.html": "/Reacllo/index.html",
-    "precache-manifest.b696b293d4714b97a4af99a1b4146c8d.js": "/Reacllo/precache-manifest.b696b293d4714b97a4af99a1b4146c8d.js",
+    "precache-manifest.8e6a866ed19f674c268971c434b9100d.js": "/Reacllo/precache-manifest.8e6a866ed19f674c268971c434b9100d.js",
     "service-worker.js": "/Reacllo/service-worker.js",
     "static/css/main.c8cf8420.chunk.css.map": "/Reacllo/static/css/main.c8cf8420.chunk.css.map",
     "static/js/2.4255d1d6.chunk.js.LICENSE.txt": "/Reacllo/static/js/2.4255d1d6.chunk.js.LICENSE.txt",
@@ -23,6 +23,6 @@
     "static/js/runtime-main.b94a1da0.js",
     "static/js/2.4255d1d6.chunk.js",
     "static/css/main.c8cf8420.chunk.css",
-    "static/js/main.c4fe3189.chunk.js"
+    "static/js/main.195d4df5.chunk.js"
   ]
 }
