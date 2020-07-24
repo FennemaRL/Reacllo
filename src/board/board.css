@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora&family=Nunito:wght@300;400;700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Nunito", "Lora", sans-serif;
+}
 /*contiene blackbackground de newTask*/
 /*arreglar background de nueva tarea / editar tarea*/
 .boardW {
@@ -25,38 +31,39 @@
   right: 8px;
 }
 .trashCan.boardhide {
-  display: none;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
 }
 .table:hover .trashCan.boardhide {
   display: block;
 }
 .trashCan.tablehide {
-  display: none;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
 }
 .table:hover .trashCan.tablehide {
-  display: block;
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
 }
 
 .trashCan.taskhide {
   width: 3.5%;
-  display: none;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
 }
 .itemList:hover .trashCan.taskhide {
-  display: block;
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
+
 }
 .board:hover .trashCan {
-  display: block;
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
 }
 .trashCan:hover {
   cursor: pointer;
 }
-.trashCan.boardt {
-  height: 15px;
-  width: 15px;
-  position: absolute;
-  top: 6px;
-  right: 6px;
-}
+
 .newTable {
   margin: 0px 16px;
   border-radius: 8px;
@@ -176,13 +183,16 @@ button:hover {
     min-height: 87vh;
   }
   .trashCan.tablehide {
-    display: block;
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
   }
   .trashCan.taskhide {
-    display: block;
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
   }
   .trashCan.boardhide {
-    display: block;
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
   }
   .table .title {
     height: fit-content;

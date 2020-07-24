@@ -9,7 +9,7 @@ const ShowRoute = props => {
   return (
     <div className="showRoute">
       <Link to="/Reacllo/">
-        <p>Mis pizarras&nbsp;&nbsp;/&nbsp;&nbsp;</p>
+        Mis pizarras
       </Link>
       {routes.map(route => (
         <p key={route}>{route}</p>

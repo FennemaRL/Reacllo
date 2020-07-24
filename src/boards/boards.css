@@ -6,8 +6,17 @@ span.position {
   cursor: grab;
   position: absolute;
 }
+.board span.position{
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+}
+.board:hover span.position{
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
+}
 span.position img {
   width: 80%;
+  filter: invert(100%);
 }
 .sortableCursor {
   pointer-events: all !important;
@@ -23,29 +32,27 @@ li {
 .board {
   color: white;
   margin: 15px;
-  width: 120px;
-  min-height: 80px;
+  max-width: 260px;
+  min-width: 220px;
+  min-height: 120px;
   border-radius: 2px;
-
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.75);
-  background-color: #b0bec5;
-
-  padding: 16px;
-
+  background-color: #394989;
+  padding: 30px;
   position: relative;
 }
 .row {
-  height: 35px;
-  width: 15px;
-  margin: 2px;
-  background-color: rgba(0, 0, 0, 0.5);
+  height: 40px;
+  width: 30px;
+  margin-right: 7px;
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 2px;
 }
 .row:nth-child(2) {
-  height: 25px;
+  height: 30px;
 }
 .row:nth-child(3) {
-  height: 15px;
+  height: 20px;
 }
 
 .containerButton {
@@ -97,10 +104,28 @@ button.buttonCreateBoard:hover {
 .boardsContainer {
   min-height: 85vh;
   min-width: 70%;
-  margin: 0 15%;
+  padding: 0 10%;
   padding-top: 2vh;
-}
+  background-color: #3b2e5a;
 
+}
+.boardsContainer ul{
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  min-height: 65vh;
+}
+.rowContainer{
+  display: flex;
+}
+.trashCan.boardt {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  filter: invert(100%);
+}
 @media only screen and (max-width: 48em) {
   .board {
     margin: 10px;
@@ -117,6 +142,7 @@ button.buttonCreateBoard:hover {
     width: 95%;
     height: 30px;
   }
+
   ul {
     justify-content: center;
   }

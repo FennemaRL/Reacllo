@@ -15,7 +15,7 @@ import BoardForm from "./boardForm";
 
 const DragHandle = SortableHandle(() => {
   return (
-    <span className="position" title="arrastrame para reordenar">
+    <span className="position " title="arrastrame para reordenar">
       <img src={hand} alt="arrastrame" />
     </span>
   );
@@ -55,8 +55,8 @@ const SortableItem = SortableElement(({ value, removeBoard }) => {
         />
         <DragHandle />
         <Link to={`/Reacllo/board/${value}`}>
-          <h4 style={{ marginTop: "12px" }}>{value}</h4>
-          <div style={{ display: "flex" }}>
+          <h4 >{value}</h4>
+          <div className="rowContainer">
             <div className="row" />
             <div className="row" />
             <div className="row" />

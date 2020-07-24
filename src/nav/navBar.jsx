@@ -4,6 +4,7 @@ import "./nav.css";
 import userin from "../img/user.svg";
 import reg from "../img/register2.svg";
 import logout from "../img/logout2.svg";
+import burger from  "../img/burger.svg"
 
 const logOutUser = history => {
   localStorage.removeItem("userName");
@@ -14,56 +15,45 @@ const Nav = props => {
   let isLog = localStorage.getItem("userName");
   let userName = localStorage.getItem("userName") || "UserTest";
   const [displayNav, setDisplayNav] = useState(false);
+  let burgerClass = displayNav ? "hide" : "hide twist"
+  let showNavMobile =  displayNav ? "show buttons": "buttons"
   return (
-    <header
-      className={displayNav ? (isLog ? "displayNavB1" : "displayNavB2") : ""}
-    >
-      <div style={{ flex: "1" }}>
-        <Link to="/Reacllo/">Reacllo</Link>
+    <header >
+      <div className="logoNav">
+        <Link to="/Reacllo/" ><h2>Reacllo</h2></Link>
+      </div> 
+      <div className="burger "> 
+      <img src={burger} className={burgerClass}
+          onClick={() => setDisplayNav(!displayNav)}/>
       </div>
-      <div className="userNav">
-        <Link to="/Reacllo/">{userName} </Link>
-        <span
-          className={displayNav ? "hide" : "hide twist"}
-          onClick={() => setDisplayNav(!displayNav)}
-        >
-          |||
-        </span>
+      <div  className="userName">
+          <Link to="/Reacllo/">{userName}</Link>
       </div>
-      <nav className="mobileDisplay">
-        {(isLog && (
-          <div className="buttons">
-            <Link to="/Reacllo/">
-              <button
-                onClick={() => {
-                  setDisplayNav(!displayNav);
-                  logOutUser(props.history);
-                }}
-              >
-                <img src={logout} className="imgButton" alt="cerrar sesión" />
-                &nbsp; Cerrar&nbsp; sesión
-              </button>
-            </Link>
-          </div>
-        )) || (
-          <div className="buttons">
-            <Link to="/Reacllo/login/">
-              <button onClick={() => setDisplayNav(!displayNav)}>
-                <img src={userin} className="imgButton" alt="Ingresa" />
-                &nbsp; Ingresa
-              </button>
-            </Link>
-            <Link to="/Reacllo/register/">
-              <button onClick={() => setDisplayNav(!displayNav)}>
-                <img src={reg} className="imgButton" alt="Registrate" />
-                &nbsp;Registrate
-              </button>
-            </Link>
-          </div>
-        )}
-      </nav>
+        <Buttons showNavMobile={showNavMobile} isLog={isLog} setDisplayNav={setDisplayNav} displayNav={displayNav} props={props}/>
+
     </header>
   );
 };
+const Buttons= ({showNavMobile, isLog, setDisplayNav, displayNav,props}) => {
 
+  return ( isLog &&
+      <div className={showNavMobile}>
+        <Link to="/Reacllo/" onClick={() => { setDisplayNav(!displayNav); logOutUser(props.history) }}>
+            <img src={logout} className="imgButton" alt="cerrar sesión" />
+            Cerrar sesión
+        </Link>  
+      </div>)
+        || (
+        <div className={showNavMobile}>
+            <Link to="/Reacllo/login/" onClick={() => setDisplayNav(!displayNav)}>
+                <img src={userin} className="imgButton" alt="Ingresa" />
+                Ingresa
+            </Link>
+            <Link to="/Reacllo/register/" onClick={() => setDisplayNav(!displayNav)}>
+                <img src={reg} className="imgButton" alt="Registrate" />
+                Registrate
+            </Link>
+        </div>
+  )         
+}
 export default Nav;
