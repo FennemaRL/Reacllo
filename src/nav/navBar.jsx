@@ -24,7 +24,7 @@ const Nav = props => {
       </div> 
       <div className="burger "> 
       <img src={burger} className={burgerClass}
-          onClick={() => setDisplayNav(!displayNav)}/>
+          onClick={() => setDisplayNav(!displayNav)} alt="Menu"/>
       </div>
       <div  className="userName">
           <Link to="/Reacllo/">{userName}</Link>

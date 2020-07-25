@@ -1,7 +1,7 @@
 header{
   display: grid;
   padding: 10px 2vw;
-  max-height: 4vh;
+  height: 4vh;
   background-color: #3b2e5a;
 }
 .logoNav{
@@ -67,13 +67,23 @@ header a h3 {
 .showRoute{
   padding: 10px 2vw;
   max-height: 3vh;
+  display: flex;
+  color: wheat;
+  background-color: #574f82;
+  
 }
 .showRoute a{
   text-decoration: none;
-  color: #111;
+  display: inline;
+  color: wheat;
+  font-weight: 600;
+}
+.showRoute p {
+  font-family: Lora;
 }
 @media only screen and (max-width: 48em) {
   header{
+    max-height: 200px;
     grid-template-areas: 
     "logo logo username  burger "
     "1 nav nav 12"
@@ -82,6 +92,10 @@ header a h3 {
     max-height: 0;
     transition: max-height 1s ease-in-out, -webkit-transform 1s  ease;
     overflow: hidden;
+  }
+  .buttons.show{
+    max-height: 200px;
+    justify-content: center;
   }
   .buttons.show{
     max-height: 200px;

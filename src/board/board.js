@@ -6,8 +6,8 @@ import TaskWiewer from "./taskUtil";
 import UpdateRes from "../nav/updateRes";
 import "./board.css";
 import axios from "axios";
+import NewTable from  "./newTable"
 
-let reftitle = React.createRef();
 
 const onDragEnd = (
   result,
@@ -127,10 +127,6 @@ const createTable = (
 ) => {
   let token =
     localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
-  if (tables.filter((t) => t.titleTable === titleTable).length > 0) {
-    setMessage("ya existe una tabla con ese nombre");
-    return;
-  }
   let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
     url: `${uri}/board/table/`,
@@ -279,131 +275,7 @@ const editTask = (
     } else errMessageFunc("Ya existe una tarea con ese nombre");
   };
 };
-const TableMapper = ({
-  tables,
-  setTables,
-  boardTitle,
-  setMessage,
-  setTaskViewerinfo,
-  redirect,
-  setTaskTitles,
-}) => {
-  return tables.map((table) => {
-    return (
-      <div key={table.titleTable} className="table">
-        <h3 className="title">{table.titleTable}</h3>
-        <img
-          src={tc}
-          alt=""
-          className="trashCan tablehide"
-          title="borrar tabla"
-          onClick={() =>
-            removeTable(
-              table.titleTable,
-              tables,
-              setTables,
-              boardTitle,
-              setMessage,
-              redirect
-            )
-          }
-        />
 
-        <Droppable key={table.titleTable} droppableId={table.titleTable}>
-          {(provided, snapshot) => {
-            return (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="listContainer"
-                style={{
-                  backgroundColor: snapshot.isDraggingOver ? "lightblue" : "",
-                }}
-              >
-                {table.content.map((task, indx) => {
-                  return (
-                    <Draggable
-                      key={task.taskTitle}
-                      draggableId={task.taskTitle}
-                      index={indx}
-                    >
-                      {(provided, snapshot) => {
-                        return (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="itemList"
-                            style={{
-                              backgroundColor: snapshot.isDragging
-                                ? "#CFD8DC"
-                                : "#FAFAFA",
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            <p className="title">{task.taskTitle}</p>
-                            <p className="description">{task.description}</p>
-                            <img
-                              src={tc}
-                              className="trashCan taskhide"
-                              title="borrar tarea"
-                              alt=""
-                              onClick={() => {
-                                removeTask(
-                                  table.titleTable,
-                                  indx,
-                                  task,
-                                  tables,
-                                  setTables,
-                                  boardTitle,
-                                  setMessage,
-                                  setTaskTitles
-                                );
-                              }}
-                            />
-                            <img
-                              src={edit}
-                              title="editar tarea"
-                              className="edit"
-                              alt=""
-                              onClick={() =>
-                                setTaskViewerinfo({
-                                  display: true,
-                                  tableID: table.titleTable,
-                                  task: task,
-                                })
-                              }
-                            />
-                          </div>
-                        );
-                      }}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            );
-          }}
-        </Droppable>
-
-        <div className="containerButtonNewTask">
-          <button
-            title="crear una nueva tarea"
-            className="newTask"
-            onClick={() =>
-              setTaskViewerinfo({
-                display: true,
-                tableID: table.titleTable /*edit aca new task */,
-              })
-            }
-          >
-            +
-          </button>
-        </div>
-      </div>
-    );
-  });
-};
 function Board(props) {
   const [tables, setTables] = useState([]);
   const [taskTitlesinUse, setTaskTitles] = useState(new Set());
@@ -466,11 +338,10 @@ function Board(props) {
   }, []);
   return (
     <>
-      <TaskWiewer
-        taskWiewerInfo={taskWiewerInfo}
-        close={() =>
-          setTaskViewerinfo({ display: false, tableID: undefined, task: null })
-        }
+      <TaskWiewer taskWiewerInfo={taskWiewerInfo}
+                  close={() =>
+                  setTaskViewerinfo({ display: false, tableID: undefined, task: null })
+                  }
         addTask={createTask(
           taskWiewerInfo.tableID,
           tables,
@@ -494,7 +365,6 @@ function Board(props) {
       />
       <UpdateRes message={message} />
       <div className="container boardW">
-        {" "}
         <DragDropContext
           onDragEnd={(result) =>
             onDragEnd(
@@ -507,7 +377,7 @@ function Board(props) {
             )
           }
         >
-          <TableMapper
+          <TablesMapper
             tables={tables}
             setTables={setTables}
             boardTitle={props.match.params.boardTitle}
@@ -517,37 +387,132 @@ function Board(props) {
             redirect={redirect(props)}
           />
         </DragDropContext>
-        <div className="newTable">
-          {" "}
-          {/*pasaje a componente*/}
-          <input
-            ref={reftitle}
-            type="text"
-            placeholder="Crear una nueva Tabla"
-          />
-          <button
-            title="crear una nueva tabla"
-            onClick={(e) => {
-              e.preventDefault();
-              if (reftitle.current.value) {
-                createTable(
-                  reftitle.current.value,
-                  tables,
-                  setTables,
-                  props.match.params.boardTitle,
-                  setMessage,
-                  redirect(props)
-                );
-                reftitle.current.value = "";
-              }
-            }}
-          >
-            {" "}
-            +
-          </button>
-        </div>
+        <NewTable tables={tables}  setTables={setTables} setMessage={setMessage} props={props} redirect={redirect} redirect={redirect} createTable={createTable}/>
       </div>
     </>
   );
 }
+
+const TablesMapper = ({
+  tables,
+  setTables,
+  boardTitle,
+  setMessage,
+  setTaskViewerinfo,
+  redirect,
+  setTaskTitles,
+}) => {
+  return tables.map((table) => {
+    return (
+      <div key={table.titleTable} className="table">
+        <h3 className="title">{table.titleTable}</h3>
+        <img src={tc}
+          alt=""
+          className="trashCan tablehide"
+          title="borrar tabla"
+          onClick={() =>
+            removeTable(
+              table.titleTable,
+              tables,
+              setTables,
+              boardTitle,
+              setMessage,
+              redirect
+            )
+          }
+        />
+        <hr/>
+        <Droppable key={table.titleTable} droppableId={table.titleTable}>
+          {(provided, snapshot) => {
+            return (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="listContainer"
+                style={{
+                  backgroundColor: snapshot.isDraggingOver ? "lightblue" : "",
+                }}
+              >
+                {table.content.map((task, indx) => {
+                  return (
+                    <Draggable
+                      key={task.taskTitle}
+                      draggableId={task.taskTitle}
+                      index={indx}
+                    >
+                      {(provided, snapshot) => {
+                        return (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="itemList"
+                            style={{
+                              backgroundColor: snapshot.isDragging
+                                ? "#CFD8DC"
+                                : "",
+                              ...provided.draggableProps.style,
+                            }}
+                          >
+                            <p className="titleTask">{task.taskTitle}</p>
+                            <p className="description">{task.description}</p>
+                            <img
+                              src={tc}
+                              className="trashCan taskhide"
+                              title="borrar tarea"
+                              alt=""
+                              onClick={() => {
+                                removeTask(
+                                  table.titleTable,
+                                  indx,
+                                  task,
+                                  tables,
+                                  setTables,
+                                  boardTitle,
+                                  setMessage,
+                                  setTaskTitles
+                                );
+                              }}
+                            />
+                            <img
+                              src={edit}
+                              title="editar tarea"
+                              className="edit"
+                              alt=""
+                              onClick={() =>
+                                setTaskViewerinfo({
+                                  display: true,
+                                  tableID: table.titleTable,
+                                  task: task,
+                                })
+                              }
+                            />
+                          </div>
+                        );
+                      }}
+                    </Draggable>
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
+        <hr/>
+        <div className="containerButtonNewTask">
+          <button
+            title="crear una nueva tarea"
+            className="btnNewTask"
+            onClick={() =>
+              setTaskViewerinfo({
+                display: true,
+                tableID: table.titleTable /*edit aca new task */,
+              })
+            }
+          >+ agregar tarea</button>
+        </div>
+      </div>
+    );
+  });
+};
 export default Board;

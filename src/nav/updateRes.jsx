@@ -3,7 +3,7 @@ import "./updateRes.css";
 const UpdateRes = ({ message }) => {
   const [messages, setMessage] = useState("");
   useEffect(() => {
-    setMessage(message);
+    setMessage(message)
   }, [message]);
 
   return (

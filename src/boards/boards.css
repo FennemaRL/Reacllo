@@ -12,6 +12,8 @@ span.position {
   left: 6px;
   cursor: grab;
   position: absolute;
+
+ 
 }
 .board span.position{
   opacity: 0;
@@ -43,7 +45,7 @@ li {
 .board {
   color: white;
   margin: 15px;
-  max-width: 260px;
+  max-width: 220px;
   min-width: 220px;
   min-height: 120px;
   border-radius: 2px;
@@ -88,22 +90,30 @@ button.buttonFormBoard:hover {
 }
 .formNewBoard input[type="text"].titleNewBoard {
   margin-top: 6px;
-  width: 89%;
+  width: 85%;
   padding: 5px;
 }
-button.buttonCreateBoard {
-  margin: 20px 0 0 0;
-  background-color: #389e1b;
+button.buttonCreateBoard, button.buttonCancelBoard{
+  margin: 20px 10px 0 0;
+  background-color: #389e0d;
   color: white;
   padding: 5px 10px;
   font-size: 1em;
-  height: 35px;
-  width: 50%;
+  height: 30px;
+  width: 40%;
   border: none;
   border-radius: 2px;
+  transition: background-color .3s ease-in-out;
+  cursor: pointer;
 }
 button.buttonCreateBoard:hover {
-  background-color: #5aac44;
+  background-color: #237804;
+}
+button.buttonCancelBoard{
+  background-color: #cf1322;
+}
+button.buttonCancelBoard:hover {
+  background-color: #a8071a;
 }
 .container{
   flex: 1;
@@ -132,8 +142,8 @@ button.buttonCreateBoard:hover {
   .board {
     margin: 10px;
     width: 110px;
-    padding-left: 8px;
-    padding-top: 20px;
+    padding-left: 28px;
+    padding-top: 30px;
   }
   .boards {
     padding: 0;

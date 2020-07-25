@@ -18,7 +18,6 @@ const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
       setMessage("La pizarra tiene que tener un titulo");
       return;
     }
-
     let title = e.target.titleNewBoard.value;
     onCreateBoard(title);
     setDisplay(false);
@@ -34,6 +33,9 @@ const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
         />
         <button className="buttonCreateBoard" type="submit">
           Crear
+        </button>
+        <button className="buttonCancelBoard" onClick={  e => setDisplay(false)}>
+          Cancelar
         </button>
       </form>
     </div>

@@ -10,25 +10,26 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  min-height: 85vh;
-  min-width: 100%;
-  background-color: #b0bec5;
-  padding-top: 2vh;
+  background-color: #394989;
+  padding: 2vh;
   position: relative;
-  overflow-y: hidden;
   overflow-x: auto;
 }
 .edit {
   margin: 5px 0;
   width: 15px;
+  transition: width .2s ease-in-out
 }
 .edit:hover {
   cursor: pointer;
+  width: 20px;
+ ;
 }
 .trashCan {
   position: absolute;
   top: 8px;
   right: 8px;
+  filter: invert(100%);
 }
 .trashCan.boardhide {
   opacity: 0;
@@ -51,6 +52,9 @@
   opacity: 0;
   transition: opacity .3s ease-in-out;
 }
+.trashCan.taskhide{
+  filter: none;
+}
 .itemList:hover .trashCan.taskhide {
   opacity: 1;
   transition: opacity .3s ease-in-out;
@@ -65,88 +69,123 @@
 }
 
 .newTable {
-  margin: 0px 16px;
-  border-radius: 8px;
-  text-align: center;
-  position: relative;
-  width: 45%;
-  height: 45px;
-  display: flex;
-  text-transform: capitalize;
-}
-.newTable input[type="text"] {
-  border: none;
-  border-radius: 3px 0px 0px 3px;
-  padding-left: 8px;
-  background-color: rgb(96, 125, 139);
-  color: white;
-}
-.newTable input[type="text"]::placeholder {
-  color: white;
-}
-.newTable button {
-  min-width: 40px;
-  border: none;
-  border-radius: 0px 3px 3px 0px;
-  background-color: rgb(96, 125, 139);
-  color: white;
-  cursor: pointer;
-}
-.table {
-  background-color: #eceff1;
-  margin: 0px 16px;
-  min-width: 270px;
   border-radius: 3px;
   position: relative;
-  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.45);
+  min-width: 270px;
+  min-height: 45px;
+  display: flex;
+  padding: 8px;
+  
+  text-transform: capitalize;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+.newTable form input[type="text"] {
+  flex: 1;
+  border: none;
+  border-radius:3px;
+  padding: 8px;
+  color: white;
+  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.newTable form label {
+  color: white;
+}
+.newTable input[type="text"]:focus {
+  background-color: rgba(0, 0, 0, 0.35);
+  transition: all .3s ease-in-out;
+}
+.newTable form button, .openForm {
+  min-width: 40px;
+  border: none;
+  background-color: transparent;
+  border-radius:3px;
+  padding: 8px;
+  cursor: pointer;
+  color: white;
+  transition: background-color .3s ease-in-out;
+}
+.newTable form  button:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.newTable input[type="text"].error {
+  border: 1px solid #ff4d4f;
+}
+
+.newTable form label.errorNewTable{
+  font-size: 0.6em;
+  font-weight: 600;
+  padding: 8px;
+  color: #ff4d4f;
+}
+.newTable .openForm {
+  padding: 8px;
+  text-align: left;
+  flex: 1;
+}
+.table {
+  /*background-color: #eceff1;*/
+  background-color: rgba(0, 0, 0, 0.45);
+  color: white;
+  margin: 0px 16px;
+  min-width: 270px;
+  max-width: 270px;
+  border-radius: 2px;
+  position: relative;
+  box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.45);
 }
 .table .title {
-  margin: 12px 8px;
+  margin: 13px 8px;
   text-transform: capitalize;
 }
 
 .table .listContainer {
-  margin: 8px 8px 0px 8px;
+  margin: 8px;
   border-radius: 5px;
+  padding: 0 4px 2px 6px;
 }
 .table .listContainer .itemList {
-  user-select: none;
-  padding: 16px;
-  margin: 0 0 8px 0;
-  max-width: 300px;
-  min-height: 50px;
+  padding: 10px 8px;
+  margin-bottom: 8px;  
   display: flex;
+  max-width: 250px;
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
+  background-color: white;
   color: black;
   text-align: left;
   position: relative;
+  border-radius: 5px;
 }
-.itemList .description {
-  margin: 0px 8px;
+.itemList p.description {
+  margin-top: 5px;
+  width: 90%;
   font-size: 0.8em;
 }
-
+.table hr {
+  margin-left: 5%;
+  width: 89%;
+  color: white;
+}
 .containerButtonNewTask {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  margin:8px 0;
 }
-button.newTask {
-  border-radius: 50%;
-  background-color: #607d8b;
-  color: white;
-  width: 50px;
-  height: 50px;
-  font-size: 2.5em;
-  margin: 8px 0px;
-  border: none;
-
-  transition-duration: 0.4s;
+button.btnNewTask {
+  width: 240px;
+  border-radius: 5px;
+  text-align: left;
+  font-size: 1em;
+  padding: 10px 6px;
+  transition: font-size .2s ease-in-out;
+  background-color: #fdede1;
 }
-button:hover {
+button.btnNewTask:hover {
   cursor: pointer;
-  background-color: #445863;
+  background-color: #fdede1;
+  font-size: 1.2em;
 }
 .blackbackground {
   position: fixed;
@@ -177,11 +216,16 @@ button:hover {
 
   color: black;
 }
+.itemList .trashCan {
+  top: 14px;
+  width: 12px;
+  right: 8px;
+}
+.itemList .titleTask{
+  width: 90%;
+}
 @media only screen and (max-width: 48em) {
-  .boardW {
-    padding-top: 0.5vh;
-    min-height: 87vh;
-  }
+
   .trashCan.tablehide {
     opacity: 1;
     transition: opacity .3s ease-in-out;
@@ -195,7 +239,19 @@ button:hover {
     transition: opacity .3s ease-in-out;
   }
   .table .title {
-    height: fit-content;
     max-width: 195px;
+    margin: 5px 8px;
+  }
+.table {
+  min-width: 230px;
+  padding: 6px 1px;
+  }
+  .table .listContainer .itemList{
+    padding: 6px;
+  }
+  .itemList .trashCan {
+    top: 10px;
+    width: 12px;
+    right: 4px;
   }
 }
