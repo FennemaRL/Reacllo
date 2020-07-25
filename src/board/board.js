@@ -493,7 +493,7 @@ function Board(props) {
         )}
       />
       <UpdateRes message={message} />
-      <div className="boardW">
+      <div className="container boardW">
         {" "}
         <DragDropContext
           onDragEnd={(result) =>

@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: space-evenly;
   color: white;
-  height: 5vh;
+  padding: 10px;
+  max-height: 20px;
   position: relative;
 }
 .closeUpdateRes {
@@ -12,4 +13,9 @@
   position: absolute;
   top: 2px;
   right: 10px;
+}
+@media only screen and (max-width: 48em) {
+  .updateRes{
+    height: 30px;
+  }
 }

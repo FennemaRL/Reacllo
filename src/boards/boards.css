@@ -1,3 +1,10 @@
+.content{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 span.position {
   height: 20px;
   width: 20px;
@@ -13,6 +20,10 @@ span.position {
 .board:hover span.position{
   opacity: 1;
   transition: opacity .3s ease-in-out;
+}
+.board a {
+  text-decoration: none;
+  color: white;
 }
 span.position img {
   width: 80%;
@@ -55,63 +66,54 @@ li {
   height: 20px;
 }
 
-.containerButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  width: 90%;
-  height: 80%;
-  padding: 0px;
-  box-sizing: 0px 1px 3px 0px rgba(0, 0, 0, 0.75);
-}
-button.buttonCBoard {
-  border: none;
-  color: white;
+button.buttonFormBoard {
   width: 100%;
-  height: 100%;
-  background-color: #b0bec5;
   cursor: pointer;
+  text-align: left;
   transition-duration: 0.4s;
+  border-radius: 2px;
+  background-color: transparent;
+  color: white;
+  font-size: 1em;
+  padding: 5px;
+  font-weight: 600;
+  border: 0;
 }
-button.buttonCBoard:hover {
-  background-color: #7b888f;
+button.buttonFormBoard:hover {
+  background-color: rgba(0, 0, 0, 0.3);
 }
-input[type="text"].titleNewBoard {
-  width: 80%;
-  border-style: none;
-  border-bottom: 2px solid rgba(28, 110, 164, 0.13);
-  height: 25px;
-  margin-top: 8px;
+.formNewBoard{
+  max-height: 100%;
+}
+.formNewBoard input[type="text"].titleNewBoard {
+  margin-top: 6px;
+  width: 89%;
+  padding: 5px;
 }
 button.buttonCreateBoard {
-  margin-top: 10px;
-  background-color: #5aac44;
+  margin: 20px 0 0 0;
+  background-color: #389e1b;
   color: white;
-  width: 30%;
-  min-width: 50px;
-  height: 30px;
+  padding: 5px 10px;
   font-size: 1em;
+  height: 35px;
+  width: 50%;
   border: none;
   border-radius: 2px;
 }
 button.buttonCreateBoard:hover {
   background-color: #5aac44;
-  min-width: 55px;
-  width: 35%;
-  height: 30px;
 }
-.boardsContainer {
-  min-height: 85vh;
-  min-width: 70%;
-  padding: 0 10%;
-  padding-top: 2vh;
+.container{
+  flex: 1;
+}
+.boards {
+  padding: 2vh 10%;
   background-color: #3b2e5a;
-
 }
-.boardsContainer ul{
+.boards ul{
   display: flex;
-  justify-content: stretch;
   align-items: center;
   min-height: 65vh;
 }
@@ -130,17 +132,20 @@ button.buttonCreateBoard:hover {
   .board {
     margin: 10px;
     width: 110px;
-    padding: 8px;
+    padding-left: 8px;
+    padding-top: 20px;
   }
-  .boardsContainer {
-    min-height: 85.5vh;
-    min-width: 100%;
+  .boards {
+    padding: 0;
     padding-top: 2vh;
     margin: 0;
   }
   input[type="text"].titleNewBoard {
     width: 95%;
     height: 30px;
+  }
+  .board span.position{
+    opacity: 1;
   }
 
   ul {

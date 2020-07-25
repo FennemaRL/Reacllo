@@ -15,7 +15,8 @@ const Root = () => {
   const ShowRoutep = withRouter(props => <ShowRoute {...props} />);
   const NavWithp = withRouter(props => <Nav {...props} />);
   return (
-    <Router>
+   <Router>
+    <div className="content">
       <NavWithp />
       <ShowRoutep />
       <Switch>
@@ -25,7 +26,9 @@ const Root = () => {
         <Route extact path="/Reacllo/login/" component={LoginReg} />
         <Redirect to="/Reacllo/boards/" />
       </Switch>
-    </Router>
+    </div>
+  </Router>
+   
   );
 };
 

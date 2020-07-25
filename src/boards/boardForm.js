@@ -1,11 +1,10 @@
 import React, { useState, useRef } from "react";
-import Bf from "./bf";
+import ButtonForm from "./bf";
 
 const CreateButton = ({ setDisplay }) => {
   return (
-    /*ultimo a arreglar */
     <div className="board containerButton" onClick={() => setDisplay(true)}>
-      <button className="buttonCBoard">Crea una nueva pizarra</button>
+      <button className="buttonFormBoard">Nueva Pizarra</button>
     </div>
   );
 };
@@ -15,7 +14,7 @@ const BoardForm = props => {
 
   return (
     (display && (
-      <Bf setDisplay={setDisplay} rf={wrapperRefForm} {...props} />
+      <ButtonForm setDisplay={setDisplay} rf={wrapperRefForm} {...props} />
     )) || <CreateButton setDisplay={setDisplay} />
   );
 };

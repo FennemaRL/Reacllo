@@ -26,9 +26,9 @@ const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
   return (
     <div ref={rf} className="board ">
       <form onSubmit={handleCreate} className="formNewBoard">
+        <label>Titulo</label><br/>
         <input
           type="text"
-          placeholder="Escriba un titulo"
           name="titleNewBoard"
           className="titleNewBoard"
         />

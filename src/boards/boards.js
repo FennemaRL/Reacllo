@@ -20,8 +20,7 @@ const DragHandle = SortableHandle(() => {
     </span>
   );
 });
-const SortableList = SortableContainer(
-  ({ items, removeBoard, onCreateBoard, setMessage }) => {
+const SortableList = SortableContainer(({ items, removeBoard, onCreateBoard, setMessage }) => {
     return (
       <ul>
         {items.map((value, index) => (
@@ -37,15 +36,13 @@ const SortableList = SortableContainer(
         </li>
       </ul>
     );
-  }
-);
+});
 
 const SortableItem = SortableElement(({ value, removeBoard }) => {
   return (
     <li tabIndex={value} /*position relative */>
       <div className="board">
-        <img
-          src={tc}
+        <img src={tc}
           className="trashCan boardhide boardt"
           title="remove board"
           alt=""
@@ -55,7 +52,7 @@ const SortableItem = SortableElement(({ value, removeBoard }) => {
         />
         <DragHandle />
         <Link to={`/Reacllo/board/${value}`}>
-          <h4 >{value}</h4>
+          {value}
           <div className="rowContainer">
             <div className="row" />
             <div className="row" />
@@ -181,9 +178,8 @@ class Boards extends Component {
     return (
       <>
         <UpdateRes message={this.state.message} />
-        <div className="boardsContainer">
+        <div className="container boards">
           <SortableList
-            helperClass="sortableCursor"
             items={this.state.boardsObs}
             onSortEnd={this.onSortEnd}
             useDragHandle={true}
