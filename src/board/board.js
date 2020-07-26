@@ -387,7 +387,7 @@ function Board(props) {
             redirect={redirect(props)}
           />
         </DragDropContext>
-        <NewTable tables={tables}  setTables={setTables} setMessage={setMessage} props={props} redirect={redirect} redirect={redirect} createTable={createTable}/>
+        <NewTable tables={tables}  setTables={setTables} setMessage={setMessage} props={props} redirect={redirect} createTable={createTable}/>
       </div>
     </>
   );

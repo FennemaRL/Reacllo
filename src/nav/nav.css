@@ -1,7 +1,7 @@
 header{
   display: grid;
   padding: 10px 2vw;
-  height: 4vh;
+  max-height: 4vh;
   background-color: #3b2e5a;
 }
 .logoNav{
