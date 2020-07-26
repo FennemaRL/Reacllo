@@ -89,9 +89,18 @@ button.buttonFormBoard:hover {
   max-height: 100%;
 }
 .formNewBoard input[type="text"].titleNewBoard {
+
+  border-radius: 2px;
   margin-top: 6px;
   width: 85%;
   padding: 5px;
+  transition: all .3s ease-in-out;
+}
+
+.formNewBoard input[type="text"].titleNewBoard:focus {
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.7);
+  
 }
 button.buttonCreateBoard, button.buttonCancelBoard{
   margin: 20px 10px 0 0;

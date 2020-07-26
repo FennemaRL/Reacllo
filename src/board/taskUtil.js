@@ -58,6 +58,7 @@ const EditTaskW = ({
     } else {
       if (title === task.taskTitle && description === task.description) {
         close();
+        setErrMessage('');
       } else {
         editTask(
           task,
@@ -135,7 +136,7 @@ const EmptyFormTaskW = ({
     <div className="blackbackground">
       <div
         ref={ntRef}
-        className="containerf newTask"
+        className="containerf task"
         style={{
           borderTop: `3px solid ${!errMessage ? "#00ADBB" : "#e81123"}`,
         }}

@@ -55,10 +55,10 @@ const Reg = props => {
   };
   const _checkUserFieldsEmpty = () => {
     if (!user.userName) {
-      setErr({ ...err, userName: "El campo se encuentra vacio" });
+      setErr({ ...err, userName: "El nomber se encuentra vacio" });
     }
     if (!user.password) {
-      setErr({ ...err, password: "El campo se encuentra vacio" });
+      setErr({ ...err, password: "La contraseña se encuentra vacia" });
     }
   };
   const handleSubmit = e => {
