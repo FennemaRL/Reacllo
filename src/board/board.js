@@ -153,7 +153,7 @@ const createTask = (
   return (task, errMessageFunc, close) => {
     if (task) {
       let title2Verify = task.taskTitle.toLowerCase();
-      if (titlesinUse.has(title2Verify)) {
+      if ( title2Verify && titlesinUse.has(title2Verify)) {
         errMessageFunc({title:"ya existe una tarea con ese nombre"});
         return;
       }
@@ -176,7 +176,6 @@ const createTask = (
   };
 };
 const removeTask = (
-  /*2 modify */
   titleTable,
   taskIndex,
   task,
@@ -209,7 +208,6 @@ const removeTask = (
   setTables(copyTables);
 };
 const editTask = (
-  /*a modify */
   titleTable,
   tables,
   setTables,
@@ -228,7 +226,7 @@ const editTask = (
     );
     let titleTask2Remove = oldTask.taskTitle.toLowerCase();
     let titleTask2Add = newTask.taskTitle.toLowerCase();
-    if (titleTask2Add === titleTask2Remove || !titlesinUse.has(titleTask2Add)) {
+    if ( titleTask2Add && (titleTask2Add === titleTask2Remove || !titlesinUse.has(titleTask2Add) )) {
       tableToModifytask.content.splice(taskToModifyIndex, 1, newTask);
       setTables(tablesCopy); /* miss api call*/
       setTitlesTask((titles) => {
@@ -254,7 +252,7 @@ const editTask = (
       close();
       setTables(tablesCopy);
       setMessage("actualizando ...");
-    } else errMessageFunc("Ya existe una tarea con ese nombre");
+    } else errMessageFunc({title:"Ya existe una tarea con ese nombre"});
   };
 };
 const redirect = (props) => (err) => {

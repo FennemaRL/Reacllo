@@ -85,6 +85,7 @@ const EditTaskW = ({
       handleForm={handleEditForm}
       errMessage={errMessage}
       title={task.taskTitle}
+      setErrMessage={setErrMessage}
       description={task.description}
     />
   );
@@ -113,7 +114,7 @@ const CreateTaskW = ({
       return
     }
     if (!description) {
-      setErrMessage({description:"necesita descripcion"})
+      setErrMessage({description:"necesita titulo y descripcion"})
       return
     }
 
@@ -130,10 +131,13 @@ const CreateTaskW = ({
       close={close}
       ntRef={ntRef}
       handleForm={handleCreateForm}
+      setErrMessage={setErrMessage}
+      
       errMessage={errMessage}
     />
   );
 };
+
 const EmptyFormTaskW = ({
   titleForm,
   buttonText,
@@ -143,7 +147,12 @@ const EmptyFormTaskW = ({
   description,
   handleForm,
   errMessage,
+  setErrMessage
 }) => {
+  const handleChange = e => {
+    setErrMessage ({})
+  };
+
   return (
     <div className="blackbackground">
       <div
@@ -171,6 +180,7 @@ const EmptyFormTaskW = ({
                 name="title"
                 placeholder="Ingrese un titulo"
                 maxLength="35"
+                onChange={handleChange}
                 style={{
                 borderBottom: `2px solid ${
                   !errMessage.title ? "rgba(28,110,164,0.13)" : "#e81123"
@@ -192,6 +202,7 @@ const EmptyFormTaskW = ({
               placeholder="Ingrese una descripción"
               maxLength="155"
               defaultValue={description || ""}
+              onChange={handleChange}
               style={{
                 borderBottom: `2px solid ${
                   !errMessage.description ? "rgba(28,110,164,0.13)" : "#e81123"

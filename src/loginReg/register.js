@@ -3,21 +3,6 @@ import axios from "axios";
 import "./formLr.css";
 import {openSession, getUrl} from "../userUtil";
 
-const _validateFields = (name, value) => {
-  let err = {};
-  if (name === "userName") {
-    err.userName =
-      value.length >= 4
-        ? ""
-        : "El nombre de usuario debe ser mayor a 4 caracteres";
-  }
-  if (name === "password") {
-    err.password = /^(?=.*[A-Z]).{4,}$/.test(value)
-      ? ""
-      : "La contraseña debe tener almenos una mayuscula y entre 4 caracteres ";
-  }
-  return err;
-};
 
 const Reg = props => {
   const [user, setUser] = useState({ userName: "", password: "" });
@@ -34,6 +19,22 @@ const Reg = props => {
 
     setMessage("");
   };
+  const _validateFields = (name, value) => {
+    let err = {};
+    if (name === "userName") {
+      err.userName =
+        value.length >= 4
+          ? ""
+          : "El nombre de usuario debe ser mayor a 4 caracteres";
+    }
+    if (name === "password") {
+      err.password = /^(?=.*[A-Z]).{4,}$/.test(value)
+        ? ""
+        : "La contraseña debe tener almenos una mayuscula y entre 4 caracteres ";
+    }
+    return err;
+  };
+  
 
   const errorHandler = err => {
     if ("Username already exists" === err.response.data.message) {
@@ -79,8 +80,6 @@ const Reg = props => {
       .then(res => succesReqHandler(res))
       .catch(err => errorHandler(err));
   };
-
-
   const _isErrMessage = () => {
     return ![
       "No se puede registrar este usuario",
