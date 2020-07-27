@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Reacllo/static/css/main.f5bc7b23.chunk.css",
+    "main.css": "/Reacllo/static/css/main.2dfa0308.chunk.css",
     "main.js": "/Reacllo/static/js/main.e73140a7.chunk.js",
     "main.js.map": "/Reacllo/static/js/main.e73140a7.chunk.js.map",
     "runtime-main.js": "/Reacllo/static/js/runtime-main.b94a1da0.js",
@@ -8,9 +8,9 @@
     "static/js/2.1ba6a879.chunk.js": "/Reacllo/static/js/2.1ba6a879.chunk.js",
     "static/js/2.1ba6a879.chunk.js.map": "/Reacllo/static/js/2.1ba6a879.chunk.js.map",
     "index.html": "/Reacllo/index.html",
-    "precache-manifest.87e3e93332eb1e94b8f1fd96cea9fa49.js": "/Reacllo/precache-manifest.87e3e93332eb1e94b8f1fd96cea9fa49.js",
+    "precache-manifest.e621c88d60c78b62abfaec714dd153f1.js": "/Reacllo/precache-manifest.e621c88d60c78b62abfaec714dd153f1.js",
     "service-worker.js": "/Reacllo/service-worker.js",
-    "static/css/main.f5bc7b23.chunk.css.map": "/Reacllo/static/css/main.f5bc7b23.chunk.css.map",
+    "static/css/main.2dfa0308.chunk.css.map": "/Reacllo/static/css/main.2dfa0308.chunk.css.map",
     "static/js/2.1ba6a879.chunk.js.LICENSE.txt": "/Reacllo/static/js/2.1ba6a879.chunk.js.LICENSE.txt",
     "static/media/burger.svg": "/Reacllo/static/media/burger.86595150.svg",
     "static/media/edit.svg": "/Reacllo/static/media/edit.aa72a69b.svg",
@@ -23,7 +23,7 @@
   "entrypoints": [
     "static/js/runtime-main.b94a1da0.js",
     "static/js/2.1ba6a879.chunk.js",
-    "static/css/main.f5bc7b23.chunk.css",
+    "static/css/main.2dfa0308.chunk.css",
     "static/js/main.e73140a7.chunk.js"
   ]
 }
