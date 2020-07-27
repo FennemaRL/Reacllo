@@ -7,6 +7,7 @@ import UpdateRes from "../nav/updateRes";
 import "./board.css";
 import axios from "axios";
 import NewTable from  "./newTable"
+import {getToken, closeSession} from "../userUtil";
 
 
 const onDragEnd = (
@@ -125,8 +126,7 @@ const createTable = (
   setMessage,
   redirect
 ) => {
-  let token =
-    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
+  let token = getToken()
   let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
     url: `${uri}/board/table/`,
@@ -203,8 +203,7 @@ const removeTask = (
   let table = copyTables.find((t) => t.titleTable === titleTable);
   table.content.splice(taskIndex, 1);
 
-  let token =
-    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
+  let token =getToken()
   let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
     url: `${uri}/board/table/task/`,
@@ -250,9 +249,7 @@ const editTask = (
         titles.delete(titleTask2Remove);
         return titles.add(titleTask2Add);
       });
-      let token =
-        localStorage.getItem("UserToken") ||
-        process.env.REACT_APP_DEFAULT_TOKEN;
+      let token =getToken()
       let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios({
         url: `${uri}/board/table/task/`,
@@ -275,41 +272,39 @@ const editTask = (
     } else errMessageFunc("Ya existe una tarea con ese nombre");
   };
 };
-
+const redirect = (props) => (err) => {
+  if (err.response.status === 401) {
+    closeSession()
+    props.history.push({
+      pathname: "/boards",
+      message:
+        "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente ",
+    }); /*setear mensaje de log out */
+  }
+  if (
+    err.response.status === 400 &&
+    err.response.data.message === "Board not found"
+  ) {
+    props.history.push({
+      pathname: "/boards",
+      message: "No existe una pizarra con ese titulo ",
+    });
+  } else {
+    props.history.push({
+      pathname: "/boards",
+      message: err.response.data.message,
+    });
+  }
+};
 function Board(props) {
   const [tables, setTables] = useState([]);
   const [taskTitlesinUse, setTaskTitles] = useState(new Set());
   const [taskWiewerInfo, setTaskViewerinfo] = useState({
     display: false /*cambiar a tipo de view (newTask, editTask, none) */,
-
     tableID: undefined /*se tiene que quedar para crear la nueva tarea */,
     task: null /*en el caso de editarla */,
   });
-  const redirect = (props) => (err) => {
-    if (err.response.status === 401) {
-      localStorage.removeItem("UserToken");
-      localStorage.removeItem("userName");
-      props.history.push({
-        pathname: "/boards",
-        message:
-          "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente ",
-      }); /*setear mensaje de log out */
-    }
-    if (
-      err.response.status === 400 &&
-      err.response.data.message === "Board not found"
-    ) {
-      props.history.push({
-        pathname: "/boards",
-        message: "No existe una pizarra con ese titulo ",
-      });
-    } else {
-      props.history.push({
-        pathname: "/boards",
-        message: err.response.data.message,
-      });
-    }
-  };
+
   const [message, setMessage] = useState("");
   const latestProps = useRef(props);
   useEffect(() => {

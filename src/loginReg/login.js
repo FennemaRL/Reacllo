@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import {openSession} from "../userUtil";
 const Reg = props => {
   const [user, setUser] = useState({ userName: "", password: "" });
   const [err, setError] = useState({ userName: "", password: "" });
@@ -43,10 +43,7 @@ const Reg = props => {
       method: "post"
     })
       .then(res => {
-        localStorage.removeItem("userName");
-        localStorage.setItem("userName", user.userName);
-        localStorage.removeItem("UserToken");
-        localStorage.setItem("UserToken", res.data.token);
+        openSession(user.userName,res.data.token)
         props.history.push("/boards");
       })
       .catch(err => errorHandler(err));

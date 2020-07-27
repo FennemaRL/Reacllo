@@ -12,6 +12,7 @@ import "./boards.css";
 import axios from "axios";
 import UpdateRes from "../nav/updateRes";
 import BoardForm from "./boardForm";
+import {getToken, getUserName, closeSession} from "../userUtil";
 
 const DragHandle = SortableHandle(() => {
   return (
@@ -20,7 +21,7 @@ const DragHandle = SortableHandle(() => {
     </span>
   );
 });
-const SortableList = SortableContainer(({ items, removeBoard, onCreateBoard, setMessage }) => {
+const SortableList = SortableContainer(({ items, removeBoard, onCreateBoard, setMessage, hasBoardName }) => {
     return (
       <ul>
         {items.map((value, index) => (
@@ -32,7 +33,7 @@ const SortableList = SortableContainer(({ items, removeBoard, onCreateBoard, set
           />
         ))}
         <li>
-          <BoardForm onCreateBoard={onCreateBoard} setMessage={setMessage} />
+          <BoardForm onCreateBoard={onCreateBoard} setMessage={setMessage} hasBoardName={hasBoardName}/>
         </li>
       </ul>
     );
@@ -76,8 +77,7 @@ class Boards extends Component {
   }
 
   errHandler = err => {
-    localStorage.removeItem("UserToken");
-    localStorage.removeItem("userName");
+    closeSession()
     if (err.response.status === 401) {
       this.setState({
         message:
@@ -88,8 +88,7 @@ class Boards extends Component {
   };
 
   removeBoard = board => {
-    let token =
-      localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
+    let token = getToken()
     let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
       url: `${uri}/board/`,
@@ -131,13 +130,7 @@ class Boards extends Component {
     });
   };
   createBoard = board => {
-    let token =
-      localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
-
-    if (this.state.boardsObs.includes(board)) {
-      this.setState({ message: "Existe una board con ese nombre" });
-      return;
-    }
+    let token = getToken()
     let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
       url: `${uri}/board`,
@@ -154,10 +147,18 @@ class Boards extends Component {
       };
     });
   };
+  hasBoardName = boardTitle => {
+    if (this.state.boardsObs.includes(boardTitle)) {
+      this.setState({ message: "Existe una board con ese nombre" });
+      return true
+    }
+     return false
+  }
+  hasBoardName = this.hasBoardName.bind(this);
 
   _getBoards() {
-    let user =
-      localStorage.getItem("userName") || process.env.REACT_APP_DEFAULT_USER;
+    let user = getUserName()
+      
     if (this.state.firstFetch) {
       let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios
@@ -186,6 +187,7 @@ class Boards extends Component {
             removeBoard={this.removeBoard}
             onCreateBoard={this.createBoard}
             setMessage={messager => this.setState({ message: messager })}
+            hasBoardName={this.hasBoardName}
             axis="xy"
           />
         </div>

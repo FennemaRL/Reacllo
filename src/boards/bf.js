@@ -1,5 +1,9 @@
-import React, { useEffect } from "react";
-const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
+import React, { useEffect, useState } from "react";
+
+
+
+const Bf = ({ setDisplay, rf, onCreateBoard, hasBoardName }) => {
+  const [err, setErrorMessage] = useState("");
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, false);
     return () => {
@@ -13,13 +17,17 @@ const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
     }
   };
   const handleCreate = e => {
-    e.preventDefault();
-    if (!e.target.titleNewBoard.value) {
-      setMessage("La pizarra tiene que tener un titulo");
-      return;
+    e.preventDefault()
+    let nameBoard = e.target.titleNewBoard.value
+    if (!nameBoard) {
+      setErrorMessage("La pizarra tiene que tener un titulo")
+      return
     }
-    let title = e.target.titleNewBoard.value;
-    onCreateBoard(title);
+    if (hasBoardName(nameBoard)){
+      setErrorMessage("Ya existe tabla con ese nombre")
+      return
+    }
+    onCreateBoard(nameBoard)
     setDisplay(false);
   };
   return (
@@ -30,7 +38,13 @@ const Bf = ({ setDisplay, rf, onCreateBoard, setMessage }) => {
           type="text"
           name="titleNewBoard"
           className="titleNewBoard"
+          style={{
+                borderBottom: ` ${
+                  err ? "2px solid #e81123" : ""
+                }`
+              }}
         />
+        {err && <p className="error">{err}</p>}
         <button className="buttonCreateBoard" type="submit">
           Crear
         </button>

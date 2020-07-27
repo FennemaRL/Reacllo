@@ -90,7 +90,7 @@ button.buttonFormBoard:hover {
 }
 .formNewBoard input[type="text"].titleNewBoard {
 
-  border-radius: 2px;
+  border-radius: 3px;
   margin-top: 6px;
   width: 85%;
   padding: 5px;
@@ -146,6 +146,11 @@ button.buttonCancelBoard:hover {
   top: 6px;
   right: 6px;
   filter: invert(100%);
+}
+.error {
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: #ffc2c2;
 }
 @media only screen and (max-width: 48em) {
   .board {

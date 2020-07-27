@@ -35,7 +35,7 @@ form .field label {
   font-weight: bold;
   margin: 20px 0;
 }
-form .field input {
+form .field input, form .field textarea  {
   width: 97%;
   border-style: none;
   height: 25px;
@@ -44,22 +44,14 @@ form .field input {
   background-color: rgb(243, 242, 242);
   border-bottom: 2px solid rgba(28, 110, 164, 0.13);
   border-radius: 3px;
-  transition: all 0.3 ease-in-out;
+  font-size: .9em;
 }
 
 form .field textarea {
-  width: 97%;
-  border-style: none;
-  padding: 5px;
-  margin: 5px 0;
   resize: none;
-  background-color: rgb(243, 242, 242);
-  border-bottom: 2px solid rgba(28, 110, 164, 0.13);
-  border-radius: 3px;
-  transition: all .3s ease-in-out;
+  height: 100px;
 }
-form .field input[type="password"]{
-
+form .field input, form .field textarea{
   transition: all .3s ease-in-out;
 }
 form .field input[type="text"]:focus, form .field textarea:focus, input[type="password"]:focus{
