@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./formLr.css";
-import {openSession} from "../userUtil";
+import {openSession, getUrl} from "../userUtil";
 
 const _validateFields = (name, value) => {
   let err = {};
@@ -44,9 +44,8 @@ const Reg = props => {
   const succesReqHandler = res => {
     setMessage("se registro exitosamente, ingresando...");
 
-    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `${uri}/user/login/`,
+      url: `${getUrl()}/user/login/`,
       data: { ...user, Username: user.userName },
       method: "post"
     })
@@ -71,9 +70,9 @@ const Reg = props => {
       setMessage("No se puede registrar este usuario");
       return;
     }
-    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
+    
     axios({
-      url: `${uri}/user/register/`,
+      url: `${getUrl()}/user/register/`,
       data: { ...user, Username: user.userName },
       method: "post"
     })

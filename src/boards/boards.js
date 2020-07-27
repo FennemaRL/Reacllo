@@ -12,7 +12,7 @@ import "./boards.css";
 import axios from "axios";
 import UpdateRes from "../nav/updateRes";
 import BoardForm from "./boardForm";
-import {getToken, getUserName, closeSession} from "../userUtil";
+import {getToken, getUserName, closeSession, getUrl} from "../userUtil";
 
 const DragHandle = SortableHandle(() => {
   return (
@@ -88,12 +88,10 @@ class Boards extends Component {
   };
 
   removeBoard = board => {
-    let token = getToken()
-    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `${uri}/board/`,
+      url: `${getUrl()}/board/`,
       method: "DELETE",
-      headers: { token: token },
+      headers: { token: getToken() },
       data: { boardTitle: board }
     })
       .then(res => this.setState({ message: "se borro exitosamente" }))
@@ -113,15 +111,11 @@ class Boards extends Component {
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(({ boardsObs }) => {
-      let token =
-        localStorage.getItem("UserToken") ||
-        process.env.REACT_APP_DEFAULT_TOKEN;
-      let newOrder = arrayMove(boardsObs, oldIndex, newIndex);
-      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
+      let newOrder = arrayMove(boardsObs, oldIndex, newIndex)
       axios({
-        url: `${uri}/user/neworder`,
+        url: `${getUrl() }/user/neworder`,
         method: "Patch",
-        headers: { token: token },
+        headers: { token: getToken() },
         data: { boardsOrder: newOrder }
       })
         .then(res => this.setState({ message: "se reordeno exitosamente" }))
@@ -130,12 +124,10 @@ class Boards extends Component {
     });
   };
   createBoard = board => {
-    let token = getToken()
-    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `${uri}/board`,
+      url: `${getUrl()}/board`,
       method: "POST",
-      headers: { token: token },
+      headers: { token: getToken() },
       data: { boardTitle: board }
     })
       .then(res => this.setState({ message: "se guardo exitosamente" }))
@@ -160,9 +152,8 @@ class Boards extends Component {
     let user = getUserName()
       
     if (this.state.firstFetch) {
-      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios
-        .get(`${uri}/user/${user}`)
+        .get(`${getUrl() }/user/${user}`)
         .then(res => {
           this.setState({ boardsObs: res.data.boards, firstFetch: false });
         })

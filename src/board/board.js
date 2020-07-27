@@ -7,7 +7,7 @@ import UpdateRes from "../nav/updateRes";
 import "./board.css";
 import axios from "axios";
 import NewTable from  "./newTable"
-import {getToken, closeSession} from "../userUtil";
+import {getToken, closeSession, getUrl} from "../userUtil";
 
 
 const onDragEnd = (
@@ -67,12 +67,9 @@ const onDragEnd = (
     tableTitleFrom = source.droppableId;
     setTables(tablesCopy);
   }
-  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
 
-  let token =
-    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
   axios({
-    url: `${uri}/board/table/`,
+    url: `${getUrl() }/board/table/`,
     method: "Patch",
     data: {
       boardTitle: boardName,
@@ -81,7 +78,7 @@ const onDragEnd = (
       taskTitle: rmItem.taskTitle,
       indexTo: indexTo,
     },
-    headers: { token: token },
+    headers: { token: getToken() },
   })
     .then(
       (res) => setMessage("se reordeno la tarea correctamente") //message confirm
@@ -101,13 +98,10 @@ const removeTable = (
     JSON.stringify(tables.filter((t) => t.titleTable !== tableTitle))
   );
 
-  let token =
-    localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
-  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
-    url: `${uri}/board/table/`,
+    url: `${getUrl() }/board/table/`,
     method: "Delete",
-    headers: { token: token },
+    headers: { token: getToken() },
     data: { boardTitle: boardName, tableTitle: tableTitle },
   })
     .then(
@@ -126,12 +120,10 @@ const createTable = (
   setMessage,
   redirect
 ) => {
-  let token = getToken()
-  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
-    url: `${uri}/board/table/`,
+    url: `${getUrl() }/board/table/`,
     method: "Post",
-    headers: { token: token },
+    headers: { token: getToken() },
     data: { boardTitle: boardName, tableTitle: titleTable },
   })
     .then(
@@ -165,15 +157,11 @@ const createTask = (
         errMessageFunc("ya existe una tarea con ese nombre");
         return;
       }
-      let token =
-        localStorage.getItem("UserToken") ||
-        process.env.REACT_APP_DEFAULT_TOKEN;
       tableToAddtask.content.push(task);
-      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
       axios({
-        url: `${uri}/board/table/task/`,
+        url: `${getUrl() }/board/table/task/`,
         method: "Post",
-        headers: { token: token },
+        headers: { token: getToken() },
         data: { boardTitle: boardName, tableTitle: titleTable, task: task },
       })
         .then((res) => {
@@ -203,12 +191,10 @@ const removeTask = (
   let table = copyTables.find((t) => t.titleTable === titleTable);
   table.content.splice(taskIndex, 1);
 
-  let token =getToken()
-  let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
   axios({
-    url: `${uri}/board/table/task/`,
+    url: `${getUrl() }/board/table/task/`,
     method: "delete",
-    headers: { token: token },
+    headers: { token: getToken() },
     data: {
       boardTitle: boardName,
       tableTitle: titleTable,
@@ -249,12 +235,11 @@ const editTask = (
         titles.delete(titleTask2Remove);
         return titles.add(titleTask2Add);
       });
-      let token =getToken()
-      let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
+
       axios({
-        url: `${uri}/board/table/task/`,
+        url: `${getUrl() }/board/table/task/`,
         method: "Patch",
-        headers: { token: token },
+        headers: { token: getToken() },
         data: {
           boardTitle: boardName,
           tableTitle: titleTable,
@@ -311,13 +296,10 @@ function Board(props) {
     latestProps.current = props;
   });
   useEffect(() => {
-    let token =
-      localStorage.getItem("UserToken") || process.env.REACT_APP_DEFAULT_TOKEN;
-    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `${uri}/board/${latestProps.current.match.params.boardTitle}`,
+      url: `${getUrl() }/board/${latestProps.current.match.params.boardTitle}`,
       method: "Get",
-      headers: { token: token },
+      headers: { token: getToken() },
     })
       .then((res) => {
         setTables(res.data.tables);

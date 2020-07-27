@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {openSession} from "../userUtil";
+import {openSession, getUrl} from "../userUtil";
 const Reg = props => {
-  const [user, setUser] = useState({ userName: "", password: "" });
-  const [err, setError] = useState({ userName: "", password: "" });
+  const [user, setUser] = useState({ userName: "", password: "" })
+  const [err, setError] = useState({ userName: "", password: "" })
   const [message, setMessage] = useState("");
 
   const handleChange = e => {
@@ -14,12 +14,12 @@ const Reg = props => {
     });
   };
   const errorHandler = err => {
-    setUser({ ...user, password: "" });
-    setMessage("El usuario o la contraseña es incorrecta");
+    setUser({ ...user, password: "" })
+    setMessage("El usuario o la contraseña es incorrecta")
   };
 
   const handleSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
     if (!user.userName ) {
       setMessage("Error campo vacio");
       setError({ userName: "Usuario vacio", password: "" })
@@ -36,9 +36,8 @@ const Reg = props => {
 
     setMessage("Ingresando...");
 
-    let uri = process.env.REACT_APP_DEFAULT_URLBACKEND;
     axios({
-      url: `${uri}/user/login/`,
+      url: `${getUrl() }/user/login/`,
       data: { ...user, Username: user.userName },
       method: "post"
     })
