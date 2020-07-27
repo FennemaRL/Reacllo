@@ -7,6 +7,7 @@ header{
 .logoNav{
   grid-area: logo;
 }
+
 .hide {
   display: none;
   width: 15px;
@@ -85,8 +86,8 @@ header a h3 {
   header{
     max-height: 200px;
     grid-template-areas: 
-    "logo logo username  burger "
-    "1 nav nav 12"
+    "logo  .  username  burger "
+    ". nav  nav ."
   }
   .buttons{
     max-height: 0;
