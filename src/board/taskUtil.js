@@ -54,11 +54,11 @@ const EditTaskW = ({
     let description = form.description.value;
     if (!title || !description) {
       if (!title ) {
-        setErrMessage({title: "necesita titulo"})
+        setErrMessage({title: "Necesita titulo"})
         return
       }
       if (!description) {
-        setErrMessage({description:"necesita titulo y descripcion"})
+        setErrMessage({description:"Necesita descripcion"})
         return
       }
     } 
