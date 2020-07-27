@@ -4,11 +4,11 @@ const TaskWiewer = (props) => {
   let ntRef = useRef(null);
   const handleClickOutside = (e) => {
     if (ntRef.current && !ntRef.current.contains(e.target)) {
-      setErrMessage("");
+      setErrMessage({});
       props.close();
     }
   };
-  const [errMessage, setErrMessage] = useState("");
+  const [errMessage, setErrMessage] = useState({});
 
   return (
     props.taskWiewerInfo.display &&
@@ -53,12 +53,19 @@ const EditTaskW = ({
     let title = form.title.value;
     let description = form.description.value;
     if (!title || !description) {
-      setErrMessage("necesita titulo y descripcion");
-      return;
-    } else {
+      if (!title ) {
+        setErrMessage({title: "necesita titulo"})
+        return
+      }
+      if (!description) {
+        setErrMessage({description:"necesita titulo y descripcion"})
+        return
+      }
+    } 
+    else {
       if (title === task.taskTitle && description === task.description) {
         close();
-        setErrMessage('');
+        setErrMessage({});
       } else {
         editTask(
           task,
@@ -97,14 +104,19 @@ const CreateTaskW = ({
     };
   });
   const handleCreateForm = (e) => {
-    e.preventDefault();
-    let form = e.target;
-    let title = form.title.value;
-    let description = form.description.value;
-    if (!title || !description) {
-      setErrMessage("necesita titulo y descripcion");
-      return;
+    e.preventDefault()
+    let form = e.target
+    let title = form.title.value
+    let description = form.description.value
+    if (!title ) {
+      setErrMessage({title: "necesita titulo"})
+      return
     }
+    if (!description) {
+      setErrMessage({description:"necesita descripcion"})
+      return
+    }
+
     addTask(
       { taskTitle: title, description: description },
       setErrMessage,
@@ -138,7 +150,7 @@ const EmptyFormTaskW = ({
         ref={ntRef}
         className="containerf task"
         style={{
-          borderTop: `3px solid ${!errMessage ? "#00ADBB" : "#e81123"}`,
+          borderTop: `3px solid ${errMessage ? "#00ADBB" : "#e81123"}`,
         }}
       >
         <form onSubmit={handleForm}>
@@ -154,16 +166,23 @@ const EmptyFormTaskW = ({
           <h3> {titleForm} </h3>
           <div className="field">
             <label>Titulo</label>
-
-            <div>
               <input
                 type="text"
                 name="title"
                 placeholder="Ingrese un titulo"
                 maxLength="35"
+                style={{
+                borderBottom: `2px solid ${
+                  !errMessage.title ? "rgba(28,110,164,0.13)" : "#e81123"
+                }`}}
                 defaultValue={title || ""}
+                
               />
-            </div>
+               {errMessage.title && (
+            <p className="error"    >
+              {errMessage.title}
+            </p>
+          )}
           </div>
           <div className="field">
             <label>Descripcion</label>
@@ -173,22 +192,20 @@ const EmptyFormTaskW = ({
               placeholder="Ingrese una descripción"
               maxLength="155"
               defaultValue={description || ""}
+              style={{
+                borderBottom: `2px solid ${
+                  !errMessage.description ? "rgba(28,110,164,0.13)" : "#e81123"
+                }`}}
             />
+             {errMessage.description && (
+            <p className="error" >
+              {errMessage.description}
+            </p>
+          )}
           </div>
           <button className="send" type="submit">
             {buttonText}
           </button>
-
-          {errMessage && (
-            <p
-              className="resMessage"
-              style={{
-                color: "#e81123",
-              }}
-            >
-              {errMessage}
-            </p>
-          )}
         </form>
       </div>
     </div>

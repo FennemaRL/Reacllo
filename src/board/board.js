@@ -154,7 +154,7 @@ const createTask = (
     if (task) {
       let title2Verify = task.taskTitle.toLowerCase();
       if (titlesinUse.has(title2Verify)) {
-        errMessageFunc("ya existe una tarea con ese nombre");
+        errMessageFunc({title:"ya existe una tarea con ese nombre"});
         return;
       }
       tableToAddtask.content.push(task);
