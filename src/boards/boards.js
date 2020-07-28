@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import {
   SortableContainer,
   SortableElement,
@@ -10,7 +10,6 @@ import tc from "../img/trash-can.svg";
 import hand from "../img/grab.png";
 import "./boards.css";
 import axios from "axios";
-import UpdateRes from "../nav/updateRes";
 import BoardForm from "./boardForm";
 import {getToken, getUserName, closeSession, getUrl} from "../userUtil";
 
@@ -65,27 +64,23 @@ const SortableItem = SortableElement(({ value, removeBoard }) => {
   );
 });
 
-class Boards extends Component {
+class Boards extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       boardsObs: [],
       firstFetch: true,
-      message: props.location.message
     };
     this.setState = this.setState.bind(this);
   }
-
   errHandler = err => {
     closeSession()
     if (err.response.status === 401) {
-      this.setState({
-        message:
-          "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, logueese nuevamente",
-        firstFetch: true
-      });
-    }
-  };
+      this.props.setNotification({
+        message:"La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, logueese nuevamente",type :"error" })
+  }
+  
+}
 
   removeBoard = board => {
     axios({
@@ -94,7 +89,7 @@ class Boards extends Component {
       headers: { token: getToken() },
       data: { boardTitle: board }
     })
-      .then(res => this.setState({ message: "se borro exitosamente" }))
+      .then(res =>  this.props.setNotification({message: "se borro exitosamente"}))
       .catch(err => this.errHandler(err));
 
     this.setState(prev => {
@@ -102,10 +97,10 @@ class Boards extends Component {
       copy.splice(
         copy.findIndex(b => b === board),
         1
-      );
-      return { boardsObs: copy, message: "actualizando ..." };
-    });
-  };
+      )
+      return { boardsObs: copy}
+    })
+  }
 
   removeBoard = this.removeBoard.bind(this);
 
@@ -118,11 +113,11 @@ class Boards extends Component {
         headers: { token: getToken() },
         data: { boardsOrder: newOrder }
       })
-        .then(res => this.setState({ message: "se reordeno exitosamente" }))
-        .catch(err => this.errHandler(err));
-      return { boardsObs: newOrder, message: "actualizando ..." };
-    });
-  };
+        .then(res =>  this.props.setNotification({message: "se reordeno exitosamente"} ))
+        .catch(err => this.errHandler(err))
+      return { boardsObs: newOrder, message: "actualizando ..." }
+    })
+  }
   createBoard = board => {
     axios({
       url: `${getUrl()}/board`,
@@ -130,7 +125,7 @@ class Boards extends Component {
       headers: { token: getToken() },
       data: { boardTitle: board }
     })
-      .then(res => this.setState({ message: "se guardo exitosamente" }))
+      .then(res =>  this.props.setNotification({message: "se guardo exitosamente"}))
       .catch(err => this.errHandler(err));
     this.setState(prevs => {
       return {
@@ -138,13 +133,10 @@ class Boards extends Component {
         message: "actualizando ..."
       };
     });
-  };
+  }
   hasBoardName = boardTitle => {
-    if (this.state.boardsObs.includes(boardTitle)) {
-      this.setState({ message: "Existe una board con ese nombre" });
-      return true
-    }
-     return false
+    if (this.state.boardsObs.includes(boardTitle)) return true
+    return false
   }
   hasBoardName = this.hasBoardName.bind(this);
 
@@ -169,7 +161,6 @@ class Boards extends Component {
   render() {
     return (
       <>
-        <UpdateRes message={this.state.message} />
         <div className="container boards">
           <SortableList
             items={this.state.boardsObs}
@@ -177,7 +168,7 @@ class Boards extends Component {
             useDragHandle={true}
             removeBoard={this.removeBoard}
             onCreateBoard={this.createBoard}
-            setMessage={messager => this.setState({ message: messager })}
+            setMessage={this.props.setNotification}
             hasBoardName={this.hasBoardName}
             axis="xy"
           />

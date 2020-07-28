@@ -1,23 +1,41 @@
+.updateMessage{
+  position: absolute;
+  width: 220px;
+
+  padding: 10px;
+  z-index: 2;
+  top: 100px;
+  background-color: #fff;
+  box-shadow: -3px 11px 9px -11px rgba(0,0,0,0.75);
+  left: 45%;
+  max-height: 0;
+  transition: all .1s ease-in-out;
+}
+.updateMessage.display{
+  max-height: 40px;
+}
+
 .updateRes {
-  background-color: #574f82;;
-  top: 1;
-  right: 1;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  color: white;
-  padding: 10px;
-  max-height: 20px;
-  position: relative;
+  font-size: .8em;
 }
 .closeUpdateRes {
   cursor: pointer;
   position: absolute;
-  top: 2px;
-  right: 10px;
+  top: 0px;
+  right: 8px;
+}
+.updateMessage img {
+  width: 25px;
 }
 @media only screen and (max-width: 48em) {
   .updateRes{
     height: 30px;
   }
+  .updateMessage{
+    left: 21%;
+  }
+  
 }

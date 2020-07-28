@@ -87,7 +87,7 @@ header a h3 {
     max-height: 200px;
     grid-template-areas: 
     "logo  .  username  burger "
-    ". nav  nav ."
+    ". nav nav ."
   }
   .buttons{
     max-height: 0;

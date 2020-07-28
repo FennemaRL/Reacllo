@@ -1,20 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const ShowRoute = props => {
-  let routes = props.location.pathname.split("/");
-  routes.splice(0, 1);
-  routes.splice(0, 1);
+import {GetBoard} from "../userUtil";
 
-  routes.splice(0, 1);
+const ShowRoute = () => {
+  let boardTitle = GetBoard()
+  
   return (
     <div className="showRoute">
       <Link to="/Reacllo/">
         Mis pizarras/ 
       </Link>
-      {routes.map(route => (
-        <p key={route}> {route} </p>
-      ))}
+        <p> {boardTitle} </p>
     </div>
-  );
-};
-export default ShowRoute;
+  )
+}
+export default  ShowRoute

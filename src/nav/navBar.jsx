@@ -6,12 +6,12 @@ import reg from "../img/register2.svg";
 import logout from "../img/logout2.svg";
 import burger from  "../img/burger.svg"
 
-const logOutUser = history => {
+const logOutUser = () => {
   localStorage.removeItem("userName");
   localStorage.removeItem("UserToken");
 };
 
-const Nav = props => {
+const Nav =  () => {
   let isLog = localStorage.getItem("userName");
   let userName = localStorage.getItem("userName") || "UserTest";
   const [displayNav, setDisplayNav] = useState(false);
@@ -29,16 +29,16 @@ const Nav = props => {
       <div  className="userName">
           <Link to="/Reacllo/">{userName}</Link>
       </div>
-        <Buttons showNavMobile={showNavMobile} isLog={isLog} setDisplayNav={setDisplayNav} displayNav={displayNav} props={props}/>
+        <Buttons showNavMobile={showNavMobile} isLog={isLog} setDisplayNav={setDisplayNav} displayNav={displayNav} />
 
     </header>
   );
 };
-const Buttons= ({showNavMobile, isLog, setDisplayNav, displayNav,props}) => {
+const Buttons= ({showNavMobile, isLog, setDisplayNav, displayNav}) => {
 
   return ( isLog &&
       <div className={showNavMobile}>
-        <Link to="/Reacllo/" onClick={() => { setDisplayNav(!displayNav); logOutUser(props.history) }}>
+        <Link to="/Reacllo/" onClick={() => { setDisplayNav(!displayNav); logOutUser() }}>
             <img src={logout} className="imgButton" alt="cerrar sesión" />
             Cerrar sesión
         </Link>  

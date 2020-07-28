@@ -1,27 +1,30 @@
-import React from "react";
+import React, {useState}from "react";
 import Nav from "./nav/navBar";
-import BoardTest from "./board/board";
+import Board from "./board/board";
 import Boards from "./boards/boards";
 import ShowRoute from "./nav/showRute";
 import LoginReg from "./loginReg/loginReg";
+import UpdateRes from "./nav/updateRes"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
-  withRouter
+  Redirect
 } from "react-router-dom";
+
 const Root = () => {
-  const ShowRoutep = withRouter(props => <ShowRoute {...props} />);
-  const NavWithp = withRouter(props => <Nav {...props} />);
+
+  const [notification, setNotification] = useState({message :undefined , type:""})
+  
   return (
    <Router>
     <div className="content">
-      <NavWithp />
-      <ShowRoutep />
+      <Nav />
+      <ShowRoute />
+      <UpdateRes notification={notification} />
       <Switch>
-        <Route exact path="/Reacllo/board/:boardTitle" component={BoardTest} />
-        <Route exact path="/Reacllo/boards/" component={Boards} />
+        <Route exact path="/Reacllo/board/:boardTitle" ><Board setNotification={setNotification} /></Route>
+        <Route exact path="/Reacllo/boards/" ><Boards setNotification={setNotification} /></Route>
         <Route exact path="/Reacllo/register/" component={LoginReg} />
         <Route extact path="/Reacllo/login/" component={LoginReg} />
         <Redirect to="/Reacllo/boards/" />

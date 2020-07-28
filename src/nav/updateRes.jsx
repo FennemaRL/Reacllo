@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
 import "./updateRes.css";
-const UpdateRes = ({ message }) => {
-  const [messages, setMessage] = useState("");
+import ok from "../img/ok.png";
+import fail from "../img/fail.png";
+const UpdateRes = ({ notification }) => {
+  const [message, setMessage] = useState({message :undefined , type:""});
   useEffect(() => {
-    setMessage(message)
-  }, [message]);
-
+      setMessage(notification)
+  }, [notification]);
   return (
     <>
-      {messages && (
+      {message.message && (
+        <div className={message.message ?  "updateMessage display" : "updateMessage"}>
         <div className="updateRes">
-          <p>{messages}</p>
+          <img src={message.type ? fail: ok} alt="icon notification"/>
+          <p>{message.message}</p>
           <p onClick={() => setMessage("")} className="closeUpdateRes">
             x
           </p>
+        </div>
         </div>
       )}
     </>
   );
 };
-export default UpdateRes;
+let nothaveToUpdate=(prevProps,nextProps)  => !nextProps.notification || !nextProps.notification.message
+
+export default  React.memo(UpdateRes,nothaveToUpdate) 

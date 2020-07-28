@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import tc from "../img/trash-can.svg";
 import edit from "../img/edit.svg";
 import TaskWiewer from "./taskUtil";
-import UpdateRes from "../nav/updateRes";
 import "./board.css";
 import axios from "axios";
 import NewTable from  "./newTable"
-import {getToken, closeSession, getUrl} from "../userUtil";
+import {getToken, closeSession, getUrl,GetBoard} from "../userUtil";
+
 
 
 const onDragEnd = (
@@ -81,10 +81,9 @@ const onDragEnd = (
     headers: { token: getToken() },
   })
     .then(
-      (res) => setMessage("se reordeno la tarea correctamente") //message confirm
+      (res) => setMessage({message:"se reordeno la tarea correctamente"}) //message confirm
     )
     .catch((err) => redirect(err));
-  setMessage("actualizando ...");
 };
 const removeTable = (
   tableTitle,
@@ -105,12 +104,10 @@ const removeTable = (
     data: { boardTitle: boardName, tableTitle: tableTitle },
   })
     .then(
-      (res) => setMessage("se borro correctamente la tabla") //message confirm
+      (res) => setMessage({message:"se borro correctamente la tabla"}) //message confirm
     )
     .catch((err) => redirect(err));
   setTables(copyTables);
-
-  setMessage("actualizando ...");
 };
 const createTable = (
   titleTable,
@@ -127,15 +124,13 @@ const createTable = (
     data: { boardTitle: boardName, tableTitle: titleTable },
   })
     .then(
-      (res) =>
-        setMessage("se agrego correctamente la tabla") /*message confirm */
+      (res) =>setMessage({message:"se agrego correctamente la tabla"}) /*message confirm */
     )
     .catch((err) => {
       redirect(err);
     });
   let newTable = { titleTable: titleTable, content: [] };
   setTables([...tables, newTable]);
-  setMessage("actualizando ...");
 };
 const createTask = (
   titleTable,
@@ -165,13 +160,12 @@ const createTask = (
         data: { boardTitle: boardName, tableTitle: titleTable, task: task },
       })
         .then((res) => {
-          setMessage("se agrego correctamente la tarea");
+          setMessage({message:"se agrego correctamente la tarea"});
           setTitlesTask((titlesinUse) => titlesinUse.add(title2Verify));
         })
         .catch((err) => redirect(err));
       close();
       setTables(tablesCopy);
-      setMessage("actualizando ...");
     }
   };
 };
@@ -189,7 +183,6 @@ const removeTask = (
   let copyTables = [...tables];
   let table = copyTables.find((t) => t.titleTable === titleTable);
   table.content.splice(taskIndex, 1);
-
   axios({
     url: `${getUrl() }/board/table/task/`,
     method: "delete",
@@ -201,8 +194,10 @@ const removeTask = (
     },
   })
     .then((res) => {
-      setMessage("se borro correctamente la tarea");
-      setTitlesTask((titles) => titles.delete(task.taskTitle.toLowerCase()));
+      setMessage({message:"se borro correctamente la tarea"});
+      setTitlesTask((titles) => {
+        titles.delete(task.taskTitle.toLowerCase() )
+      return titles});
     })
     .catch((err) => redirect(err));
   setTables(copyTables);
@@ -246,23 +241,22 @@ const editTask = (
         },
       })
         .then((res) => {
-          setMessage("se modifico correctamente la tarea");
+          setMessage({message:"se modifico correctamente la tarea"});
         })
         .catch((err) => redirect(err));
       close();
       setTables(tablesCopy);
-      setMessage("actualizando ...");
     } else errMessageFunc({title:"Ya existe una tarea con ese nombre"});
   };
 };
-const redirect = (props) => (err) => {
+const redirect = (props) => (err) => {/*
   if (err.response.status === 401) {
     closeSession()
     props.history.push({
       pathname: "/boards",
       message:
         "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente ",
-    }); /*setear mensaje de log out */
+    }); //setear mensaje de log out 
   }
   if (
     err.response.status === 400 &&
@@ -277,9 +271,10 @@ const redirect = (props) => (err) => {
       pathname: "/boards",
       message: err.response.data.message,
     });
-  }
+  } rehacer*/
+
 };
-function Board(props) {
+function Board({setNotification}) {
   const [tables, setTables] = useState([]);
   const [taskTitlesinUse, setTaskTitles] = useState(new Set());
   const [taskWiewerInfo, setTaskViewerinfo] = useState({
@@ -287,15 +282,10 @@ function Board(props) {
     tableID: undefined /*se tiene que quedar para crear la nueva tarea */,
     task: null /*en el caso de editarla */,
   });
-
-  const [message, setMessage] = useState("");
-  const latestProps = useRef(props);
+  let boardTitle = GetBoard()
   useEffect(() => {
-    latestProps.current = props;
-  });
-  useEffect(() => {
-    axios({
-      url: `${getUrl() }/board/${latestProps.current.match.params.boardTitle}`,
+    boardTitle && axios({
+      url: `${getUrl()}/board/${boardTitle }`,
       method: "Get",
       headers: { token: getToken() },
     })
@@ -309,20 +299,23 @@ function Board(props) {
         );
         setTaskTitles(set2save);
       })
-      .catch((err) => redirect(latestProps.current)(err));
-  }, []);
+      .catch((err) => redirect(1)(err));
+      
+  }, [boardTitle]);
+  
   return (
     <>
       <TaskWiewer taskWiewerInfo={taskWiewerInfo}
                   close={() =>
                   setTaskViewerinfo({ display: false, tableID: undefined, task: null })
                   }
+        
         addTask={createTask(
           taskWiewerInfo.tableID,
           tables,
           setTables,
-          props.match.params.boardTitle,
-          setMessage,
+          boardTitle,
+          setNotification,
           redirect,
           taskTitlesinUse,
           setTaskTitles
@@ -331,14 +324,13 @@ function Board(props) {
           taskWiewerInfo.tableID,
           tables,
           setTables,
-          props.match.params.boardTitle,
-          setMessage,
+          boardTitle,
+          setNotification,
           redirect,
           taskTitlesinUse,
           setTaskTitles
         )}
       />
-      <UpdateRes message={message} />
       <div className="container boardW">
         <DragDropContext
           onDragEnd={(result) =>
@@ -346,23 +338,23 @@ function Board(props) {
               result,
               tables,
               setTables,
-              props.match.params.boardTitle,
-              setMessage,
-              redirect(props)
+              boardTitle,
+              setNotification,
+              redirect(1)
             )
           }
         >
           <TablesMapper
             tables={tables}
             setTables={setTables}
-            boardTitle={props.match.params.boardTitle}
-            setMessage={setMessage}
+            boardTitle={boardTitle}
+            setMessage={setNotification}
             setTaskViewerinfo={setTaskViewerinfo}
             setTaskTitles={setTaskTitles}
-            redirect={redirect(props)}
+            redirect={redirect(1)}
           />
         </DragDropContext>
-        <NewTable tables={tables}  setTables={setTables} setMessage={setMessage} props={props} redirect={redirect} createTable={createTable}/>
+        <NewTable tables={tables}  setTables={setTables} setMessage={setNotification} boardTitle={boardTitle} redirect={redirect} createTable={createTable}/>
       </div>
     </>
   );
@@ -374,8 +366,8 @@ const TablesMapper = ({
   boardTitle,
   setMessage,
   setTaskViewerinfo,
-  redirect,
   setTaskTitles,
+  redirect,
 }) => {
   return tables.map((table) => {
     return (
@@ -445,7 +437,8 @@ const TablesMapper = ({
                                   setTables,
                                   boardTitle,
                                   setMessage,
-                                  setTaskTitles
+                                  redirect(1),
+                                  setTaskTitles,
                                 );
                               }}
                             />
@@ -490,4 +483,4 @@ const TablesMapper = ({
     );
   });
 };
-export default Board;
+export default Board
