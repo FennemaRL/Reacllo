@@ -1,6 +1,5 @@
 import React, { useState} from "react";
 import "./board.css";
-let reftitle = React.createRef();
 
 const NewTable = (props)=>{
     const [displayform, setDisplayform] = useState(false) 
@@ -17,21 +16,21 @@ const NewTable = (props)=>{
     const [errorMsg, setErrorMesg] = useState('')
     const addNewTable = (e) => {
       e.preventDefault();
-      if (reftitle.current.value) {
+      let title=e.target.titleTable.value
+      if (title) {
         setErrorMesg('')
-        if (tables.filter((t) => t.titleTable === reftitle.current.value).length > 0) {
+        if (tables.filter((t) => t.titleTable === title).length > 0) {
           setErrorMesg("ya existe una tabla con ese nombre");
           return;
         }
         createTable(
-          reftitle.current.value,
+          title,
           tables,
           setTables,
           boardTitle,
           setMessage,
           redirect
         );
-        reftitle.current.value = "";
         setDisplayform(false)
       }
       else{
@@ -41,7 +40,7 @@ const NewTable = (props)=>{
     return<div className="newTable">
     <form onSubmit={addNewTable}>
       <label>Titulo</label><br/>
-      <input ref={reftitle} type="text" className= {errorMsg ?"error":''}/>
+      <input name="titleTable" type="text" className= {errorMsg ?"error":''}/>
       <button title="Crear tabla" type="submit" >+</button>
       <button title="Cancelar" onClick={() =>  setDisplayform(false)} >x</button><br/>
       { errorMsg && <label className="errorNewTable">{errorMsg}</label>}
