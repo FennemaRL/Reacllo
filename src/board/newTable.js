@@ -29,7 +29,7 @@ const NewTable = (props)=>{
           setTables,
           boardTitle,
           setMessage,
-          redirect(1)
+          redirect
         );
         reftitle.current.value = "";
         setDisplayform(false)

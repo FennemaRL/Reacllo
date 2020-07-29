@@ -15,7 +15,6 @@ import {
 const Root = () => {
 
   const [notification, setNotification] = useState({message :undefined , type:""})
-  
   return (
    <Router>
     <div className="content">

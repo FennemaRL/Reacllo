@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {GetBoard} from "../userUtil";
+import {useBoardTitle} from "../userUtil";
 
 const ShowRoute = () => {
-  let boardTitle = GetBoard()
+  let boardTitle = useBoardTitle()
   
   return (
     <div className="showRoute">

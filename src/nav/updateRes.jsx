@@ -2,27 +2,31 @@ import React, { useState, useEffect } from "react";
 import "./updateRes.css";
 import ok from "../img/ok.png";
 import fail from "../img/fail.png";
+
+
 const UpdateRes = ({ notification }) => {
-  const [message, setMessage] = useState({message :undefined , type:""});
-  useEffect(() => {
+  const [message, setMessage] = useState({})
+  useEffect(() => {    
       setMessage(notification)
-  }, [notification]);
+
+      let toexecute = () => {setMessage({})}
+
+      let close = setTimeout( toexecute,1500)
+
+      return   () =>{ clearTimeout(close); toexecute()}
+  }, [notification])
+  
   return (
     <>
-      {message.message && (
-        <div className={message.message ?  "updateMessage display" : "updateMessage"}>
-        <div className="updateRes">
-          <img src={message.type ? fail: ok} alt="icon notification"/>
-          <p>{message.message}</p>
-          <p onClick={() => setMessage("")} className="closeUpdateRes">
-            x
-          </p>
+        <div className={message.message ?  "updateMessage display"  : "updateMessage close"}>
+          <div className="updateRes">
+            {message.message && <img src={message.type ? fail: ok} alt="icon notification"/>}
+            <p>{message.message}</p>
+          </div>
         </div>
-        </div>
-      )}
     </>
   );
 };
-let nothaveToUpdate=(prevProps,nextProps)  => !nextProps.notification || !nextProps.notification.message
+let nothaveToUpdate=(prevProps,nextProps)  =>!nextProps.notification || !nextProps.notification.message
 
-export default  React.memo(UpdateRes,nothaveToUpdate) 
+export default  React.memo(UpdateRes,nothaveToUpdate)  

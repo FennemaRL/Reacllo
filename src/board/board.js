@@ -6,7 +6,8 @@ import TaskWiewer from "./taskUtil";
 import "./board.css";
 import axios from "axios";
 import NewTable from  "./newTable"
-import {getToken, closeSession, getUrl,GetBoard} from "../userUtil";
+import {getToken, closeSession, getUrl,useBoardTitle} from "../userUtil";
+import { useHistory } from "react-router-dom";
 
 
 
@@ -249,29 +250,22 @@ const editTask = (
     } else errMessageFunc({title:"Ya existe una tarea con ese nombre"});
   };
 };
-const redirect = (props) => (err) => {/*
+const redirect = (history,setMessage) => (err) => {
   if (err.response.status === 401) {
     closeSession()
-    props.history.push({
-      pathname: "/boards",
-      message:
-        "La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente ",
-    }); //setear mensaje de log out 
+    setMessage({message :"La ultima accion no pudo guardarse debido a que los permisos del usuario caducaron, ingrese nuevamente " , type:"error"})
+    history.push({pathname: "/boards",   }); //setear mensaje de log out 
   }
   if (
     err.response.status === 400 &&
     err.response.data.message === "Board not found"
   ) {
-    props.history.push({
-      pathname: "/boards",
-      message: "No existe una pizarra con ese titulo ",
-    });
+    history.push({ pathname: "/boards",  })
+    setMessage({message :"No existe una pizarra con ese titulo " , type:"error"})
   } else {
-    props.history.push({
-      pathname: "/boards",
-      message: err.response.data.message,
-    });
-  } rehacer*/
+    history.push({ pathname: "/boards",  });
+    setMessage({message :err.response.data.message, type:"error"})
+  } 
 
 };
 function Board({setNotification}) {
@@ -282,7 +276,8 @@ function Board({setNotification}) {
     tableID: undefined /*se tiene que quedar para crear la nueva tarea */,
     task: null /*en el caso de editarla */,
   });
-  let boardTitle = GetBoard()
+  let history = useHistory()
+  let boardTitle = useBoardTitle()
   useEffect(() => {
     boardTitle && axios({
       url: `${getUrl()}/board/${boardTitle }`,
@@ -299,9 +294,9 @@ function Board({setNotification}) {
         );
         setTaskTitles(set2save);
       })
-      .catch((err) => redirect(1)(err));
+      .catch((err) => redirect(history, setNotification)(err));
       
-  }, [boardTitle]);
+  }, [boardTitle, history, setNotification]);
   
   return (
     <>
@@ -316,7 +311,7 @@ function Board({setNotification}) {
           setTables,
           boardTitle,
           setNotification,
-          redirect,
+          redirect(history, setNotification),
           taskTitlesinUse,
           setTaskTitles
         )}
@@ -326,7 +321,7 @@ function Board({setNotification}) {
           setTables,
           boardTitle,
           setNotification,
-          redirect,
+          redirect(history, setNotification),
           taskTitlesinUse,
           setTaskTitles
         )}
@@ -340,7 +335,7 @@ function Board({setNotification}) {
               setTables,
               boardTitle,
               setNotification,
-              redirect(1)
+              redirect(history, setNotification)
             )
           }
         >
@@ -351,10 +346,10 @@ function Board({setNotification}) {
             setMessage={setNotification}
             setTaskViewerinfo={setTaskViewerinfo}
             setTaskTitles={setTaskTitles}
-            redirect={redirect(1)}
+            redirect={redirect(history, setNotification)}
           />
         </DragDropContext>
-        <NewTable tables={tables}  setTables={setTables} setMessage={setNotification} boardTitle={boardTitle} redirect={redirect} createTable={createTable}/>
+        <NewTable tables={tables}  setTables={setTables} setMessage={setNotification} boardTitle={boardTitle} redirect={redirect(history, setNotification)} createTable={createTable}/>
       </div>
     </>
   );
@@ -437,7 +432,7 @@ const TablesMapper = ({
                                   setTables,
                                   boardTitle,
                                   setMessage,
-                                  redirect(1),
+                                  redirect,
                                   setTaskTitles,
                                 );
                               }}
