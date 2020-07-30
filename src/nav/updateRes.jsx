@@ -18,7 +18,7 @@ const UpdateRes = ({ notification }) => {
   
   return (
     <>
-        <div className={message.message ?  "updateMessage display"  : "updateMessage close"}>
+        <div className={message.message ?  "updateMessage display"  : "updateMessage "}>
           <div className="updateRes">
             {message.message && <img src={message.type ? fail: ok} alt="icon notification"/>}
             <p>{message.message}</p>

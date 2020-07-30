@@ -10,10 +10,7 @@
   left: 45%;
   opacity: 0;
   font-size: .8em;
-  transition: opacity 0.3s ease-in;
-}
-.updateMessage.close{
-  top: 25px;
+  transition: all 0.1s ease-in;
 }
 .updateMessage.display{
   opacity: 1;
