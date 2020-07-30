@@ -41,12 +41,11 @@ header{
   width: 0%;
   height: 1px;
   background-color: white; 
-  transition: width 0.5s ease;
+  transition: width 0.3s ease-in-out;
   bottom: 0;
 }
 .buttons a:hover::after, .userName a:hover::after {
   width: 100%;
-  transition: width 0.5s ease;
 }
 .userName a{
   margin-top: 6px;
